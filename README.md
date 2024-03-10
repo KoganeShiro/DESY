@@ -1,5 +1,11 @@
 # DESY
 
+### Langages
+[🇫🇷 French version](https://github.com/KoganeShiro/DESY/blob/main/README%20(fr).md)
+[🇬🇧 English version ⬇️⬇️⬇️]([https://github.com/KoganeShiro/DESY/blob/main/README%20(fr).md](https://github.com/KoganeShiro/DESY/blob/main/README.md))
+
+#
+
 DESY is a collaborative project involving students from Esadhar School and 42 Le Havre, as part of the Normandy Impressionism Festival.
 
 ![image](https://github.com/KoganeShiro/desy/assets/126095786/c3f5f0df-1095-4d5a-93fe-ec71be1ea26e)
