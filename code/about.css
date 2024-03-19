@@ -1,0 +1,30 @@
+
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 800px;
+    width: 80%; /* Adjust the width as needed */
+    padding: 2rem;
+    background: rgb(245, 242, 224);
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+h1 {
+	display: flex;
+	font-size: 2em;
+	text-align: left;
+	font-weight: bold;
+}
+
+.project-description {
+	margin-top: 1rem;
+	margin-left: 20%;
+	text-align: left;
+}
+
+.project-description p {
+	margin-bottom: 1rem;
+}
