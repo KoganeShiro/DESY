@@ -19,8 +19,6 @@ window.onload = function() {
         });
 }
 
-
-
 /*
 window.onload = function() {
     var constraints = { audio: true, video: true };

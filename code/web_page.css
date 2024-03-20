@@ -77,13 +77,120 @@ button:hover {
 	color: #0059ff;
 }
 
+.burger-menu {
+	color: #f0f0f0;
+	font-size: 1.5rem;
+	cursor: pointer;
+	display: none;
+}
+
+.burger-menu:hover {
+	color: #92a6cc;
+}
+
+/* Media query for mobile responsiveness */
+@media (max-width: 910px) {
+    .navbar-links ul {
+        display: none; /* Hide the nav links */
+    }
+
+    /* Show the burger menu button */
+    .burger-menu-button {
+        display: block;
+    }
+
+    /* Show the burger menu when it's opened */
+    .burger-menu.open {
+        display: block;
+    }
+}
+
+.lang-menu {
+    width: 100px;
+    text-align: right;
+    font-weight: bold;
+    margin-top: 25px;
+    position: relative;
+}
+.lang-menu .selected-lang {
+    display: flex;   
+    justify-content: space-between;
+    line-height: 2;
+    cursor: pointer;
+}
+.lang-menu .selected-lang:before {
+    content: '';
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-image: url('../img/french.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.lang-menu ul {
+    margin: 0;
+    padding: 0;
+    display: none;
+    background-color: #fff;
+    border: 1px solid #f8f8f8;
+    position: absolute;
+    top: 45px;
+    right: 0px;
+    width: 125px;
+    border-radius: 5px;
+    box-shadow: 0px 1px 10px rgba(0,0,0,0.2);
+}
+
+
+.lang-menu ul li {
+    list-style: none;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+}
+
+.lang-menu ul li a {
+    text-decoration: none;
+    width: 125px;
+    padding: 5px 10px;
+    display: block;
+}
+
+.lang-menu ul li:hover {
+    background-color: #f2f2f2;
+}
+
+.lang-menu ul li a:before {
+    content: '';
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+    margin-right: 10px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.en:before {
+    background-image: url('../img/british-us.png');
+}
+.fr:before {
+    background-image: url('../img/french.png');
+}
+
+
+.lang-menu:hover ul {
+    display: block;
+}
+
 /* Background image for the entire page */
 body {
     margin: 0;
 	height: 100%;
 	width: 100%;
 	margin-bottom: 43.3%; /*maybe change as the website change dimension*/
-    background-image: url('../img/bg.webp');
+    background-image: url('../img/bg_bis.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
