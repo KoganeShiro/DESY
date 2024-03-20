@@ -77,11 +77,17 @@ button:hover {
 	color: #0059ff;
 }
 
-.burger-menu {
+.fa-solid, .fas {
+    font-weight: 900;
+    margin-right: 30px;
+}
+
+.burger-menu-button {
 	color: #f0f0f0;
 	font-size: 1.5rem;
 	cursor: pointer;
 	display: none;
+	margin-left: 10px;
 }
 
 .burger-menu:hover {
@@ -89,27 +95,39 @@ button:hover {
 }
 
 /* Media query for mobile responsiveness */
-@media (max-width: 910px) {
+@media (max-width: 911px) {
     .navbar-links ul {
         display: none; /* Hide the nav links */
     }
 
-    /* Show the burger menu button */
     .burger-menu-button {
         display: block;
     }
 
-    /* Show the burger menu when it's opened */
-    .burger-menu.open {
-        display: block;
-    }
+    /* Initially hide the burger menu */
+	.burger-menu {
+		display: none;
+	}
+
+	/* Show the burger menu when it's opened */
+	.burger-menu.open {
+		display: block;
+		position: absolute;
+		top: 60px;
+		left: 10px;
+		width: 200px;
+		background-color: #333;
+		color: white;
+		padding: 10px;
+		border-radius: 5px;
+	}
 }
 
 .lang-menu {
     width: 100px;
     text-align: right;
     font-weight: bold;
-    margin-top: 25px;
+    margin-top: 15px;
     position: relative;
 }
 .lang-menu .selected-lang {
