@@ -23,8 +23,6 @@ li, a, button {
 	width: 100px;
 }
 
-
-
 .navbar {
 	position: fixed;
 	top: 0;
@@ -43,8 +41,6 @@ li, a, button {
 	margin: 0;
 	padding: 0;
 	display: flex;
-	margin-left: auto;
-	align-self: flex-end;
 }
 
 .navbar-links li{
@@ -66,7 +62,6 @@ li, a, button {
 	color: #0059ff;
 }
 
-
 button {
 	padding: 9px 25px;
 	color: #333;
@@ -83,7 +78,7 @@ button:hover {
 }
 
 
-/*burger menu button*/
+
 .fa-solid, .fas {
     font-weight: 900;
     margin-right: 30px;
@@ -101,41 +96,41 @@ button:hover {
 	color: #92a6cc;
 }
 
-.burger-menu li {
+/*not working*/
+.burger-menu {
 	display: none;
 }
 
+/* Media query for mobile responsiveness */
 @media (max-width: 911px) {
     .navbar-links ul {
-        display: none;
+        display: none; /* Hide the nav links */
     }
 
     .burger-menu-button {
         display: block;
     }
 
+	/* Show the burger menu when it's opened */
 	.burger-menu {
 		display: block;
-		position: right;
+		position: absolute;
 		justify-content: initial;
+		top: 60px;
+		left: 10px;
 		width: 200px;
 		padding: 10px;
 		border-radius: 5px;
-	}
-
-	.burger-menu li {
-		display: flex;
-		padding: 0.7rem;
-		align-items: center;
-		justify-content: center;
 	}
 }
 
 
 
 .lang-menu {
+    width: 100px;
     text-align: right;
     font-weight: bold;
+    margin-top: 15px;
     position: relative;
 }
 .lang-menu .selected-lang {
@@ -149,7 +144,7 @@ button:hover {
     display: inline-block;
     width: 32px;
     height: 32px;
-    background-image: url('../img/french.png');
+    background-image: url('../img/british-us.png');
     background-size: contain;
     background-repeat: no-repeat;
 }
@@ -209,8 +204,6 @@ button:hover {
 .lang-menu:hover ul {
     display: block;
 }
-
-
 
 /* Background image for the entire page */
 body {
