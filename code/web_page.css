@@ -1,3 +1,4 @@
+
 * {
 	box-sizing: border-box;
 	margin: 0;
@@ -43,8 +44,9 @@ li, a, button {
 	margin: 0;
 	padding: 0;
 	display: flex;
-	margin-left: auto;
-	align-self: flex-end;
+	position:fixed;
+	right:20rem;
+	top:3rex;
 }
 
 .navbar-links li{
@@ -105,7 +107,7 @@ button:hover {
 	display: none;
 }
 
-@media (max-width: 911px) {
+@media screen and (max-width: 911px) {
     .navbar-links ul {
         display: none;
     }
@@ -113,6 +115,15 @@ button:hover {
     .burger-menu-button {
         display: block;
     }
+
+	.navbar-links {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		margin: 0;
+		padding: 0;
+		display: flex;
+	}
 
 	.burger-menu {
 		display: block;
@@ -132,11 +143,11 @@ button:hover {
 }
 
 
-
 .lang-menu {
-    text-align: right;
-    font-weight: bold;
-    position: relative;
+	position:fixed;
+	right:15rem;
+	top:7rex;
+	font-weight: bold;
 }
 .lang-menu .selected-lang {
     display: flex;   
@@ -225,15 +236,4 @@ body {
     background-color: #f0f0f0;
     font-family: Arial, sans-serif;
     color: #333;
-}
-
-@media screen and (max-width: 911px) {
-	.navbar-links {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		margin: 0;
-		padding: 0;
-		display: flex;
-	}
 }

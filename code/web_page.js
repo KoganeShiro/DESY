@@ -20,6 +20,8 @@ window.onload = function() {
 }
 
 /*
+invert the color of the video
+
 window.onload = function() {
     var constraints = { audio: true, video: true };
 
