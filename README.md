@@ -11,7 +11,7 @@ DESY is a collaborative project involving students from Esadhar School and 42 Le
 
 ![image](https://github.com/KoganeShiro/desy/assets/126095786/c3f5f0df-1095-4d5a-93fe-ec71be1ea26e)
 
-You cna learn more about it [here](https://www.normandie-impressionniste.fr/fr)
+You can learn more about the festival [here](https://www.normandie-impressionniste.fr/fr)
 
 In this project, we aim to create a unique and immersive synesthetic experience.
 
