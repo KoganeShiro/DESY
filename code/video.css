@@ -1,4 +1,4 @@
-
+/*
 video {
 	width: 100%;
 	height: auto;
@@ -7,7 +7,7 @@ video {
 	border-radius: 3px;
 }
 
-/* Container to hold all content */
+
 .container {
 	position: absolute;
 	top: 50%;
@@ -21,3 +21,4 @@ video {
 	max-width: 800px;
 	padding: 2rem;
 }
+*/
