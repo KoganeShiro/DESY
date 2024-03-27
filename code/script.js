@@ -1,4 +1,10 @@
 
+/* Maybe change the color with a warm tone when the volume is high,
+	and have a cold tone when the volume is low.
+	Make a distord effect on the image, maybe with a distortion more when the volume is high
+	
+	The distord effect on the image or on a clone image that is superposed */
+
 function main() {
 	const canvas = document.getElementById('canvas');
 	const ctx = canvas.getContext('2d');
@@ -84,7 +90,7 @@ function main() {
 				box.update(samples[i]);
 				box.draw(ctx, volume);
 			});
-			ctx.restore();
+			//ctx.restore();
 		}
 		requestAnimationFrame(animate);
 	}
