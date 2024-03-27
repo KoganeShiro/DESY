@@ -15,7 +15,7 @@
 		<script src="burger-menu.js"></script>
 		<script src="script.js"></script>
 	</head>
-	<body class="page">
+	<body class="page" onload='main()'>
         <!-- 
 			motion design of the logo when we enter the website on phone
 
@@ -46,15 +46,16 @@
 					<i class="fa-solid fa-bars"></i>
 				</div>
 				<div class="burger-menu">
-					<ul>
+					<ul class="sidebar-link">
 						<li><a href="web_page.html"><button>Home</button></a></li>
 						<li><a href="about.html"><button>About</button></a></li>
+						<li onclick="showSidebar()"><a href=""></a></li>
 						<!-- <li><a href="gallery.html"><button>Gallery</button></a></li> -->
 					</ul>
 				</div>
 			</div>
 		</nav>
-		<div class="container" onload='main()'>
+		<div class="container">
 				<canvas id="canvas"></canvas>
 		</div>
     </body>

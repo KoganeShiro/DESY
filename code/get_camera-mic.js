@@ -2,6 +2,7 @@
 class Microphone {
 	constructor(fftSize) {
 		this.initialized = false;
+
 		navigator.mediaDevices.getUserMedia({audio: true, video: true})
 		.then(function(stream){
 			this.audioContext = new AudioContext();
@@ -12,6 +13,7 @@ class Microphone {
 			this.dataArray = new Uint8Array(bufferLength);
 			this.microphone.connect(this.analyser);
 			this.initialized = true;
+
 		}.bind(this)).catch(function(err) {
 			alert(err);
 		});
@@ -31,4 +33,20 @@ class Microphone {
 		let volume = Math.sqrt(sum / normSamples.length);
 		return volume;
 	}
+}
+
+
+window.onload = function() {
+    var constraints = { audio: true, video: true };
+
+    // Call getUserMedia
+    navigator.mediaDevices.getUserMedia(constraints)
+        .then(function(mediaStream) {
+            var video = document.querySelector('video');
+            video.srcObject = mediaStream;
+            video.play();
+        })
+        .catch(function(err) {
+            alert(err);
+        });
 }
