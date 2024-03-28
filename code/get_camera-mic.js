@@ -1,4 +1,18 @@
 
+window.onload = function() {
+    var constraints = { audio: true, video: true };
+
+    navigator.mediaDevices.getUserMedia(constraints)
+        .then(function(mediaStream) {
+            var video = document.querySelector('video');
+            video.srcObject = mediaStream;
+            video.play();
+        })
+        .catch(function(err) {
+            alert(err);
+        });
+}
+
 class Microphone {
 	constructor(fftSize) {
 		this.initialized = false;
@@ -15,7 +29,7 @@ class Microphone {
 			this.initialized = true;
 
 		}.bind(this)).catch(function(err) {
-			alert(err);
+			alert("You can't experiment if you don't activate your camera and your mic !...");
 		});
 	}
 	getSamples() {
@@ -33,20 +47,4 @@ class Microphone {
 		let volume = Math.sqrt(sum / normSamples.length);
 		return volume;
 	}
-}
-
-
-window.onload = function() {
-    var constraints = { audio: true, video: true };
-
-    // Call getUserMedia
-    navigator.mediaDevices.getUserMedia(constraints)
-        .then(function(mediaStream) {
-            var video = document.querySelector('video');
-            video.srcObject = mediaStream;
-            video.play();
-        })
-        .catch(function(err) {
-            alert(err);
-        });
 }

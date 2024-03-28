@@ -66,16 +66,18 @@ li, a, button {
 	list-style: none;
 	background-color: #333;
 	color: white;
-	z-index: 1000; /* Ensure the navbar is above other content */
+	z-index: 1000;
 }
 
 .navbar-links ul {
 	margin: 0;
 	padding: 0;
 	display: flex;
-	/*position:fixed;*/
 	right:20rem;
-	/*top:3rex;*/
+}
+
+.navbar-links {
+    margin-right: 15rem;
 }
 
 .navbar-links li{
@@ -115,42 +117,50 @@ button:hover {
 
 
 /*burger menu button*/
-.fa-solid, .fas {
-    font-weight: 900;
-    margin-right: 30px;
+.burger-menu {
+    position: relative;
 }
 
-.burger-menu-button {
-	color: #f0f0f0;
-	font-size: 1.5rem;
-	cursor: pointer;
-	display: none;
-	margin-left: 10px;
+.sidebar {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    background-color: #333;
 }
 
-.burger-menu:hover {
+.links-button {
+    display: none;
+}
+
+.menu-button {
+    display: none;
+    position: absolute;
+    top: 5px;
+    right: 100px;
+    transform: translateY(-50%);
+    border-radius: 3px;
+}
+
+.menu-button svg {
+    fill: white;
+	width: 30px;
+	height: 30px;
+}
+
+.close-button svg {
+    fill: white;
+	width: 30px;
+	height: 30px;
+}
+
+.menu-button svg:hover {
 	color: #92a6cc;
-}
-
-.burger-menu li {
-	display: none;
-}
-
-.sidebar-link {
-	position: fixed;
-	top: 10px;
-	right: 0;
-	width: 200px;
-	height: 20vh;
-	z-index: 999;
-	border: none;
-	border-radius: 10px;
-	background-color: #333;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	display: none;
 }
 
 @media screen and (max-width: 911px) {
@@ -158,32 +168,37 @@ button:hover {
         display: none;
     }
 
-    .burger-menu-button {
+    .navbar-links {
+        position: absolute;
+        width: 100%;
+        height: 10%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+    }
+
+    .menu-button {
         display: block;
     }
 
-	.navbar-links {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		margin: 0;
-		padding: 0;
-		display: flex;
+	.close-button {
+		display: none;
 	}
 
-	.burger-menu {
-		display: block;
-		position: right;
-		justify-content: initial;
-		width: 200px;
-		padding: 10px;
-		border-radius: 5px;
-	}
+    .sidebar-open .sidebar {
+        display: block;
+    }
 
-	.burger-menu li {
-		display: flex;
-		padding: 0.7rem;
-		align-items: center;
-		justify-content: center;
-	}
+    .sidebar-open .links-button {
+        display: block;
+    }
+
+	.sidebar {
+        position: relative;
+        width: 100%;
+        height: 10%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+    }
 }

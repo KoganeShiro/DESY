@@ -33,10 +33,12 @@ h1 {
 
 .lang-menu {
 	position:fixed;
-	right:15rem;
-	top:7rex;
+	right:10rem;
+	top:6.5rex;
 	font-weight: bold;
 }
+
+
 .lang-menu .selected-lang {
     display: flex;   
     justify-content: space-between;

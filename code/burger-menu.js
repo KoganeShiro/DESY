@@ -1,11 +1,29 @@
 
 function showSidebar() {
-    var sidebar = document.querySelector('.burger-menu');
+    console.log("show sidebar");
+
+    const closeButtons = document.querySelectorAll('.close-button');
+    const menuButton = document.querySelector('.menu-button');
+    const sidebar = document.querySelector('.sidebar');
+
+    sidebar.classList.add('sidebar-open');
     sidebar.style.display = 'flex';
-    //sidebar.classList.toggle('active');
+    menuButton.style.display = 'none';
+    closeButtons.forEach(function(button) {
+        button.style.display = 'flex';
+    });
 }
 
 function hideSidebar() {
-    const sidebar = document.querySelector('.burger-menu');
-    sidebar.style.display = 'none';
+    console.log("hide sidebar");
+
+    const closeButtons = document.querySelectorAll('.close-button');
+    const menuButton = document.querySelector('.menu-button');
+    const sidebar = document.querySelector('.sidebar');
+
+    sidebar.classList.remove('sidebar-open');
+    menuButton.style.display = 'flex';
+    closeButtons.forEach(function(button) {
+        button.style.display = 'none';
+    });
 }
