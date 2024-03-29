@@ -10,7 +10,7 @@ function showSidebar() {
     sidebar.style.display = 'flex';
     menuButton.style.display = 'none';
     closeButtons.forEach(function(button) {
-        button.style.display = 'flex';
+        button.style.display = 'block';
     });
 }
 
@@ -22,7 +22,8 @@ function hideSidebar() {
     const sidebar = document.querySelector('.sidebar');
 
     sidebar.classList.remove('sidebar-open');
-    menuButton.style.display = 'flex';
+    sidebar.style.display = 'none';
+    menuButton.style.display = 'block';
     closeButtons.forEach(function(button) {
         button.style.display = 'none';
     });

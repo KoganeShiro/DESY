@@ -2,51 +2,62 @@
 
 <html lang="fr">
 	<head>
-        <meta charset="utf-8">
+		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>DESY</title>
+		<title>DESY</title>
 		<link rel="stylesheet" href="about.css">
 		<link rel="stylesheet" href="web_page.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	</head>
 	<body>
-        <!-- loading screen -->
-        <nav class="navbar">
+		<nav class="navbar">
 			<div class="title-logo">
 				<a href="https://github.com/KoganeShiro/DESY" target="_blank">
 					<img class="logo" src="../img/logo.webp" alt="DESY logo">
 				</a>
-			</div>					
+			</div>
 			<div class="navbar-links">
 				<ul>
-					<li><a href="web_page.html"><button>Home</button></a></li>
-					<li><a href="about.html"><button>About</button></a></li>
+					<li><a href="web_page.html"><button>Accueil</button></a></li>
+					<li><a href="about.html"><button>A Propos</button></a></li>
 					<!-- <li><a href="gallery.html"><button>Gallery</button></a></li> -->
 				</ul>
-				</div>
-				<div class="lang-menu">
-					<script src="languages.js"></script>
-					<div class="selected-lang" id="langButton">
-						<!-- French -->
-					</div>
-					<ul id="langOptions">
-						<li><a href="" class="fr">French</a></li>
-						<li><a href="about_en.html" class="en">English</a></li>
-					</ul>
-				</div>
-				<div class="burger-menu-button">
-					<i class="fa-solid fa-bars"></i>
-				</div>
-				<div class="burger-menu">
-					<ul>
-						<li><a href="web_page.html"><button>Home</button></a></li>
-						<li><a href="about.html"><button>About</button></a></li>
-						<!-- <li><a href="gallery.html"><button>Gallery</button></a></li> -->
-					</ul>
-				</div>
 			</div>
+			<div class="lang-menu">
+				<script src="languages.js"></script>
+				<div class="selected-lang" id="langButton">
+					<!-- French -->
+				</div>
+				<ul id="langOptions">
+					<li><a href="" class="fr">French</a></li>
+					<li><a href="about_en.html" class="en">English</a></li>
+				</ul>
+			</div>
+			<div class="burger-menu">
+				<ul class="sidebar">
+					<li class="close-button" onclick="hideSidebar()">
+						<a href="#">
+							<svg xmlns="http://www.w3.org/2000/svg" height="26" viewBox="0 96 960 960" width="26">
+								<path d="m249 849-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z"/>
+							</svg>
+						</a>
+					</li>
+					<li class="links-button"><a href="web_page.html"><button>Accueil</button></a></li>
+					<li class="links-button"><a href="about.html"><button>A Propos</button></a></li>
+					<!-- <li class="links-button"><a href="gallery.html"><button>Gallery</button></a></li> -->
+				</ul>
+				<ul>
+					<li class="menu-button" onclick="showSidebar()">
+						<a href="#">
+							<svg xmlns="http://www.w3.org/2000/svg" height="26" viewBox="0 96 960 960" width="26">
+							<path d="M120 816v-60h720v60H120Zm0-210v-60h720v60H120Zm0-210v-60h720v60H120Z"/>
+							</svg>
+						</a>
+					</li>
+				</ul>
+				<script src="burger-menu.js"></script>
+			</div>				
 		</nav>
-		<script src="burger-menu.js"></script>
 		<div class="container">
 			<h1>Le Project</h1>
 			<div class="project-description">
@@ -60,5 +71,5 @@
 					faisant intéragir en temps réel l'image capturée avec le niveau sonore de l'environnement en altérant l'image par la couleur des pixels.</p>
 			</div>
 		</div>
-    </body>
+	</body>
 </html>

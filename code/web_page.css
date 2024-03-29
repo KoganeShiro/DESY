@@ -7,17 +7,13 @@
 
 /* Background image for the entire page */
 body {
-    margin: 0;
-	height: 100%;
-	width: 100%;
-	margin-bottom: 43.3%; /*maybe change as the website change dimension*/
+    min-height: 100vh;
     background-image: url('../img/bg_bis.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     background-color: #f0f0f0;
     font-family: Arial, sans-serif;
-    color: #333;
 }
 
 .container {
@@ -77,7 +73,7 @@ li, a, button {
 }
 
 .navbar-links {
-    margin-right: 15rem;
+    margin-left: 17rem;
 }
 
 .navbar-links li{
@@ -117,53 +113,36 @@ button:hover {
 
 
 /*burger menu button*/
-.burger-menu {
-    position: relative;
-}
-
-.sidebar {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
-    background-color: #333;
-}
 
 .links-button {
     display: none;
+    text-align: center;
+    margin-top: auto;
 }
 
-.menu-button {
+.menu-button,
+.close-button {
     display: none;
     position: absolute;
-    top: 5px;
+    top: 60px;
     right: 100px;
     transform: translateY(-50%);
     border-radius: 3px;
 }
 
-.menu-button svg {
-    fill: white;
-	width: 30px;
-	height: 30px;
-}
-
+.menu-button svg,
 .close-button svg {
     fill: white;
-	width: 30px;
-	height: 30px;
+    width: 35px;
+    height: 35px;
 }
 
-.menu-button svg:hover {
-	color: #92a6cc;
+.menu-button svg:hover,
+.close-button svg:hover {
+    color: #92a6cc;
 }
 
-@media screen and (max-width: 911px) {
+@media screen and (max-width: 1212px) {
     .navbar-links ul {
         display: none;
     }
@@ -181,24 +160,32 @@ button:hover {
         display: block;
     }
 
-	.close-button {
-		display: none;
+    .close-button {
+        display: none;
+    }
+
+    .sidebar {
+        position: fixed;
+        width: 200px;
+		height: 250px;
+        top: 0;
+        flex-direction: column;
+        background-color: #333;
+        padding: 20px;
+        box-sizing: border-box;
+		border-radius: 3px;
+    }
+
+    .sidebar-open {
+        right: 0;
+    }
+
+    .links-button {
+		position: relative;
+		top: 100px;
+		display: block;
+		margin-top: 10px;
+		text-align: left;
+		padding-left: 10px;
 	}
-
-    .sidebar-open .sidebar {
-        display: block;
-    }
-
-    .sidebar-open .links-button {
-        display: block;
-    }
-
-	.sidebar {
-        position: relative;
-        width: 100%;
-        height: 10%;
-        margin: 0;
-        padding: 0;
-        display: flex;
-    }
 }
