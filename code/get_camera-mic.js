@@ -1,18 +1,4 @@
 
-window.onload = function() {
-    var constraints = { audio: true, video: true };
-
-    navigator.mediaDevices.getUserMedia(constraints)
-        .then(function(mediaStream) {
-            var video = document.querySelector('video');
-            video.srcObject = mediaStream;
-            video.play();
-        })
-        .catch(function(err) {
-            alert(err);
-        });
-}
-
 class Microphone {
 	constructor(fftSize) {
 		this.initialized = false;
@@ -28,7 +14,12 @@ class Microphone {
 			this.microphone.connect(this.analyser);
 			this.initialized = true;
 
+			var video = document.querySelector('video');
+            video.srcObject = stream;
+            video.play();
+
 		}.bind(this)).catch(function(err) {
+			console.log(err);
 			alert("You can't experiment if you don't activate your camera and your mic !...");
 		});
 	}
