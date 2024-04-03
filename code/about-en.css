@@ -6,10 +6,9 @@
     transform: translate(-50%, -50%);
     max-width: 800px;
     width: 80%; /* Adjust the width as needed */
-    padding: 2rem;
     background: rgb(245, 242, 224);
-    padding: 10px;
     box-sizing: border-box;
+	padding: 2rem
 }
 
 h1 {
@@ -32,15 +31,14 @@ h1 {
 
 
 .lang-menu {
-	position:fixed;
-	right:13rem;
-	top:6.7rex;
+	position: fixed;
+	right: 13rem;
+	top: 6.7rex;
 	font-weight: bold;
 }
 
-
 .lang-menu .selected-lang {
-    display: flex;   
+    display: flex;
     justify-content: space-between;
     line-height: 2;
     cursor: pointer;

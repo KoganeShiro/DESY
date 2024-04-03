@@ -104,7 +104,7 @@ button {
 	cursor: pointer;
 	transition: all 0.3s ease 0s;
 	height: 100%;
-	width: 100%;
+width: 100%;
 }
 
 button:hover {

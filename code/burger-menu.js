@@ -23,7 +23,7 @@ function hideSidebar() {
 
     sidebar.classList.remove('sidebar-open');
     sidebar.style.display = 'none';
-    menuButton.style.display = 'block';
+    menuButton.style.display = 'flex';
     closeButtons.forEach(function(button) {
         button.style.display = 'none';
     });
