@@ -5,7 +5,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     max-width: 800px;
-    width: 80%; /* Adjust the width as needed */
+    width: 80%;
     padding: 2rem;
     background: rgb(245, 242, 224);
     box-sizing: border-box;
@@ -48,7 +48,7 @@ h1 {
     display: inline-block;
     width: 32px;
     height: 32px;
-    background-image: url('../img/french.png');
+    background-image: url('/img/french.png');
     background-size: contain;
     background-repeat: no-repeat;
 }
@@ -98,10 +98,10 @@ h1 {
 }
 
 .en:before {
-    background-image: url('../img/british-us.png');
+    background-image: url('/img/british-us.png');
 }
 .fr:before {
-    background-image: url('../img/french.png');
+    background-image: url('/img/french.png');
 }
 
 
