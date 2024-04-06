@@ -1,0 +1,32 @@
+.rgbKineticSlider {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+canvas {
+    position: absolute;
+    display : block;
+    top:0;
+    left : 0;
+}
+
+.notice {
+    text-decoration: none;
+    position: absolute;
+    bottom: 3rem;
+    left: 3rem;
+    z-index: 1;
+    color: var(--color-link);
+}
+
+@media screen and (max-width: 53em) {
+    .notice {
+        bottom: auto;
+        top: 2rem;
+        left : 10vw;
+        left: 3rem;
+    }
+}
