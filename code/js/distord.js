@@ -11,7 +11,7 @@ function lerp(start, end, i) {
     return start * (1 - i) + end * i;
 }
 
-function ini() {
+function init() {
     document.body.style.height = `${img.getBoundingClientRect().height}px`;
 }
 
@@ -24,7 +24,9 @@ function smoothScroll() {
 
 class EffectCanvas {
     constructor() {
-        this.div = document.querySelector('main')
+        this.img = document.querySelector('main');
+        this.imgages = [...document.querySelectorAll('img')];
+        this.meshiTEMS = [];
     }
 }
 
