@@ -11,7 +11,13 @@
 		<link rel="stylesheet" href="/code/css/video.css">
 		<script src="/code/js/web_page.js"></script>
 		<script src="/code/js/get_camera-mic.js"></script>
-		<script src="/code/js/script.js"></script>
+		<script>
+			document.documentElement.className="js";
+			var supportsCssVars=function(){
+				var e,t=document.createElement("style");
+				return t.innerHTML="root: { --tmp-var: bold; }",document.head.appendChild(t),e=!!(window.CSS&&window.CSS.supports&&window.CSS.supports("font-weight","var(--tmp-var)")),t.parentNode.removeChild(t),e};
+				supportsCssVars()||alert("Please view this demo in a modern browser that supports CSS Variables.");
+		</script>
 	</head>
 	<body class="page" onload='main()'>
 		<!-- 
@@ -68,10 +74,18 @@
 			<video>
 				<canvas id="canvas"></canvas>
 			</video>
-			<div class="img">
-				<img id="image" src="/img/gallery-test/la-catene.jpg" alt="">
+
+			<div class="content">
+				<div id="distord_filter" class="distord_filter"></div>
 			</div>
+
+			<script src="/code/js/libs/imagesLoaded.pkgd.min.js"></script>
+			<script src="/code/js/libs/pixi.min.js"></script>
+			<script src="/code/js/libs/pixi-filters.min.js"></script>
+			<script src="/code/js/libs/TweenMax.min.js"></script>
+
 			<script src="/code/js/distord.js"></script>
+			<script src="/code/js/script.js"></script>
 		</div>
 	</body>
 </html>

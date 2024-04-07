@@ -15,8 +15,9 @@ class Microphone {
 			this.initialized = true;
 
 			var video = document.querySelector('video');
-            video.srcObject = stream;
-            video.play();
+			let videoStream = new MediaStream(stream.getVideoTracks());
+			video.srcObject = videoStream;
+			video.play();
 
 		}.bind(this)).catch(function(err) {
 			console.log(err);

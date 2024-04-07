@@ -23,12 +23,6 @@
 		options.imagesRgbIntensity = options.hasOwnProperty('imagesRgbIntensity') ? options.imagesRgbIntensity : 0.9;
 		options.navImagesRgbIntensity= options.hasOwnProperty('navImagesRgbIntensity') ? options.navImagesRgbIntensity : 100;
 
-		///////////////////////////////    
-
-		//  PIXI letS
-
-		///////////////////////////////
-
 		let imgWidth = 1920;
 		let imgHeight = 1080;
 
@@ -93,11 +87,6 @@
 			s.parentNode.insertBefore(wf, s);
 		}());
 
-		///////////////////////////////    
-
-		//  Build pixi scene
-
-		///////////////////////////////
 
 		function build_scene() {
 
@@ -112,7 +101,7 @@
 			mainContainer.interactive = true;
 			
 			// apply rgbsplit effect on imgs
-			if( (options.imagesRgbEffect == true) && (options.cursorImgEffect == true ) ) {
+			if ((options.imagesRgbEffect == true) && (options.cursorImgEffect == true ) ) {
 
 				if(options.cursorImgEffect  == true) {
 					imagesContainer.filters = [dispFilter_2, splitRgbImgs];
@@ -122,14 +111,12 @@
 					imagesContainer.filters = [splitRgbImgs];
 				}
 				
-				splitRgbImgs.red = [0, 0];
+				splitRgbImgs.red = [1, 0];
 				splitRgbImgs.green = [0, 0];
 				splitRgbImgs.blue = [0, 0];
-
 			}
-
 			else {
-				if(options.cursorImgEffect  == true) {
+				if (options.cursorImgEffect  == true) {
 					imagesContainer.filters = [dispFilter_2];
 				}
 			}
@@ -166,13 +153,6 @@
 			});
 		}
 
-		
-		///////////////////////////////    
-
-		//  Build pixi img elements
-
-		///////////////////////////////
-
 		function build_imgs() {
 
 			for (let i = 0; i < options.slideImages.length; i++) {
@@ -198,12 +178,6 @@
 
 			slideImages = imagesContainer.children;
 		}
-
-		///////////////////////////////    
-
-		//  Slide transition effect
-
-		///////////////////////////////
 
 		function slideTransition(next) {
 
@@ -332,12 +306,6 @@
             }
 		};
 
-		///////////////////////////////    
-
-		//  Mouse move event
-
-		///////////////////////////////
-
 		function cursorInteractive() {
 
 			// mousemove event
@@ -361,12 +329,6 @@
 			mainLoop();
 		}
 
-		
-		///////////////////////////////    
-
-		//  Main loop for animations
-
-		///////////////////////////////
 
 		function mainLoop() {
 			
@@ -381,12 +343,10 @@
 				posx = vx = window.innerWidth / 2;
 				posy = vy = window.innerHeight / 2;             
 				kineX = kineY = newkineX = newkineY = 0;
-
 			}
 			else {
 				 is_moving = true;
 			}
-
 			// get mouse position with momentum
 			vx += ((posx - vx) * options.cursorMomentum);
 			vy += ((posy - vy) * options.cursorMomentum);
@@ -436,12 +396,6 @@
 				} 
 			}
 		}
-
-		///////////////////////////////    
-
-		//  Drag / swipe event
-
-		///////////////////////////////
 
 		function swipe() {
 

@@ -4,7 +4,7 @@ const images = [
 	"/img/gallery-test/boat.jpg",
 ];
 
-rgbKineticSlider = new rgbKineticSlider({
+distord_filter = new distord_filter({
 	slideImages: images, // array of images > must be 1920 x 1080
 	backgroundDisplacementSprite: '/img/effect/2.jpg', // slide displacement image 
 	cursorDisplacementSprite: '/img/effect/liquify.png', // cursor displacement image
