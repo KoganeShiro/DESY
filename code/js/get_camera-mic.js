@@ -16,7 +16,7 @@ class Microphone {
 
 			var video = document.querySelector('video');
 			let videoStream = new MediaStream(stream.getVideoTracks());
-			video.srcObject = videoStream;
+			videoStream.srcObject = stream;
 			video.play();
 
 		}.bind(this)).catch(function(err) {

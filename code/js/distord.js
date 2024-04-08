@@ -6,17 +6,29 @@
 		options = options || {};
 		options.useMic = options.hasOwnProperty('useMic') ? options.useMic : true;
 
+		/* TODO, delete these to fit it for sound ^*/
 		options.cursorDisplacementSprite = options.hasOwnProperty('cursorDisplacementSprite') ? options.cursorDisplacementSprite : '';
 		options.cursorImgEffect = options.hasOwnProperty('cursorImgEffect') ? options.cursorImgEffect : true;
 		options.cursorScaleIntensity = options.hasOwnProperty('cursorScaleIntensity') ? options.cursorScaleIntensity : 0.25;
 		options.cursorMomentum = options.hasOwnProperty('cursorMomentum') ? options.cursorMomentum : 0.14;
+		/**/
 
+		 options.autoPlay            = options.hasOwnProperty('autoPlay') ? options.autoPlay : true;
+      	options.autoPlaySpeed       = options.hasOwnProperty('autoPlaySpeed') ? options.autoPlaySpeed : [10, 3];
+		options.wacky               = options.hasOwnProperty('wacky') ? options.wacky : false;
+
+
+		/* TODO change it for videoFrame*/
 		options.slideImages = options.hasOwnProperty('slideImages') ? options.slideImages : [];
+
+
+		options.slideTransitionDuration = options.hasOwnProperty('slideTransitionDuration') ? options.slideTransitionDuration : 1;
+
+
 		options.itemsTitles = options.hasOwnProperty('itemsTitles') ? options.itemsTitles : [];
 		options.backgroundDisplacementSprite = options.hasOwnProperty('backgroundDisplacementSprite') ? options.backgroundDisplacementSprite : '';
 		options.swipe = options.hasOwnProperty('swipe') ? options.swipe : true;
 		options.swipeDistance = options.hasOwnProperty('swipeDistance') ? options.swipeDistance : 500;
-		options.slideTransitionDuration = options.hasOwnProperty('slideTransitionDuration') ? options.slideTransitionDuration : 1;
 		options.transitionScaleIntensity= options.hasOwnProperty('transitionScaleIntensity') ? options.transitionScaleIntensity : 40;
 		options.transitionScaleAmplitude= options.hasOwnProperty('transitionScaleAmplitude') ? options.transitionScaleAmplitude : 300;
 		options.swipeScaleIntensity= options.hasOwnProperty('swipeScaleIntensity') ? options.swipeScaleIntensity : 0.3;
@@ -28,16 +40,23 @@
 		options.imagesRgbIntensity = options.hasOwnProperty('imagesRgbIntensity') ? options.imagesRgbIntensity : 0.9;
 		options.navImagesRgbIntensity= options.hasOwnProperty('navImagesRgbIntensity') ? options.navImagesRgbIntensity : 100;
 
+		/* */
 		const fftSize = 1024; //must be a power of 2 between 2^5 and 2^15
 		let mic = new Microphone(fftSize);
 		if (options.useMicrophone) {
             mic = new Microphone(fftSize);
         }
 		console.log(mic);
+		/* */
 
+		/* image imension, TODO change to camera video*/
 		let imgWidth = 1920;
 		let imgHeight = 1080;
 
+ 
+		/* ---------------------------\
+        /  PIXI VARIABLES				|
+       	/ --------------------------- */ 
 		// remove pixi message in console
 		PIXI.utils.skipHello();
 
@@ -50,38 +69,49 @@
 		const canvas = document.getElementById("distord_filter");
 		const stage = new PIXI.Container();
 		const mainContainer = new PIXI.Container();
+
+		/* TODO framesContainer*/
 		const imagesContainer = new PIXI.Container();
 
-		// displacement variables used for slides transition 
+		// displacement variables used for slides transition
+		/* TODO change it to PIXI.Video and PIXI.VideoTexture*/
 		const dispSprite = new PIXI.Sprite.from(options.backgroundDisplacementSprite );
 		const dispFilter = new PIXI.filters.DisplacementFilter(dispSprite);
 
 		// displacement variables used for cursor moving effect
+		/*TODO change to be for sound*/
 		const dispSprite_2 = PIXI.Sprite.from(options.cursorDisplacementSprite);
 		const dispFilter_2 = new PIXI.filters.DisplacementFilter(dispSprite_2);
 
 		// colors filters
 		const splitRgbImgs = new PIXI.filters.RGBSplitFilter;
-		
+
 		// main elements
 		let render; // pixi render
 		let mainLoopID;
+
+		/* TODO framesImages*/
 		let slideImages;
 
-		// slide index
+		// SLIDES ARRAY INDEX --> do i need it ?
 		let currentIndex = 0;
-		// swipping flag
-		let loud_sound = false; //
+
+		/* */
+		let loud_sound = false;
+		/**/
+
+		//TODO, remove these
 		let is_swipping = false;
 		let drag_start = 0;
-		// transition flag
+			// transition flag
 		let is_playing = false;
-		// movig flag
+			// movig flag
 		let is_moving = false;
-		// load flag
+			// load flag
 		let is_loaded = false;
 
-		// set some variables for mouseposition and moving effect (want it to be for sound)
+		// set some variables for mouseposition and moving effect
+		//TODO (want it to be for sound)
 		let posx = 0,
 			posy = 0,
 			vx = 0,
@@ -89,7 +119,7 @@
 			kineX = 0,
 			kineY = 0;
 
-		// include the web-font loader script dynamically
+		// include the web-font loader script dynamically -->Do i need it ?
 		(function() {
 			let wf = document.createElement('script');
 			wf.src = (document.location.protocol === 'https:' ? 'https' : 'http') +
@@ -101,56 +131,74 @@
 		}());
 
 
+		 /* ---------------------------\
+        /  INITIALISE PIXI				|
+       	/ --------------------------- */ 
 		function build_scene() {
-
 			// append render to canvas
 			canvas.appendChild(renderer.view);
-
+		
 			// set dispFilter to the stage
 			stage.filters = [dispFilter];
-			// stage.scale.set(2)
-
+		
 			// enable cursorInteractive on mainContainer
+			/* need TODO it for sound*/
 			mainContainer.interactive = true;
-			
+		
 			// apply rgbsplit effect on imgs
-			if ((options.imagesRgbEffect == true)) {
-
+			if (options.imagesRgbEffect == true) {
 				if (options.cursorImgEffect == true) {
 					imagesContainer.filters = [dispFilter_2, splitRgbImgs];
-				}
-				else {
+				} else {
 					imagesContainer.filters = [splitRgbImgs];
 				}
+				/*MOVE UP THE CONDITION*/
 				if (options.useMicrophone) {
-					// Example: Adjust displacement filter based on microphone volume
 					if (mic && mic.initialized) {
 						let micData = mic.getVolume(); // Get microphone volume level
-						// Example: Update displacement filter scale based on microphone data
 						dispFilter.scale.x = micData * 0.1; // Adjust the scale factor as needed
 						dispFilter.scale.y = micData * 0.1; // Adjust the scale factor as needed
+		
+						// Set cursor displacement filter scale based on microphone data
+						dispFilter_2.scale.x = micData * 0.1;
+						dispFilter_2.scale.y = micData * 0.1;
 					}
 				}
-				
+		
 				splitRgbImgs.red = [0, 0];
 				splitRgbImgs.green = [0, 0];
 				splitRgbImgs.blue = [0, 0];
 			}
 
 			else {
-				if (options.cursorImgEffect  == true) {
+				if (options.cursorImgEffect == true) {
 					imagesContainer.filters = [dispFilter_2];
 				}
+			}
+		
+		// Set the filter to stage and set some default values for the animation
+			if ( options.autoPlay === false ) {
+				dispFilter.scale.x = 0;
+				dispFilter.scale.y = 0;
+				}
+
+				if ( options.wacky === true ) {
+
+				dispSprite.anchor.set(0.5);
+				dispSprite.x = renderer.width / 2;
+				dispSprite.y = renderer.height / 2; 
 			}
 
 			// Displacement sprites and filters set up
 			dispSprite.texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
 			dispFilter.autoFit = false;
 			dispFilter.padding = 0;
-			dispSprite_2.anchor.set(0.5);
+
+			dispSprite_2.anchor.set(0.05);
 			dispFilter_2.scale.x = 0;
 			dispFilter_2.scale.y = 0;
-			
+
+		
 			// renderer settings
 			renderer.view.style.objectFit = 'cover';
 			renderer.view.style.width = '100%';
@@ -159,14 +207,13 @@
 			renderer.view.style.left = '50%';
 			renderer.view.style.webkitTransform = 'translate( -50%, -50% ) scale(1.15)';
 			renderer.view.style.transform = 'translate( -50%, -50% ) scale(1.15)';
-			
-
-			//  Add children to the main container
+		
+			// Add children to the main container
 			mainContainer.addChild(imagesContainer, dispSprite_2);
-
+		
 			// Add children to the stage = canvas
 			stage.addChild(mainContainer, dispSprite);
-
+		
 			// pixi render animation
 			render = new PIXI.Ticker();
 			render.autoStart = true;
@@ -174,7 +221,11 @@
 				renderer.render(stage);
 			});
 		}
+		
 
+		/* ---------------------------\
+        /  LOAD SLIDES TO CANVAS		|
+       	/ --------------------------- */ 
 		function build_imgs() {
 
 			for (let i = 0; i < options.slideImages.length; i++) {
@@ -201,15 +252,19 @@
 			slideImages = imagesContainer.children;
 		}
 
-		/* to be something when the sound is loud*/
-		function slideTransition(next) {
 
+		/* ---------------------------\
+        /  TRANSITION BETWEEN SLIDES	|
+       	/ --------------------------- */ 
+		/* to be something when the sound is loud 
+				TODO next == index 		*/
+		function slideTransition(next) {
 			// center displacement
 			dispSprite.anchor.set(0.5);
 			dispSprite.x = renderer.view.width / 2;
 			dispSprite.y = renderer.view.height / 2;
 			
-			// set timeline with callbacks
+			// set timeline with callbacks (GSAP library)
 			timelineTransition = new TimelineMax({
 				onStart: function() {
 
@@ -228,8 +283,6 @@
 						splitRgbImgs.green = [0, 0];
 						splitRgbImgs.blue = [0, 0];
 					}
-					
-
 					// update flags
 					is_playing = false;
 					is_swipping = false;
@@ -244,14 +297,11 @@
 				},
 
 				onUpdate: function() {
-
 					dispSprite.rotation =  options.transitionSpriteRotation; // frequency
 					dispSprite.scale.set( timelineTransition.progress() * options.transitionScaleIntensity);
-
 					if( is_loaded === true) {
 						// if img rgb effect is enable
 						if(options.imagesRgbEffect == true) {
-
 							// on first half of transition
 							// match splitRgb values with timeline progress / from 0 to x
 							if(timelineTransition.progress() < 0.5) {
@@ -259,7 +309,6 @@
 								splitRgbImgs.green = [0, 0];
 								splitRgbImgs.blue = [ ( timelineTransition.progress() ), 0];
 							}
-							
 							// on second half of transition
 							// match splitRgb values with timeline progress / from x to 0
 							else {
@@ -272,7 +321,9 @@
 					}
 				}
 			});
-			
+
+
+
 			// make sure timeline is finish
 			timelineTransition.clear();
 			if (timelineTransition.isActive() ) {
@@ -331,6 +382,10 @@
 			}
 		};
 
+
+
+
+		/* Need to change this function to make the sound to be interactive*/
 		function cursorInteractive() {
 
 			// mousemove event
@@ -353,13 +408,8 @@
 			// enable raf loop
 			mainLoop();
 		}
-
-		function mic_sound() {
-			let micData; // Variable to store microphone data
-			micData = mic.getVolume(); // Example: Get microphone volume level
-		}
-
-
+		
+		
 		function mainLoop() {
 			
 			// enable raf animation
@@ -584,7 +634,9 @@
 
 			// interactivity
 			cursorInteractive();
-			//sound_Interactive();
+			/* TODO
+			sound_Interactive();
+			*///to remove
 			swipe();
 			slideTransition(currentIndex);
 	

@@ -1,4 +1,4 @@
-(function() {
+(function main() {
   
     window.CanvasSlideshow = function( options ) {
 
@@ -13,21 +13,25 @@
       //  OPTIONS
       /// ---------------------------      
       options                     = options || {};
+
       options.stageWidth          = options.hasOwnProperty('stageWidth') ? options.stageWidth : 1920;
       options.stageHeight         = options.hasOwnProperty('stageHeight') ? options.stageHeight : 1080;
+
+
       options.pixiSprites         = options.hasOwnProperty('sprites') ? options.sprites : [];
-      options.texts               = options.hasOwnProperty('texts') ? options.texts : [];
+
       options.autoPlay            = options.hasOwnProperty('autoPlay') ? options.autoPlay : true;
       options.autoPlaySpeed       = options.hasOwnProperty('autoPlaySpeed') ? options.autoPlaySpeed : [10, 3];
+      
       options.fullScreen          = options.hasOwnProperty('fullScreen') ? options.fullScreen : true;
       options.displaceScale       = options.hasOwnProperty('displaceScale') ? options.displaceScale : [200, 70];
       options.displacementImage   = options.hasOwnProperty('displacementImage') ? options.displacementImage : '';
       options.navElement          = options.hasOwnProperty('navElement')  ?  options.navElement : document.querySelectorAll( '.scene-nav' ); 
       options.displaceAutoFit     = options.hasOwnProperty('displaceAutoFit')  ?  options.displaceAutoFit : false; 
       options.wacky               = options.hasOwnProperty('wacky') ? options.wacky : false;
-      options.interactive         = options.hasOwnProperty('interactive') ? options.interactive : false;
+
+      options.interactive         = options.hasOwnProperty('interactive') ? options.interactive : true;
       options.displaceScaleTo     = ( options.autoPlay === false ) ? [ 0, 0 ] : [ 20, 20 ];
-      options.textColor           = options.hasOwnProperty('textColor') ? options.textColor : '#fff';
       options.displacementCenter  = options.hasOwnProperty('displacementCenter') ? options.displacementCenter : false;
       options.dispatchPointerOver = options.hasOwnProperty('dispatchPointerOver') ? options.dispatchPointerOver : false;
       
@@ -36,24 +40,14 @@
       //  PIXI VARIABLES
       /// ---------------------------    
       var renderer            = new PIXI.autoDetectRenderer(options.stageWidth, options.stageHeight, { transparent: true });
+
       var stage               = new PIXI.Container();
       var slidesContainer     = new PIXI.Container();
+
       var displacementSprite  = new PIXI.Sprite.fromImage( options.displacementImage );
       var displacementFilter  = new PIXI.filters.DisplacementFilter( displacementSprite );
 
 
-
-      //  TEXTS
-      /// ---------------------------    
-      var style = new PIXI.TextStyle({
-        fill: options.textColor,
-        wordWrap: true,
-        wordWrapWidth: 400,
-        letterSpacing: 20,
-        fontSize: 14
-      });
-
-      
 
       //  SLIDES ARRAY INDEX
       /// ---------------------------    
@@ -132,29 +126,20 @@
       this.loadPixiSprites = function( sprites ) {
         
 
-        var rSprites = options.sprites;
-        var rTexts   = options.texts;
+        //var rSprites = options.sprites;
 
-        for ( var i = 0; i < rSprites.length; i++ ) {
+        //for ( var i = 0; i < rSprites.length; i++ ) {
           
           var texture   = new PIXI.Texture.fromImage( sprites[i] );
           var image     = new PIXI.Sprite( texture );
-
-          if ( rTexts ) {
-            var richText = new PIXI.Text( rTexts[i], style);
-            image.addChild(richText);
-
-            richText.anchor.set(0.5);
-            richText.x = image.width / 2;
-            richText.y = image.height / 2;                     
-          }
           
-
+			/*
           if ( options.centerSprites === true ) {
             image.anchor.set(0.5);
             image.x = renderer.width / 2;
             image.y = renderer.height / 2;            
           }
+          /* modify the emplacement of the image
           //image.transform.scale.x = 1.3;
           //image.transform.scale.y = 1.3;
 
@@ -162,12 +147,12 @@
           if ( i !== 0  ) {
             TweenMax.set( image, { alpha: 0 } );
           }
-
+			*/
           slidesContainer.addChild( image );
 
         } 
         
-      };
+      //};
       
 
 
@@ -309,16 +294,6 @@
         
         that.initPixi();
         that.loadPixiSprites( options.pixiSprites );
-
-        /*
-        if ( options.fullScreen === true ) {
-          window.addEventListener("resize", function( event ){ 
-            scaleToWindow( renderer.view );
-          });
-          scaleToWindow( renderer.view );  
-        }
-        */
-        
 
       };
 
@@ -490,7 +465,7 @@
         //5. Return the `scale` value. This is important, because you'll nee this value 
         //for correct hit testing between the pointer and sprites
         return scale;
-      } // http://bit.ly/2y1Yk2k      
+      } // http://bit.ly/2y1Yk2k
 
       
     };

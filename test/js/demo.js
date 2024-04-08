@@ -21,6 +21,7 @@
 		ev.preventDefault();
 		navigate(ev.target);
 	}));
+
 	/*
 	document.addEventListener('keydown', (ev) => {
 		const keyCode = ev.keyCode || ev.which;

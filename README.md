@@ -24,3 +24,4 @@ The goal is to explore the boundaries between visual and auditory stimuli, provi
 
 ### Sources
 https://github.com/hmongouachon/rgbKineticSlider/tree/master
+https://github.com/codrops/LiquidDistortion/
