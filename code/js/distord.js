@@ -404,14 +404,12 @@
 				posx = e.touches[0].clientX;
 				posy = e.touches[0].clientY;
 			}
-			
 			// enable raf loop
 			mainLoop();
 		}
-		
-		
+
+
 		function mainLoop() {
-			
 			// enable raf animation
 			mainLoopID = requestAnimationFrame(mainLoop);
 

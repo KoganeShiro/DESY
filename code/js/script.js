@@ -1,30 +1,12 @@
 
 const images = [
-	"/img/gallery-test/boat.jpg",
-	"/img/gallery-test/boat.jpg",
 ];
 
-function updateSliderWithCamera() {
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
-  const video = document.getElementById('camera');
-
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-
-  // Draw current frame from video stream onto canvas
-  context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-  // Convert canvas to base64 image data
-  const imageData = canvas.toDataURL();
-
-  distord_filter.updateSlide(imageData);
-
-  requestAnimationFrame(updateSliderWithCamera);
-}
+let video;
+let mic = new Microphone(32);
 
 distord_filter = new distord_filter({
-	/*TODO videoImages = frames*/
+	//slideImages: frames,
 	slideImages: images,
 
 	backgroundDisplacementSprite: '/img/effect/2.jpg', // slide displacement image 

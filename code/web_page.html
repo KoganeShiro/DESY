@@ -10,7 +10,6 @@
 		<link rel="stylesheet" href="/code/css/web_page.css">
 		<link rel="stylesheet" href="/code/css/video.css">
 		<script src="/code/js/web_page.js"></script>
-		<script src="/code/js/get_camera-mic.js"></script>
 		<script>
 			document.documentElement.className="js";
 			var supportsCssVars=function(){
@@ -71,21 +70,19 @@
 			</div>				
 		</nav>
 		<div class="camera">
-			<video>
+			<video id="camera-video" autoplay="true" muted="muted"></video>
 				<canvas id="canvas"></canvas>
-			</video>
-
-			<div class="content">
 				<div id="distord_filter" class="distord_filter"></div>
-			</div>
-
-			<script src="/code/js/libs/imagesloaded.pkgd.min.js"></script>
-			<script src="/code/js/libs/pixi.min.js"></script>
-			<script src="/code/js/libs/pixi-filters.min.js"></script>
-			<script src="/code/js/libs/TweenMax.min.js"></script>
-
-			<script src="/code/js/distord.js"></script>
-			<script src="/code/js/script.js"></script>
+			</video>
 		</div>
+
+		<script src="/code/js/libs/imagesloaded.pkgd.min.js"></script>
+		<script src="/code/js/libs/pixi.min.js"></script>
+		<script src="/code/js/libs/pixi-filters.min.js"></script>
+		<script src="/code/js/libs/TweenMax.min.js"></script>
+
+		<script src="/code/js/get_camera-mic.js"></script>
+		<script src="/code/js/distord.js"></script>
+		<script src="/code/js/script.js"></script>
 	</body>
 </html>

@@ -2,21 +2,24 @@
 class Microphone {
 	constructor(fftSize) {
 		this.initialized = false;
+		const video = document.querySelector('video');
+		const canvas = document.getElementById('canvas');
+		const ctx = canvas.getContext('2d');
 
 		navigator.mediaDevices.getUserMedia({audio: true, video: true})
 		.then(function(stream){
+			const audioStream = new MediaStream([stream.getAudioTracks()[0]]);
 			this.audioContext = new AudioContext();
-			this.microphone = this.audioContext.createMediaStreamSource(stream);
 			this.analyser = this.audioContext.createAnalyser();
 			this.analyser.fftSize = fftSize;
 			const bufferLength = this.analyser.frequencyBinCount;
 			this.dataArray = new Uint8Array(bufferLength);
+
+			this.microphone = this.audioContext.createMediaStreamSource(audioStream);
 			this.microphone.connect(this.analyser);
 			this.initialized = true;
 
-			var video = document.querySelector('video');
-			let videoStream = new MediaStream(stream.getVideoTracks());
-			videoStream.srcObject = stream;
+			video.srcObject = stream;
 			video.play();
 
 		}.bind(this)).catch(function(err) {
@@ -39,4 +42,27 @@ class Microphone {
 		let volume = Math.sqrt(sum / normSamples.length);
 		return volume;
 	}
+
+	/*
+	getFrequency() {
+		this.analyser.getFloatFrequencyData(this.dataArray);
+	
+		// Find the index of the frequency bin with the highest amplitude
+		let dominantFrequencyIndex = 0;
+		let maxAmplitude = 0;
+		for (let i = 0; i < this.dataArray.length; i++) {
+		  if (this.dataArray[i] > maxAmplitude) {
+			maxAmplitude = this.dataArray[i];
+			dominantFrequencyIndex = i;
+		  }
+		}
+	
+		// Calculate the dominant frequency based on sample rate and frequency bin count
+		const sampleRate = this.audioContext.sampleRate;
+		const frequencyBinCount = this.analyser.frequencyBinCount;
+		const dominantFrequency = sampleRate / frequencyBinCount * dominantFrequencyIndex;
+	
+		return dominantFrequency;
+	  }
+	  */
 }
