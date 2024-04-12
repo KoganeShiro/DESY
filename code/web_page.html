@@ -18,6 +18,9 @@
 				return t.innerHTML="root: { --tmp-var: bold; }",document.head.appendChild(t),e=!!(window.CSS&&window.CSS.supports&&window.CSS.supports("font-weight","var(--tmp-var)")),t.parentNode.removeChild(t),e};
 				supportsCssVars()||alert("Please view this demo in a modern browser that supports CSS Variables.");
 		</script>
+		<script src="/code/js/three.js-master/build/three.js"></script>
+		<script src="/code/js/dat.gui-master/build/dat.gui.js"></script>
+		<script src="/code/js/temporal_smoothing.js"></script>
 	</head>
 	<body>
 		<!-- 
@@ -70,17 +73,23 @@
 				<script src="/code/js/burger-menu.js"></script>
 			</div>				
 		</nav>
+
+		<canvas id="canvas"></canvas>
+		<!--
 		<div class="camera">
 			<video id="camera-video" autoplay="true" muted="muted"></video>
 				<canvas id="canvas"></canvas>
 				<div id="distord_filter" class="distord_filter"></div>
 			</video>
 		</div>
+		-->
 
 		<script src="/code/js/get_camera-mic.js"></script>
 		<script type="module" src="/code/js/distord.js"></script>
+		<script src="/code/js/ghostWebcam.js"></script>
 
 		<!--
+
 		<script src="/code/js/libs/imagesloaded.pkgd.min.js"></script>
 		<script src="/code/js/libs/pixi.min.js"></script>
 		<script src="/code/js/libs/pixi-filters.min.js"></script>

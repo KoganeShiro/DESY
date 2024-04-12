@@ -37,3 +37,4 @@ https://github.com/hmongouachon/rgbKineticSlider/tree/master
 https://github.com/codrops/LiquidDistortion/
 https://github.com/EliasHasle/EliasHasle.github.io/tree/master
 https://jrlazz.eu5.org/anim/ontv.html
+https://github.com/akella/webgl-mouseover-effects
