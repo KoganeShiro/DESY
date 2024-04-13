@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" class="js"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>ghost liquid rgb effect</title>
+	<link rel="stylesheet" type="text/css" href="/test/css/base.css"> <!--TODO change to be the webam-->
+
+	<script src="/code/js/three.js-master/build/three.js"></script>
+	<script src="/code/js/dat.gui-master/build/dat.gui.js"></script>
+	<script src="/test/js/temporal_smoothing.js"></script>
+
+	<script>
+	document.documentElement.className = "js";
+
+	var supportsCssVars = function supportsCssVars() {
+	  var e,
+		  t = document.createElement("style");
+	  return t.innerHTML = "root: { --tmp-var: bold; }", document.head.appendChild(t), e = !!(window.CSS && window.CSS.supports && window.CSS.supports("font-weight", "var(--tmp-var)")), t.parentNode.removeChild(t), e;
+	};
+	
+	supportsCssVars() || alert("Please view this in a modern browser that supports CSS Variables.");
+	</script>
+</head>
+<!--TODO change to be the webam-->
+<body class="vsc-initialized">
+	<section class="section centered">
+		<img src="/img/gallery-test/lighthouse-le-havre.jpg" alt="Some image" id="texture" style="opacity: 0;">
+	</section>
+
+	<div id="container"></div>
+	<script src="/test/js/step1.js"></script>
+
+    <canvas id="canvas" style="left: 50%;"></canvas>
+	<!--TODO change to be the webam-->
+
+	<script src="/test/js/get_camera-mic.js"></script>
+
+</body>
+</html>

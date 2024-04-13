@@ -18,7 +18,6 @@ function Smoother(source, remember, refresh, renderer) {
 		this.source.image.addEventListener("playing", function() {scope.init.call(scope);});
 	}
 }
-
 Smoother.prototype = Object.create(Object.prototype);
 Object.assign(Smoother.prototype, {
 	constructor: Smoother,
