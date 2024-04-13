@@ -1,5 +1,5 @@
 
-var videoTexture, videoSettings, rawVideoStream, videoStream, audioTrack;
+var videoTexture, videoSettings, rawVideoStream, videoStream, audioTrack, scene;
 
 class Microphone {
     constructor(fftSize) {
@@ -27,6 +27,7 @@ class Microphone {
 
 
                 scene = new THREE.Scene();
+                let gui = new dat.GUI();
 
 	            let videoElement = document.createElement("video");
 				Object.assign(videoElement, {
@@ -50,6 +51,45 @@ class Microphone {
                 alert("You can't experiment if you don't activate your camera and your mic !...");
             });
     }
+    get_videoElement() {
+        if (this.videoElement) {
+            return videoElement;
+        } else {
+            return 0; // Or handle the case where video settings haven't been retrieved yet
+        }
+        
+    }
+    videoSettings_width() {
+        if (this.videoSettings) {
+          return this.videoSettings.width;
+        } else {
+          return 0; // Or handle the case where video settings haven't been retrieved yet
+        }
+      }
+    
+      videoSettings_height() {
+        if (this.videoSettings) {
+          return this.videoSettings.height;
+        } else {
+          return 0; // Or handle the case differently
+        }
+      }
+
+      videoSettings_frameRate() {
+        if (this.videoSettings) {
+            return this.videoSettings.frameRate;
+          } else {
+            return 0; // Or handle the case where video settings haven't been retrieved yet
+          }
+        }
+
+        videoSettings_addTrack(audioTrack) {
+            if (this.videoSettings) {
+                return this.videoSettings.addTrack(audioTrack);
+            } else {
+                return 0; // Or handle the case where video settings haven't been retrieved yet
+            }
+        }
 
     getSamples() {
         this.analyser.getByteTimeDomainData(this.dataArray);

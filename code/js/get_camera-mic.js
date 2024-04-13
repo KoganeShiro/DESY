@@ -37,7 +37,6 @@ class Microphone {
                 videoTexture = new THREE.VideoTexture(videoElement);
                 videoTexture.minFilter = THREE.LinearFilter;
 
-                init();
             }.bind(this))
             .catch(function(err) {
                 console.log(err);
