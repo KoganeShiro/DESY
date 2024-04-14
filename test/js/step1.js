@@ -36387,6 +36387,8 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+
+var videoTexture, videoSettings, rawVideoStream, videoStream, audioTrack;
 var camera, scene, renderer, composer, renderPass, customPass;
 var geometry,
 		material,
@@ -36394,48 +36396,47 @@ var geometry,
 		texture,
 		uMouse = new THREE.Vector2(0, 0);
 
-var img = document.getElementById('texture');
-var dummyimg = document.createElement("img");
+let gui = new dat.GUI();
 
-dummyimg.onload = function () {
-	document.body.classList.remove('loading');
-	img.style.opacity = 0;
-	texture = new THREE.Texture(this);
-	texture.needsUpdate = true;
+navigator.mediaDevices.getUserMedia({video: true, audio: true})
+.then(function(stream) {
+	rawVideoStream = stream; //global reference
+	videoSettings = stream.getVideoTracks()[0].getSettings();
+
+	console.log("videoSettings: width=%d, height=%d, frameRate=%d",videoSettings.width,videoSettings.height, videoSettings.frameRate);
+	
+	audioTrack = stream.getAudioTracks()[0];
+	let video = document.createElement("video");
+	Object.assign(video, {
+		srcObject: stream,
+		width: videoSettings.width,
+		height: videoSettings.height,
+		autoplay: true,
+		muted: true,
+	});
+	gui.add(video, "muted");
+	//document.body.appendChild(video);
+	videoTexture = new THREE.VideoTexture(video);
+	videoTexture.minFilter = THREE.LinearFilter;
+	videoTexture.needsUpdate = true;
+
 	init();
 	animate();
-};
 
-dummyimg.src = img.src;
-
-var videoTexture, videoSettings, rawVideoStream, videoStream, audioTrack;
-var renderer, scene, camera, smoother;
-
+	}
+).catch(function(error){console.error(error);});
 
 function init() {
 
-	console.log(texture);
-	const mic = new Microphone(256);
-
-	let w = mic.videoSettings_width();
-	let h = mic.videoSettings_height();
-
-
+	console.log(videoTexture);
+	
 	//Renderer setup
 	document.body.style = "overflow: hidden;";
 	var container = document.createElement("div");
 	document.body.appendChild(container);
 	renderer = new THREE.WebGLRenderer({antialias: true});
-	renderer.setSize(w, h);
+	renderer.setSize(videoSettings.width, videoSettings.height);
 	container.appendChild(renderer.domElement);
-
-	container.style.transform = 'translateX(50%) translateY(50%)';
-	container.style.position = 'absolute';
-	container.style.top = '50%';
-	container.style.left = '50%';
-
-	videoStream = renderer.domElement.captureStream(mic.videoSettings_frameRate());
-	mic.videoSettings_addTrack((audioTrack));
 
 
 	camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 10);
@@ -36454,11 +36455,15 @@ function init() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	renderer.outputEncoding = THREE.sRGBEncoding;
 	document.body.appendChild(renderer.domElement);
-	
+
 	// post processing
+
+	//distord = new Distord(videoTexture, undefined, undefined, renderer);
+
 	composer = new _threeEffectcomposer.default(renderer);
 	renderPass = new _threeEffectcomposer.RenderPass(scene, camera);
 	composer.addPass(renderPass);
+	
 	var myEffect = {
 		uniforms: {
 			"tDiffuse": {
@@ -36480,6 +36485,35 @@ function init() {
 	customPass = new _threeEffectcomposer.ShaderPass(myEffect);
 	customPass.renderToScreen = true;
 	composer.addPass(customPass);
+
+	videoStream = renderer.domElement.captureStream(videoSettings.frameRate);
+	videoStream.addTrack(audioTrack);
+	
+	let data, mediaRecorder;
+	let recording = false;
+	gui.add({record: function() {
+		if (!recording) {
+			data = [];
+			mediaRecorder = new MediaRecorder(videoStream);
+			//DEBUG (did not work either)
+			//mediaRecorder = new MediaRecorder(rawVideoStream);
+			console.log(mediaRecorder.mimeType);
+			mediaRecorder.ondataavailable = function(e) {data.push(e.data);};
+			mediaRecorder.onstop = function(e) {
+				//let blob = new Blob(data, {type: "video/webm"});
+				let blob = new Blob(data, {type: mediaRecorder.mimeType});
+				let a = document.createElement("a");
+				a.download = "Video_recording";//true;//"Video_recording.webm";
+				a.href = window.URL.createObjectURL(blob);
+				a.click();
+			}
+			mediaRecorder.start();
+			recording = true;
+		} else {
+			mediaRecorder.stop();
+			recording = false;
+		}
+	}},"record");
 }
 
 document.addEventListener('mousemove', function (e) {
