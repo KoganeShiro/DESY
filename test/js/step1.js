@@ -36444,14 +36444,16 @@ function init() {
 	scene = new THREE.Scene();
 	geometry = new THREE.PlaneGeometry(0.45, 0.3);
 	material = new THREE.MeshBasicMaterial({
-		map: texture /**new THREE.Texture()**/
+		map: videoTexture /**new THREE.Texture()**/
 	});
 
 	mesh = new THREE.Mesh(geometry, material);
 	scene.add(mesh);
+
 	renderer = new THREE.WebGLRenderer({
 		antialias: true
 	});
+
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	renderer.outputEncoding = THREE.sRGBEncoding;
 	document.body.appendChild(renderer.domElement);
