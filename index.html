@@ -7,9 +7,9 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>DESY</title>
-		<link rel="stylesheet" href="/code/css/web_page.css">
-		<link rel="stylesheet" href="/code/css/video.css">
-		<script src="/code/js/web_page.js"></script>
+		<link rel="stylesheet" href="./code/css/web_page.css">
+		<link rel="stylesheet" href="./code/css/video.css">
+		<script src="./code/js/web_page.js"></script>
 		<script>
 			document.documentElement.className="js";
 			var supportsCssVars=function(){
@@ -17,8 +17,8 @@
 				return t.innerHTML="root: { --tmp-var: bold; }",document.head.appendChild(t),e=!!(window.CSS&&window.CSS.supports&&window.CSS.supports("font-weight","var(--tmp-var)")),t.parentNode.removeChild(t),e};
 				supportsCssVars()||alert("Please view this demo in a modern browser that supports CSS Variables.");
 		</script>
-		<script src="/code/js/three.js-master/build/three.js"></script>
-		<script src="/code/js/dat.gui-master/build/dat.gui.js"></script>
+		<script src="./code/js/three.js-master/build/three.js"></script>
+		<script src="./code/js/dat.gui-master/build/dat.gui.js"></script>
 	</head>
 	<body>
 		<!-- <script src="/code/js/temporal_smoothing.js"></script>
@@ -29,19 +29,19 @@
 			</video>
 		-->
 		<div id="container">
-			<img class="anim-logo" src="/img/logo.webp" alt="DESY logo">
+			<img class="anim-logo" src="./img/logo.webp" alt="DESY logo">
 		</div>
 
 		<nav class="navbar">
 			<div class="title-logo">
 				<a href="https://github.com/KoganeShiro/DESY" target="_blank">
-					<img class="logo" src="/img/logo.webp" alt="DESY logo">
+					<img class="logo" src="./img/logo.webp" alt="DESY logo">
 				</a>
 			</div>
 			<div class="navbar-links">
 				<ul>
-					<li><a href="/index.html"><button>Accueil</button></a></li>
-					<li><a href="/code/about.html"><button>A Propos</button></a></li>
+					<li><a href="./index.html"><button>Accueil</button></a></li>
+					<li><a href="./code/about.html"><button>A Propos</button></a></li>
 					<!-- <li><a href="gallery.html"><button>Gallery</button></a></li> -->
 				</ul>
 			</div>
@@ -54,8 +54,8 @@
 							</svg>
 						</a>
 					</li>
-					<li class="links-button"><a href="/index.html"><button>Home</button></a></li>
-					<li class="links-button"><a href="/code/about.html"><button>About</button></a></li>
+					<li class="links-button"><a href="./index.html"><button>Home</button></a></li>
+					<li class="links-button"><a href="./code/about.html"><button>About</button></a></li>
 					<!-- <li class="links-button"><a href="gallery.html"><button>Gallery</button></a></li> -->
 				</ul>
 				<ul>
@@ -67,12 +67,12 @@
 						</a>
 					</li>
 				</ul>
-				<script src="/code/js/burger-menu.js"></script>
+				<script src="./code/js/burger-menu.js"></script>
 			</div>				
 		</nav>
 
 		<canvas id="canvas"></canvas>
-		<script src="/code/js/distord.js"></script>
+		<script src="./code/js/distord.js"></script>
 
 	</body>
 </html>
