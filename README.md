@@ -30,18 +30,26 @@ The goal is to explore the boundaries between visual and auditory stimuli, provi
 If you want to view the website in local, you can :
 
     `git clone git@github.com:KoganeShiro/DESY.git`
+    
   open the directory in your favorite IDE (like VS codium or Vim)
   If you are using VSC then you can install the Live Server extension and go to `web_page.html` and click to `Go Live`
 
   If you are using Vim (or any other IDE) you can open the directory and open the terminal and write
+  
     `python3 -m http.server`
+
+You can also view the website [`here`](https://koganeshiro.github.io/DESY/index.html)
 
 #
 
 #
 ### Resources that help me build this
-https://github.com/hmongouachon/rgbKineticSlider/tree/master
-https://github.com/codrops/LiquidDistortion/
-https://github.com/EliasHasle/EliasHasle.github.io/tree/master
-https://jrlazz.eu5.org/anim/ontv.html
-https://github.com/akella/webgl-mouseover-effects
+[rgbKineticSlider](https://github.com/hmongouachon/rgbKineticSlider/tree/master)
+
+[LiquidDistortion](https://github.com/codrops/LiquidDistortion/)
+
+[effect on the webcam](https://github.com/EliasHasle/EliasHasle.github.io/tree/master)
+
+[drawing on the webcam](https://jrlazz.eu5.org/anim/ontv.html)
+
+[webgl-mouseover-effects](https://github.com/akella/webgl-mouseover-effects)
