@@ -25,6 +25,7 @@ image or video
 -->
 The goal is to explore the boundaries between visual and auditory stimuli, providing participants with a new and innovative way to see their surrounding.
 
+#
 
 ### Quick Start
 If you want to view the website in local, you can :
@@ -39,8 +40,6 @@ If you want to view the website in local, you can :
     `python3 -m http.server`
 
 You can also view the website [`here`](https://koganeshiro.github.io/DESY/index.html)
-
-#
 
 #
 ### Resources that help me build this
