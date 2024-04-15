@@ -31,6 +31,8 @@ The goal is to explore the boundaries between visual and auditory stimuli, provi
 #
 -->
 
+[The Web site](https://github.com/KoganeShiro/DESY/blob/main/code/web_page.html)
+
 #
 ### Resources that help me build this
 https://github.com/hmongouachon/rgbKineticSlider/tree/master
