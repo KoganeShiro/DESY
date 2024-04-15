@@ -25,13 +25,18 @@ image or video
 -->
 The goal is to explore the boundaries between visual and auditory stimuli, providing participants with a new and innovative way to see their surrounding.
 
-<!--
+
 ### Quick Start
+If you want to view the website in local, you can :
+
+    `git clone git@github.com:KoganeShiro/DESY.git`
+  open the directory in your favorite IDE (like VS codium or Vim)
+  If you are using VSC then you can install the Live Server extension and go to `web_page.html` and click to `Go Live`
+
+  If you are using Vim (or any other IDE) you can open the directory and open the terminal and write
+    `python3 -m http.server`
 
 #
--->
-
-[The html](https://github.com/KoganeShiro/DESY/blob/main/code/web_page.html)
 
 #
 ### Resources that help me build this
