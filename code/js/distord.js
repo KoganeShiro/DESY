@@ -36401,7 +36401,16 @@ var geometry,
 		uSound = new THREE.Vector2(0,0), //Replace uMouse stuff by uSound
 		uMouse = new THREE.Vector2(0, 0);
 
+var meshes = [];
+let audioContext, analyser, dataArray, bufferLength;
+
 let gui = new dat.GUI();
+
+audioContext = new (window.AudioContext || window.webkitAudioContext)();
+analyser = audioContext.createAnalyser();
+analyser.fftSize = 2048; // Adjust FFT size as needed
+bufferLength = analyser.frequencyBinCount;
+dataArray = new Uint8Array(bufferLength);
 
 navigator.mediaDevices.getUserMedia({video: true, audio: true})
 .then(function(stream) {
@@ -36411,6 +36420,8 @@ navigator.mediaDevices.getUserMedia({video: true, audio: true})
 	console.log("videoSettings: width=%d, height=%d, frameRate=%d",videoSettings.width,videoSettings.height, videoSettings.frameRate);
 	
 	audioTrack = stream.getAudioTracks()[0];
+	let source = audioContext.createMediaStreamSource(stream);
+    source.connect(analyser);
 	let video = document.createElement("video");
 	Object.assign(video, {
 		srcObject: stream,
@@ -36434,6 +36445,19 @@ navigator.mediaDevices.getUserMedia({video: true, audio: true})
 function init() {
 
 	console.log(videoTexture);
+
+	let numPoints = 5;
+	const x = [];
+	const y = [];
+	const z = [];
+
+	//define different points
+	for (let i = 0; i < numPoints; i++) {
+		x.push(Math.random() - 0.5);
+		y.push(i * 0.2);
+		z.push(0);
+	}
+
 	
 	//Renderer setup
 	const videoAspectRatio = videoSettings.width / videoSettings.height;
@@ -36444,13 +36468,29 @@ function init() {
 	scene = new THREE.Scene();
 
 	geometry = new THREE.PlaneGeometry(videoAspectRatio, 1);
+	/*
+	const geometries = [];
+	for (let i = 0; i < numPoints; i++) {
+	// Define your desired geometry (e.g., sphere, cube)
+		geometries.push(new THREE.SphereGeometry(0.1, 16, 16));
+	}
+	*/
+
 	material = new THREE.MeshBasicMaterial({
-	map: videoTexture,
-	//emissive: new THREE.Color(0x000000) // Set emissive to black
+		map: videoTexture,
 	});
 
 	mesh = new THREE.Mesh(geometry, material);
 	scene.add(mesh);
+	/*
+	for (let i = 0; i < geometry; i++) {
+		const mesh = new THREE.Mesh(geometry, material);
+		mesh.position.set(x[i], y[i], z[i]);
+		scene.add(mesh);
+		meshes.push(mesh);
+	}
+	*/
+
 
 	renderer = new THREE.WebGLRenderer({
 	antialias: true
@@ -36461,8 +36501,6 @@ function init() {
 	document.body.appendChild(renderer.domElement);
 
 	// post processing
-	//distord = new Distord(videoTexture, undefined, undefined, renderer);
-
 	composer = new _threeEffectcomposer.default(renderer);
 	renderPass = new _threeEffectcomposer.RenderPass(scene, camera);
 	composer.addPass(renderPass);
@@ -36476,6 +36514,9 @@ function init() {
 				value: new THREE.Vector2(1., videoAspectRatio)
 			},
 			"uMouse": {
+				value: new THREE.Vector2(-10, -10)
+			},
+			"uSound": {
 				value: new THREE.Vector2(-10, -10)
 			},
 			"uVelo": {
@@ -36526,14 +36567,48 @@ function init() {
 			recording = false;
 		}
 	}},"record");
+
+	//updateSoundVisualization();
 }
 
-//mouse position to the canvas kind of weird
 document.addEventListener('mousemove', function (e) {
-	// mousemove / touchmove
 	uMouse.x = e.clientX / window.innerWidth;
 	uMouse.y = 1. - e.clientY / window.innerHeight;
 });
+
+function updateSoundVisualization() {
+    requestAnimationFrame(updateSoundVisualization);
+
+    analyser.getByteFrequencyData(dataArray);
+
+    let sum = 0;
+    for (let i = 0; i < bufferLength; i++) {
+        sum += dataArray[i];
+    }
+    let avgFrequency = sum / bufferLength;
+
+    let normalizedFrequency = avgFrequency / 255;
+
+    customPass.uniforms.uSound.value.set(normalizedFrequency, 0);
+
+    composer.render();
+}
+
+function animate() {
+	customPass.uniforms.uMouse.value = uMouse;
+	requestAnimationFrame(animate);
+	//updateSoundVisualization(); //
+	composer.render();
+}
+
+
+/*
+//mouse position to the canvas kind of weird
+document.addEventListener('mousemove', function (e) {
+	uMouse.x = e.clientX / window.innerWidth;
+	uMouse.y = 1. - e.clientY / window.innerHeight;
+});
+
 
 function animate() {
 	customPass.uniforms.uMouse.value = uMouse;
@@ -36541,6 +36616,7 @@ function animate() {
 
 	composer.render();
 }
+*/
 
 
 /*
