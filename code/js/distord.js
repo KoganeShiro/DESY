@@ -36392,7 +36392,7 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-
+let source,audioData,uniforms;
 var videoTexture, videoSettings, rawVideoStream, videoStream, audioTrack;
 var camera, scene, renderer, composer, renderPass, customPass;
 var geometry,
@@ -36406,11 +36406,7 @@ let audioContext, analyser, dataArray, bufferLength;
 
 let gui = new dat.GUI();
 
-audioContext = new (window.AudioContext || window.webkitAudioContext)();
-analyser = audioContext.createAnalyser();
-analyser.fftSize = 2048; // Adjust FFT size as needed
-bufferLength = analyser.frequencyBinCount;
-dataArray = new Uint8Array(bufferLength);
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 navigator.mediaDevices.getUserMedia({video: true, audio: true})
 .then(function(stream) {
@@ -36420,8 +36416,12 @@ navigator.mediaDevices.getUserMedia({video: true, audio: true})
 	console.log("videoSettings: width=%d, height=%d, frameRate=%d",videoSettings.width,videoSettings.height, videoSettings.frameRate);
 	
 	audioTrack = stream.getAudioTracks()[0];
-	let source = audioContext.createMediaStreamSource(stream);
-    source.connect(analyser);
+	analyser = audioCtx.createAnalyser();
+	source = audioCtx.createMediaStreamSource(stream);
+	source.connect(analyser);
+    analyser.fftSize = 1024;
+	audioData = new Uint8Array(analyser.frequencyBinCount);
+
 	let video = document.createElement("video");
 	Object.assign(video, {
 		srcObject: stream,
