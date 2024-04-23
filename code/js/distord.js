@@ -36384,6 +36384,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /***INIT***/
 
 
+
+
 var THREE = _interopRequireWildcard(require("three"));
 
 var _threeEffectcomposer = _interopRequireWildcard(require("@johh/three-effectcomposer"));
@@ -36408,6 +36410,33 @@ let gui = new dat.GUI();
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
+const fragmentShader = `
+  uniform vec3 iResolution;
+  uniform float iTime;
+  uniform sampler2D iChannel0;
+
+  void mainImage( out vec4 fragColor, in vec2 fragCoord )
+  {
+	vec3 c;
+	float z = 0.1 * iTime;
+	vec2 uv = fragCoord / iResolution.xy;
+	vec2 p = uv - 0.5;
+	p.x *= iResolution.x / iResolution.y;
+	float l = 0.2 * length(p);
+	for (int i = 0; i < 3; i++) {
+	  z += 0.07;
+	  uv += p / l * (sin(z) + 1.0) * abs(sin(l * 9.0 - z * 2.0));
+	  c[i] = 0.01 / length(abs(mod(uv, 1.0) - 0.5));
+	}
+	float intensity = texture2D(iChannel0, vec2(l, 0.5)).x;
+	fragColor = vec4(c / l * intensity, iTime);
+  }
+
+  void main() {
+	mainImage(gl_FragColor, gl_FragCoord.xy);
+  }
+`;
+
 navigator.mediaDevices.getUserMedia({video: true, audio: true})
 .then(function(stream) {
 	rawVideoStream = stream; //global reference
@@ -36419,7 +36448,7 @@ navigator.mediaDevices.getUserMedia({video: true, audio: true})
 	analyser = audioCtx.createAnalyser();
 	source = audioCtx.createMediaStreamSource(stream);
 	source.connect(analyser);
-    analyser.fftSize = 1024;
+	analyser.fftSize = 1024;
 	audioData = new Uint8Array(analyser.frequencyBinCount);
 
 	let video = document.createElement("video");
@@ -36446,19 +36475,6 @@ function init() {
 
 	console.log(videoTexture);
 
-	let numPoints = 5;
-	const x = [];
-	const y = [];
-	const z = [];
-
-	//define different points
-	for (let i = 0; i < numPoints; i++) {
-		x.push(Math.random() - 0.5);
-		y.push(i * 0.2);
-		z.push(0);
-	}
-
-	
 	//Renderer setup
 	const videoAspectRatio = videoSettings.width / videoSettings.height;
 
@@ -36468,28 +36484,21 @@ function init() {
 	scene = new THREE.Scene();
 
 	geometry = new THREE.PlaneGeometry(videoAspectRatio, 1);
-	/*
-	const geometries = [];
-	for (let i = 0; i < numPoints; i++) {
-	// Define your desired geometry (e.g., sphere, cube)
-		geometries.push(new THREE.SphereGeometry(0.1, 16, 16));
-	}
-	*/
+
+	uniforms = {
+		iTime: { value: 0 },
+		iResolution: { value: new THREE.Vector3() },
+		iChannel0: { value: new THREE.DataTexture(audioData, analyser.fftSize / 2, 1, THREE.LuminanceFormat) }
+	  };
 
 	material = new THREE.MeshBasicMaterial({
-		map: videoTexture,
-	});
-
+        map: videoTexture,
+		fragmentShader: fragmentShader,
+		uniforms
+    });
+	
 	mesh = new THREE.Mesh(geometry, material);
 	scene.add(mesh);
-	/*
-	for (let i = 0; i < geometry; i++) {
-		const mesh = new THREE.Mesh(geometry, material);
-		mesh.position.set(x[i], y[i], z[i]);
-		scene.add(mesh);
-		meshes.push(mesh);
-	}
-	*/
 
 
 	renderer = new THREE.WebGLRenderer({
@@ -36540,6 +36549,7 @@ function init() {
 	guiContainer.style.width = '100%';
 	guiContainer.style.height = '30%'; 
 
+
 	videoStream = renderer.domElement.captureStream(videoSettings.frameRate);
 	videoStream.addTrack(audioTrack);
 	
@@ -36576,22 +36586,39 @@ document.addEventListener('mousemove', function (e) {
 	uMouse.y = 1. - e.clientY / window.innerHeight;
 });
 
+function animate(time) {
+	customPass.uniforms.uMouse.value = uMouse;
+	requestAnimationFrame(animate);
+    
+	analyser.getByteFrequencyData(audioData);
+  
+	time *= 0.001;
+  
+	uniforms.iTime.value = time;
+	uniforms.iResolution.value.set(canvas.width, canvas.height, 1);
+	uniforms.iChannel0.value.needsUpdate = true;
+  
+	renderer.render(scene, camera);
+	composer.render();
+  }
+
+/*
 function updateSoundVisualization() {
-    requestAnimationFrame(updateSoundVisualization);
+	requestAnimationFrame(updateSoundVisualization);
 
-    analyser.getByteFrequencyData(dataArray);
+	analyser.getByteFrequencyData(dataArray);
 
-    let sum = 0;
-    for (let i = 0; i < bufferLength; i++) {
-        sum += dataArray[i];
-    }
-    let avgFrequency = sum / bufferLength;
+	let sum = 0;
+	for (let i = 0; i < bufferLength; i++) {
+		sum += dataArray[i];
+	}
+	let avgFrequency = sum / bufferLength;
 
-    let normalizedFrequency = avgFrequency / 255;
+	let normalizedFrequency = avgFrequency / 255;
 
-    customPass.uniforms.uSound.value.set(normalizedFrequency, 0);
+	customPass.uniforms.uSound.value.set(normalizedFrequency, 0);
 
-    composer.render();
+	composer.render();
 }
 
 function animate() {
@@ -36600,47 +36627,13 @@ function animate() {
 	//updateSoundVisualization(); //
 	composer.render();
 }
-
-
-/*
-//mouse position to the canvas kind of weird
-document.addEventListener('mousemove', function (e) {
-	uMouse.x = e.clientX / window.innerWidth;
-	uMouse.y = 1. - e.clientY / window.innerHeight;
-});
-
-
-function animate() {
-	customPass.uniforms.uMouse.value = uMouse;
-	requestAnimationFrame(animate); // renderer.render( scene, camera );
-
-	composer.render();
-}
 */
 
 
-/*
-const audioContext = new AudioContext();
-	const source = audioContext.createMediaStreamSource(stream);
-	const analyser = audioContext.createAnalyser();
-	analyser.fftSize = 256;
-	source.connect(analyser);
-	const dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-	function updateMicLevel() {
-		analyser.getByteFrequencyData(dataArray);
-		const micLevel = Array.from(dataArray).reduce((a, b) => a + b, 0) / dataArray.length / 255;
-		customPass.uniforms.uMicLevel.value = micLevel;
-		requestAnimationFrame(updateMicLevel);
-	}
-	updateMicLevel();
 
 
-function animate() {
-	requestAnimationFrame(animate);
-	composer.render();
-}
-*/
+
+
 
 
 
