@@ -43831,85 +43831,85 @@ vec4 envMapTexelToLinear(vec4 color) {
           "node_modules/@johh/three-effectcomposer/dist/lib/EffectComposer.js",
       },
     ],
-    "js/step1.js": [
+    "js/distord.js": [
       function (require, module, exports) {
         "use strict";
 
         /***INIT***/
 
-        var THREE = _interopRequireWildcard(require("three"));
+var THREE = _interopRequireWildcard(require("three"));
 
-        var _threeEffectcomposer = _interopRequireWildcard(
-          require("@johh/three-effectcomposer")
-        );
+var _threeEffectcomposer = _interopRequireWildcard(
+  require("@johh/three-effectcomposer")
+);
 
-        function _getRequireWildcardCache() {
-          if (typeof WeakMap !== "function") return null;
-          var cache = new WeakMap();
-          _getRequireWildcardCache = function () {
-            return cache;
-          };
-          return cache;
-        }
+function _getRequireWildcardCache() {
+  if (typeof WeakMap !== "function") return null;
+  var cache = new WeakMap();
+  _getRequireWildcardCache = function () {
+    return cache;
+  };
+  return cache;
+}
 
-        function _interopRequireWildcard(obj) {
-          if (obj && obj.__esModule) {
-            return obj;
-          }
-          if (
-            obj === null ||
-            (typeof obj !== "object" && typeof obj !== "function")
-          ) {
-            return { default: obj };
-          }
-          var cache = _getRequireWildcardCache();
-          if (cache && cache.has(obj)) {
-            return cache.get(obj);
-          }
-          var newObj = {};
-          var hasPropertyDescriptor =
-            Object.defineProperty && Object.getOwnPropertyDescriptor;
-          for (var key in obj) {
-            if (Object.prototype.hasOwnProperty.call(obj, key)) {
-              var desc = hasPropertyDescriptor
-                ? Object.getOwnPropertyDescriptor(obj, key)
-                : null;
-              if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-              } else {
-                newObj[key] = obj[key];
-              }
-            }
-          }
-          newObj.default = obj;
-          if (cache) {
-            cache.set(obj, newObj);
-          }
-          return newObj;
-        }
+function _interopRequireWildcard(obj) {
+  if (obj && obj.__esModule) {
+    return obj;
+  }
+  if (
+    obj === null ||
+    (typeof obj !== "object" && typeof obj !== "function")
+  ) {
+    return { default: obj };
+  }
+  var cache = _getRequireWildcardCache();
+  if (cache && cache.has(obj)) {
+    return cache.get(obj);
+  }
+  var newObj = {};
+  var hasPropertyDescriptor =
+    Object.defineProperty && Object.getOwnPropertyDescriptor;
+  for (var key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      var desc = hasPropertyDescriptor
+        ? Object.getOwnPropertyDescriptor(obj, key)
+        : null;
+      if (desc && (desc.get || desc.set)) {
+        Object.defineProperty(newObj, key, desc);
+      } else {
+        newObj[key] = obj[key];
+      }
+    }
+  }
+  newObj.default = obj;
+  if (cache) {
+    cache.set(obj, newObj);
+  }
+  return newObj;
+}
 
-        let source, audioData, uniforms, video;
-        var videoTexture,
-          videoSettings,
-          rawVideoStream,
-          videoStream,
-          audioTrack;
-        var camera, scene, renderer, composer, renderPass, customPass;
-        var geometry,
-          material,
-          mesh,
-          uSound = new THREE.Vector2(0, 0), //Replace uMouse stuff by uSound
-          uMouse = new THREE.Vector2(0, 0);
+let source, audioData, uniforms, video;
+var videoTexture,
+  videoSettings,
+  rawVideoStream,
+  videoStream,
+  audioTrack;
+var camera, scene, renderer, composer, renderPass, customPass;
+var geometry,
+  material,
+  mesh,
+  uSound = new THREE.Vector2(0, 0), //Replace uMouse stuff by uSound
+  uMouse = new THREE.Vector2(0, 0);
 
-        var meshes = [];
-        let audioContext, analyser, dataArray, bufferLength;
+var meshes = [];
+let audioContext, analyser, dataArray, bufferLength;
 
-        let gui = new dat.GUI();
+let gui = new dat.GUI();
 
-        const audioCtx = new (window.AudioContext ||
-          window.webkitAudioContext)();
+const audioCtx = new (window.AudioContext ||
+  window.webkitAudioContext)();
 
-        const fragmentShader = `
+const fragmentShader = `
   uniform vec3 iResolution;
   uniform float iTime;
   uniform sampler2D iChannel0;
@@ -44065,35 +44065,6 @@ function init() {
 	},
 	vertexShader:
 		"varying vec2 vUv;void main() {vUv = uv;gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0 );}",
-	/*
-	fragmentShader:
-	"uniform float time; \
-	uniform vec2 minMouseFreq, maxMouseFreq; \
-	uniform sampler2D tDiffuse;\
-	uniform vec2 resolution, uMouse;\
-	uniform vec4 uSound[1024]; \
-\
-	float circle(vec2 uv, vec2 disc_center, float disc_radius, float border_size) { \
-	uv -= disc_center; \
-	uv *= resolution; \
-	float dist = sqrt(dot(uv, uv)); \
-	return smoothstep(disc_radius + border_size, disc_radius - border_size, dist); \
-	} \
-\
-	void main() { \
-	vec2 newUV = varyingFragmentCoord.xy / resolution; \
-	float mouse_effect = circle(newUV, uMouse, minMouseFreq.x, 0.2); \
-	const int numFrequencyBins = 1024; \
-	float sound_effect = 0.0; \
-	for (int i = int(minMouseFreq.y * numFrequencyBins); i < int(maxMouseFreq.y * numFrequencyBins); ++i) { \
-		sound_effect += uSound[i].x; // Summing up relevant frequency bin values \
-	} \
-	sound_effect /= (maxMouseFreq.y - minMouseFreq.y) * numFrequencyBins; \
-	float final_effect = mix(mouse_effect, sound_effect, 0.5); \
-	vec4 color = texture2D(tDiffuse, newUV.xy + final_effect * (0.1 * 0.5)); \
-	gl_FragColor = color; \
-	}",
-	*/
 	fragmentShader:
 		"uniform float time;\n        \
 		uniform sampler2D tDiffuse;\n        \
@@ -44461,8 +44432,8 @@ function animate() {
   {},
   [
     "../../.npm/_npx/55849/lib/node_modules/parcel/src/builtins/hmr-runtime.js",
-    "js/step1.js",
+    "js/distord.js",
   ],
   null
 );
-//# sourceMappingURL=/step1.f2e9fc30.js.map
+//# sourceMappingURL=/distord.js.map
