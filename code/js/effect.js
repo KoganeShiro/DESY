@@ -1,13 +1,21 @@
-
 // Create a new Three.js scene
 const scene = new THREE.Scene();
 
 // Create a new camera
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 5;
+const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 10);
+camera.position.z = 0.5;
+
+// Create a plane geometry to represent the camera view
+const planeGeometry = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight);
+const planeMaterial = new THREE.MeshBasicMaterial({ color: 'black' }); // Use white for a clear camera feed
+const cameraMesh = new THREE.Mesh(planeGeometry, planeMaterial);
+cameraMesh.position.set(0, 0, -1);
+scene.add(cameraMesh);
 
 // Create a new renderer
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({
+    antialias: true,
+});
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
@@ -16,20 +24,10 @@ renderer.domElement.style.position = 'absolute';
 renderer.domElement.style.top = '0'; // Position at top
 renderer.domElement.style.left = '0'; // Position at left
 
-// Create a plane geometry to represent the camera view
-const planeGeometry = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight);
-const planeMaterial = new THREE.MeshBasicMaterial({ color: 'white' }); // Use white for a clear camera feed
-const cameraMesh = new THREE.Mesh(planeGeometry, planeMaterial);
-cameraMesh.position.set(0, 0, -1);
-scene.add(cameraMesh);
-
 // Capture camera feed as texture
 const video = document.createElement('video');
-video.width = window.innerWidth;
-video.height = window.innerHeight;
 video.autoplay = true;
 video.muted = true;
-// Hide the video element (optional)
 video.style.display = 'none';
 document.body.appendChild(video);
 
@@ -46,6 +44,10 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true }) // Request bot
             texture.minFilter = THREE.LinearFilter;
             texture.magFilter = THREE.LinearFilter;
             texture.format = THREE.RGBFormat;
+
+            // Adjust the plane geometry to match the video dimensions
+            const aspectRatio = video.videoWidth / video.videoHeight;
+            planeGeometry.scale(aspectRatio, 1, 1);
 
             // Apply the video texture to the plane material
             planeMaterial.map = texture;
