@@ -1,35 +1,65 @@
-// Create a new Three.js scene
-const scene = new THREE.Scene();
-
-// Create a new camera
-const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 10);
-camera.position.z = 0.5;
-
-// Create a plane geometry to represent the camera view
-const planeGeometry = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight);
-const planeMaterial = new THREE.MeshBasicMaterial({ color: 'black' }); // Use white for a clear camera feed
-const cameraMesh = new THREE.Mesh(planeGeometry, planeMaterial);
-cameraMesh.position.set(0, 0, -1);
-scene.add(cameraMesh);
-
-// Create a new renderer
-const renderer = new THREE.WebGLRenderer({
-    antialias: true,
-});
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
-
-// Style the renderer canvas for centering
-renderer.domElement.style.position = 'absolute';
-renderer.domElement.style.top = '0'; // Position at top
-renderer.domElement.style.left = '0'; // Position at left
-
-// Capture camera feed as texture
+// Create a new video element
 const video = document.createElement('video');
 video.autoplay = true;
 video.muted = true;
 video.style.display = 'none';
 document.body.appendChild(video);
+
+// Create a new Three.js scene
+const scene = new THREE.Scene();
+
+// Define the liquid vertex shader
+const liquidVertexShader = `
+varying vec2 vUv;
+
+void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}
+`;
+
+// Define the liquid fragment shader
+const liquidFragmentShader = `
+uniform sampler2D texture;
+uniform float time;
+varying vec2 vUv;
+
+void main() {
+    // Adjust these parameters to control the liquid effect
+    float speed = 2.0; // Speed of the liquid waves
+    float frequency = 1.5; // Frequency of the liquid waves
+
+    // Calculate the displacement of the current pixel
+    float displacement = sin(vUv.y * frequency + time * speed) * 0.1;
+
+    // Apply the displacement to the current pixel position
+    vec2 displacedUV = vUv + vec2(0.0, displacement);
+
+    // Sample the texture at the displaced UV coordinates
+    vec4 color = texture2D(texture, displacedUV);
+
+    gl_FragColor = color;
+}
+`;
+
+// Define the liquid material
+const liquidMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+        texture: { value: null }, // Texture uniform for the liquid surface
+        time: { value: 0 }, // Time uniform for animation
+    },
+    vertexShader: liquidVertexShader,
+    fragmentShader: liquidFragmentShader,
+});
+
+// Create a plane geometry to represent the liquid surface
+const planeGeometry = new THREE.PlaneBufferGeometry(2, 2); // Adjust the size as needed
+
+// Create a mesh using the liquid material and geometry
+const liquidMesh = new THREE.Mesh(planeGeometry, liquidMaterial);
+
+// Add the liquid mesh to the scene
+scene.add(liquidMesh);
 
 // Process microphone input to modify camera image
 const audioContext = new AudioContext();
@@ -45,12 +75,8 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true }) // Request bot
             texture.magFilter = THREE.LinearFilter;
             texture.format = THREE.RGBFormat;
 
-            // Adjust the plane geometry to match the video dimensions
-            const aspectRatio = video.videoWidth / video.videoHeight;
-            planeGeometry.scale(aspectRatio, 1, 1);
-
-            // Apply the video texture to the plane material
-            planeMaterial.map = texture;
+            // Apply the video texture to the liquid material
+            liquidMaterial.uniforms.texture.value = texture;
 
             const microphoneSource = audioContext.createMediaStreamSource(stream);
             microphoneSource.connect(analyser);
@@ -58,22 +84,41 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true }) // Request bot
             const bufferLength = analyser.frequencyBinCount;
             const dataArray = new Uint8Array(bufferLength);
 
-            // Modify camera image based on microphone input
-            function updateCameraImage() {
-                requestAnimationFrame(updateCameraImage);
+            // Modify liquid animation based on microphone input
+            function updateLiquidAnimation() {
+                requestAnimationFrame(updateLiquidAnimation);
 
                 analyser.getByteFrequencyData(dataArray);
 
-                // Simple example: modify plane material color based on microphone amplitude
+                // Calculate amplitude
                 const amplitude = dataArray.reduce((acc, val) => acc + val, 0) / bufferLength;
-                planeMaterial.color.setRGB(amplitude, amplitude, amplitude);
 
+                // Update time uniform in the liquid material based on amplitude
+                liquidMaterial.uniforms.time.value += amplitude * 0.001; // Adjust the multiplier for animation speed
+
+                // Render the scene
                 renderer.render(scene, camera);
             }
 
-            updateCameraImage();
+            updateLiquidAnimation();
         };
     })
     .catch(function(err) {
         console.error('Error accessing camera: ', err);
     });
+
+// Create a new camera
+const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 10);
+camera.position.z = 0.5;
+
+// Create a new renderer
+const renderer = new THREE.WebGLRenderer({
+    antialias: true,
+});
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+// Style the renderer canvas for centering
+renderer.domElement.style.position = 'absolute';
+renderer.domElement.style.top = '0'; // Position at top
+renderer.domElement.style.left = '0'; // Position at left
