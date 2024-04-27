@@ -32,12 +32,13 @@ If you want to view the website in local, you can :
 
     `git clone git@github.com:KoganeShiro/DESY.git`
     
-  open the directory in your favorite IDE (like VS codium or Vim)
-  If you are using VSC then you can install the Live Server extension and go to `web_page.html` and click to `Go Live`
-
+  open the directory in VSC (VSCodium or VSCode)
+  Install the Live Server extension and go to `index.html` and click to `Go Live`
+<!--
   If you are using Vim (or any other IDE) you can open the directory and open the terminal and write
   
     `python3 -m http.server`
+-->
 
 You can also view the website [`here`](https://koganeshiro.github.io/DESY/index.html)
 
