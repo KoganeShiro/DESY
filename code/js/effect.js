@@ -8,108 +8,144 @@ document.body.appendChild(video);
 // Create a new Three.js scene
 const scene = new THREE.Scene();
 
-// Define the liquid vertex shader
-const liquidVertexShader = `
-varying vec2 vUv;
-
-void main() {
-    vUv = uv;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-}
-`;
-
-// Define the liquid fragment shader
-const liquidFragmentShader = `
-uniform sampler2D texture;
-uniform float time;
-varying vec2 vUv;
-
-void main() {
-    // Adjust these parameters to control the liquid effect
-    float speed = 2.0; // Speed of the liquid waves
-    float frequency = 1.5; // Frequency of the liquid waves
-
-    // Calculate the displacement of the current pixel
-    float displacement = sin(vUv.y * frequency + time * speed) * 0.1;
-
-    // Apply the displacement to the current pixel position
-    vec2 displacedUV = vUv + vec2(0.0, displacement);
-
-    // Sample the texture at the displaced UV coordinates
-    vec4 color = texture2D(texture, displacedUV);
-
-    gl_FragColor = color;
-}
-`;
-
-// Define the liquid material
-const liquidMaterial = new THREE.ShaderMaterial({
-    uniforms: {
-        texture: { value: null }, // Texture uniform for the liquid surface
-        time: { value: 0 }, // Time uniform for animation
-    },
-    vertexShader: liquidVertexShader,
-    fragmentShader: liquidFragmentShader,
-});
-
-// Create a plane geometry to represent the liquid surface
-const planeGeometry = new THREE.PlaneBufferGeometry(2, 2); // Adjust the size as needed
-
-// Create a mesh using the liquid material and geometry
-const liquidMesh = new THREE.Mesh(planeGeometry, liquidMaterial);
-
-// Add the liquid mesh to the scene
-scene.add(liquidMesh);
-
-// Process microphone input to modify camera image
+// Define plane material here
+const planeMaterial = new THREE.MeshBasicMaterial({ vertexColors: true });
 const audioContext = new AudioContext();
 const analyser = audioContext.createAnalyser();
 navigator.mediaDevices.getUserMedia({ video: true, audio: true }) // Request both video and audio tracks
-    .then(function(stream) {
-        video.srcObject = stream;
+  .then(function (stream) {
+    video.srcObject = stream;
 
-        // Apply the video texture once the video metadata is loaded
-        video.onloadedmetadata = function() {
-            const texture = new THREE.VideoTexture(video);
-            texture.minFilter = THREE.LinearFilter;
-            texture.magFilter = THREE.LinearFilter;
-            texture.format = THREE.RGBFormat;
+    // Apply the video texture once the video metadata is loaded
+    video.onloadedmetadata = function () {
+      const texture = new THREE.VideoTexture(video);
+      texture.minFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+      texture.format = THREE.RGBFormat;
 
-            // Apply the video texture to the liquid material
-            liquidMaterial.uniforms.texture.value = texture;
+      // Adjust the plane geometry to match the video dimensions
+      const aspectRatio = video.videoWidth / video.videoHeight;
+      planeGeometry.scale(aspectRatio, 1, 1);
 
-            const microphoneSource = audioContext.createMediaStreamSource(stream);
-            microphoneSource.connect(analyser);
-            analyser.fftSize = 256;
-            const bufferLength = analyser.frequencyBinCount;
-            const dataArray = new Uint8Array(bufferLength);
+      // Apply the video texture to the plane material
+      planeMaterial.map = texture;
 
-            // Modify liquid animation based on microphone input
-            function updateLiquidAnimation() {
-                requestAnimationFrame(updateLiquidAnimation);
+      const microphoneSource = audioContext.createMediaStreamSource(stream);
+      microphoneSource.connect(analyser);
+      analyser.fftSize = 256;
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
 
-                analyser.getByteFrequencyData(dataArray);
+      let warmPoint = {
+        x: Math.random(),
+        y: Math.random()
+      };
 
-                // Calculate amplitude
-                const amplitude = dataArray.reduce((acc, val) => acc + val, 0) / bufferLength;
+      function updateCameraImage() {
+        requestAnimationFrame(updateCameraImage);
+    
+        analyser.getByteFrequencyData(dataArray);
+    
+        // Calculate amplitude
+        const amplitude = dataArray.reduce((acc, val) => acc + val, 0) / bufferLength;
+    
+        let color;
+        if (amplitude === 0) {
+            // No sound, go back to normal color
+            color = new THREE.Color(1, 1, 1); // White
+        } else {
+            // Calculate color based on amplitude
+            const hue = mapRange(amplitude, 0, 255, 240, 0); // Map amplitude to hue value
+            color = new THREE.Color().setHSL(hue / 360, 1, 0.5); // Convert hue to RGB
+        }
+    
+        // Set color for all vertices
+        const colors = [];
+        for (let i = 0; i < planeGeometry.attributes.position.count; i++) {
+            colors.push(color.r, color.g, color.b);
+        }
+        planeGeometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    
+        // Render the scene
+        renderer.render(scene, camera);
+    }
 
-                // Update time uniform in the liquid material based on amplitude
-                liquidMaterial.uniforms.time.value += amplitude * 0.001; // Adjust the multiplier for animation speed
+      /*
+      function updateCameraImage() {
+        requestAnimationFrame(updateCameraImage);
 
-                // Render the scene
-                renderer.render(scene, camera);
-            }
+        analyser.getByteFrequencyData(dataArray);
 
-            updateLiquidAnimation();
-        };
-    })
-    .catch(function(err) {
-        console.error('Error accessing camera: ', err);
-    });
+        // Calculate amplitude
+        const amplitude = dataArray.reduce((acc, val) => acc + val, 0) / bufferLength;
+
+        // Update warmPoint with a new random position
+        warmPoint.x = Math.random();
+        warmPoint.y = Math.random();
+
+        // Iterate over all pixels and update their color based on position, warmPoint, and amplitude
+        for (let i = 0; i < planeGeometry.attributes.position.count; i++) {
+          const position = {
+            x: planeGeometry.attributes.position.getX(i),
+            y: planeGeometry.attributes.position.getY(i)
+          };
+          const distance = getDistance(position, warmPoint);
+          const maxDistance = Math.sqrt(2); // Assuming planeGeometry covers a unit square (adjust if needed)
+
+          // Color intensity based on distance to warmPoint (higher closer to point)
+          const colorIntensity = 1 - Math.min(distance / maxDistance, 1);
+
+          // Amplitude modifier increases intensity with higher sound levels
+          const amplitudeModifier = mapRange(amplitude, 0, 255, 0.5, 1.5);
+
+          // Final intensity combines distance and amplitude effects
+          const finalIntensity = colorIntensity * amplitudeModifier;
+
+          // Adjust original color saturation or brightness based on finalIntensity
+          const originalColor = new THREE.Color(planeMaterial.color.r, planeMaterial.color.g, planeMaterial.color.b);
+          const adjustedColor = originalColor.clone();
+          adjustedColor.setSatuanation(adjustedColor.getSaturation() * finalIntensity);
+          // OR: adjustedColor.setBrightness(adjustedColor.getBrightness() + finalIntensity);
+
+          planeGeometry.attributes.color.setXYZ(i, adjustedColor.r, adjustedColor.g, adjustedColor.b);
+        }
+
+        // Mark the colors as needing update
+        planeGeometry.attributes.color.needsUpdate = true;
+
+        // Render the scene
+        renderer.render(scene, camera);
+      }
+      */
+      function getDistance(point1, point2) {
+        const dx = point1.x - point2.x;
+        const dy = point1.y - point2.y;
+        return Math.sqrt(dx * dx + dy * dy);
+      }
+
+      function mapRange(value, min1, max1, min2, max2) {
+        return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
+      }
+
+      updateCameraImage();
+    };
+  })
+  .catch(function (err) {
+    console.error('Error accessing camera: ', err);
+  });
 
 // Create a new camera
 const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 10);
 camera.position.z = 0.5;
+
+// Create a plane geometry to represent the camera view
+const planeGeometry = new THREE.PlaneBufferGeometry(1, 1, 32, 32); // Default dimensions with segments
+planeGeometry.setAttribute('color', new THREE.BufferAttribute(new Float32Array(planeGeometry.attributes.position.count * 3), 3));
+
+// Create the mesh with planeGeometry and planeMaterial
+const cameraMesh = new THREE.Mesh(planeGeometry, planeMaterial);
+cameraMesh.position.set(0, 0, -1);
+scene.add(cameraMesh);
 
 // Create a new renderer
 const renderer = new THREE.WebGLRenderer({
