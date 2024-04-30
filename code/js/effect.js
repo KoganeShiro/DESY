@@ -1,3 +1,4 @@
+
 // Create a new video element
 const video = document.createElement('video');
 video.autoplay = true;
@@ -41,93 +42,77 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true }) // Request bot
         y: Math.random()
       };
 
-      function updateCameraImage() {
-        requestAnimationFrame(updateCameraImage);
-    
-        analyser.getByteFrequencyData(dataArray);
-    
-        // Calculate amplitude
-        const amplitude = dataArray.reduce((acc, val) => acc + val, 0) / bufferLength;
-    
-        let color;
-        if (amplitude === 0) {
-            // No sound, go back to normal color
-            color = new THREE.Color(1, 1, 1); // White
-        } else {
-            // Calculate color based on amplitude
-            const hue = mapRange(amplitude, 0, 255, 240, 0); // Map amplitude to hue value
-            color = new THREE.Color().setHSL(hue / 360, 1, 0.5); // Convert hue to RGB
-        }
-    
-        // Set color for all vertices
-        const colors = [];
-        for (let i = 0; i < planeGeometry.attributes.position.count; i++) {
-            colors.push(color.r, color.g, color.b);
-        }
-        planeGeometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-    
-        // Render the scene
-        renderer.render(scene, camera);
+      // Function to update camera image
+  function updateCameraImage() {
+    requestAnimationFrame(updateCameraImage);
+
+    analyser.getByteFrequencyData(dataArray);
+
+    // Calculate amplitude with smoothing
+    const previousAmplitude = updateCameraImage.previousAmplitude || 0;
+    const currentAmplitude = dataArray.reduce((acc, val) => acc + val, 0) / bufferLength;
+    updateCameraImage.previousAmplitude = lerp(previousAmplitude, currentAmplitude, 4.2); // Smooth amplitude change
+
+    // Calculate a random center point within the image bounds (0 to 1)
+    const centerX = Math.random();
+    const centerY = Math.random();
+
+    // Function to calculate distance from a point
+    function getDistance(x, y) {
+      const dx = x - centerX;
+      const dy = y - centerY;
+      return Math.sqrt(dx * dx + dy * dy);
     }
 
-      /*
-      function updateCameraImage() {
-        requestAnimationFrame(updateCameraImage);
+    const colors = [];
+    for (let i = 0; i < planeGeometry.attributes.position.count; i++) {
+      const position = {
+        x: planeGeometry.attributes.position.getX(i),
+        y: planeGeometry.attributes.position.getY(i)
+      };
 
-        analyser.getByteFrequencyData(dataArray);
+      // Calculate distance from the center point
+      const distance = getDistance(position.x, position.y);
 
-        // Calculate amplitude
-        const amplitude = dataArray.reduce((acc, val) => acc + val, 0) / bufferLength;
-
-        // Update warmPoint with a new random position
-        warmPoint.x = Math.random();
-        warmPoint.y = Math.random();
-
-        // Iterate over all pixels and update their color based on position, warmPoint, and amplitude
-        for (let i = 0; i < planeGeometry.attributes.position.count; i++) {
-          const position = {
-            x: planeGeometry.attributes.position.getX(i),
-            y: planeGeometry.attributes.position.getY(i)
-          };
-          const distance = getDistance(position, warmPoint);
-          const maxDistance = Math.sqrt(2); // Assuming planeGeometry covers a unit square (adjust if needed)
-
-          // Color intensity based on distance to warmPoint (higher closer to point)
-          const colorIntensity = 1 - Math.min(distance / maxDistance, 1);
-
-          // Amplitude modifier increases intensity with higher sound levels
-          const amplitudeModifier = mapRange(amplitude, 0, 255, 0.5, 1.5);
-
-          // Final intensity combines distance and amplitude effects
-          const finalIntensity = colorIntensity * amplitudeModifier;
-
-          // Adjust original color saturation or brightness based on finalIntensity
-          const originalColor = new THREE.Color(planeMaterial.color.r, planeMaterial.color.g, planeMaterial.color.b);
-          const adjustedColor = originalColor.clone();
-          adjustedColor.setSatuanation(adjustedColor.getSaturation() * finalIntensity);
-          // OR: adjustedColor.setBrightness(adjustedColor.getBrightness() + finalIntensity);
-
-          planeGeometry.attributes.color.setXYZ(i, adjustedColor.r, adjustedColor.g, adjustedColor.b);
-        }
-
-        // Mark the colors as needing update
-        planeGeometry.attributes.color.needsUpdate = true;
-
-        // Render the scene
-        renderer.render(scene, camera);
+      let colorIntensity;
+      if (currentAmplitude === 0) {
+        // No sound, keep original color
+        colorIntensity = 0;
+      } else {
+        // Calculate color intensity based on distance and smoothed amplitude
+        colorIntensity = 1 - distance;
+        colorIntensity *= Math.min(currentAmplitude / 255, 1); // Reduce intensity with higher amplitude
       }
-      */
-      function getDistance(point1, point2) {
-        const dx = point1.x - point2.x;
-        const dy = point1.y - point2.y;
-        return Math.sqrt(dx * dx + dy * dy);
-      }
+
+      const baseHue = 200; // Base hue for warmer colors
+      const maxHueChange = 350; // Maximum change in hue for warmer colors
+      const hue = baseHue - mapRange(colorIntensity, 0, 1, 0, maxHueChange); // Hue inversely proportional to distance and amplitude
+
+      const finalColor = new THREE.Color().setHSL(hue / 360, 1, 0.5);
+      colors.push(finalColor.r, finalColor.g, finalColor.b);
+    }
+
+    planeGeometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    planeGeometry.attributes.color.needsUpdate = true; // Mark color attribute for update
+
+    renderer.render(scene, camera);
+  }
+
+  // Add this line outside the function to store the previous amplitude
+  updateCameraImage.previousAmplitude = 0;
+
+  // Helper function for linear interpolation (lerp)
+  function lerp(start, end, amount) {
+    return (1 - amount) * start + amount * end;
+  }
+
 
       function mapRange(value, min1, max1, min2, max2) {
         return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
       }
 
-      updateCameraImage();
+      setTimeout(updateCameraImage(), 10000);
+
     };
   })
   .catch(function (err) {
@@ -149,7 +134,7 @@ scene.add(cameraMesh);
 
 // Create a new renderer
 const renderer = new THREE.WebGLRenderer({
-    antialias: true,
+    antialias: false,
 });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
