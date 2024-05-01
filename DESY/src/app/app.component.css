@@ -1,0 +1,30 @@
+ul li a {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: large;
+    color: crimson;
+    text-decoration: none;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    height: 80px;
+    background-color: #424252;
+    display: flex;
+    padding: 0 120px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.titre {
+    font-size: 32px;
+    font-weight: bold;
+    color: crimson;
+}
+
+nav ul {
+    display: flex;
+    gap: 16px;
+    list-style: none;
+}

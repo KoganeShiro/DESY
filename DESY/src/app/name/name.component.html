@@ -1,0 +1,21 @@
+<p>Loïck Baïnachi</p>
+
+<div>
+    <label>
+        <span>prénom</span>
+        <input type="text" [(ngModel)]="name"/>
+    </label>
+</div>
+
+
+<div>
+    <label>
+        <span>nom de famille</span>
+        <input type="text" [value]="lastName" (input)="onLastNameChange($event)"/>
+    </label>
+</div>
+
+
+<div>
+    {{name + " " + lastName}}
+</div>
