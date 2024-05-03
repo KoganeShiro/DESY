@@ -29,6 +29,13 @@ canvas.height = 512;
 
 const ctx = canvas.getContext('2d');
 
+/*
+material = new THREE.MeshBasicMaterial({
+	map: videoTexture,
+	fragmentShader: fragmentShader,
+	uniforms,
+	});
+*/
 const texture = new THREE.Texture(canvas);
 texture.minFilter = THREE.LinearFilter;
 texture.magFilter = THREE.LinearFilter;
@@ -80,7 +87,7 @@ function connectAudioAPI() {
         analyser.fftSize = 2048;
 
         navigator.mediaDevices
-            .getUserMedia({ audio: true, video: false })
+            .getUserMedia({ audio: true, video: true })
             .then(function (stream) {
                 mediaSource = context.createMediaStreamSource(stream);
                 mediaSource.connect(analyser);
