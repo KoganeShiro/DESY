@@ -1,133 +1,117 @@
+
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import Stats from 'three/examples/jsm/libs/stats.module';
 
+// Setup
 const scene = new THREE.Scene();
-
-const light = new THREE.AmbientLight();
-scene.add(light);
-
-const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-);
-camera.position.x = 7;
-camera.position.y = 0.75;
-camera.position.z = 10;
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.set(0, 0, 5);
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
+const stats = new Stats();
+document.body.appendChild(stats.domElement);
 
-const canvas = document.createElement('canvas');
-canvas.width = 256;
-canvas.height = 512;
+// Load Image
+const textureLoader = new THREE.TextureLoader();
+const imageTexture = textureLoader.load('path/to/your/image.jpg');
 
-const ctx = canvas.getContext('2d');
+// Plane Geometry
+const planeGeometry = new THREE.PlaneGeometry(5, 5, 256, 256); // Adjust size and segments as needed
 
-/*
-material = new THREE.MeshBasicMaterial({
-	map: videoTexture,
-	fragmentShader: fragmentShader,
-	uniforms,
-	});
-*/
-const texture = new THREE.Texture(canvas);
-texture.minFilter = THREE.LinearFilter;
-texture.magFilter = THREE.LinearFilter;
+// Custom Shader Material
+const liquidShaderMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+        fftData: { value: new Float32Array(256) }, // FFT data uniform
+        imageTexture: { value: imageTexture },
+        time: { value: 0.0 }
+    },
+    vertexShader: `
+        uniform float time;
+        uniform sampler2D fftTexture; // Assuming you store FFT data in a texture
 
-const plane = new THREE.Mesh(
-    new THREE.PlaneGeometry(20, 20, 256, 256),
-    new THREE.MeshPhongMaterial({
-        wireframe: true,
-        color: new THREE.Color(0x00ff00),
-        displacementMap: texture,
-        displacementScale: 10,
-    })
-);
-plane.rotation.x = -Math.PI / 2;
+        // Additional uniforms for vertex movement control (adjust as needed)
+        uniform float movementScale;
+        uniform float frequencyCutoff; // Optional: filter out low frequencies
+
+        varying vec2 vUv;
+
+        void main() {
+            // Sample FFT data from texture
+            float frequencySample = texture2D(fftTexture, gl_Position.xy / vec2(textureSize(fftTexture).x, 1.0)).r;
+
+            // Apply a movement based on frequency and time (optional)
+            if (frequencySample > frequencyCutoff) { // Optional: filter out low frequencies
+            vec2 movement = vec2(sin(time + frequencySample * movementScale), 0.0);
+            gl_Position += vec4(movement, 0.0, 1.0);
+            }
+
+            vUv = uv;
+        }
+        `,
+
+    fragmentShader: `
+        precision mediump float;
+        uniform sampler2D imageTexture;
+        uniform sampler2D fftTexture; // Assuming you store FFT data in a texture
+        uniform float time;
+        varying vec2 vUv;
+
+        // Additional uniforms for liquid effect control (adjust as needed)
+        uniform float frequencyScale;
+        uniform float amplitudeScale;
+
+        // Utility functions (replace with your own if needed)
+        float mapRange(float value, float inMin, float inMax, float outMin, float outMax) {
+            return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+        }
+
+        void main() {
+            vec3 color = texture2D(imageTexture, vUv).rgb;
+
+            // Sample FFT data from texture
+            float frequencySample = texture2D(fftTexture, gl_FragCoord.xy / vec2(textureSize(fftTexture).x, 1.0)).r;
+
+            // Calculate displacement based on FFT data and time
+            float displacement = sin(vUv.x * frequencyScale * time + frequencySample * amplitudeScale);
+
+            // Apply displacement to UV coordinates for texture sampling
+            vec2 displacedUV = vUv + vec2(displacement, 0.0);
+
+            // Sample the image texture with displaced UV coordinates
+            vec3 distortedColor = texture2D(imageTexture, displacedUV).rgb;
+
+            // Apply additional effects or blending (optional)
+
+            gl_FragColor = vec4(distortedColor, 1.0);
+        }
+        `,
+
+});
+
+const plane = new THREE.Mesh(planeGeometry, liquidShaderMaterial);
 scene.add(plane);
 
-window.addEventListener('resize', onWindowResize, false);
+// Resize handler
+window.addEventListener('resize', onWindowResize);
 
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    render();
 }
 
 let context;
-let analyser;
-let mediaSource;
-let imageData;
 
-function getUserMedia(dictionary, callback) {
-    try {
-        navigator.getUserMedia =
-            navigator.getUserMedia ||
-            navigator.webkitGetUserMedia ||
-            navigator.mozGetUserMedia;
-        navigator.getUserMedia(dictionary, callback, (e) => {
-            console.dir(e);
-        });
-    } catch (e) {
-        alert('getUserMedia threw exception :' + e);
-    }
-}
-
-function connectAudioAPI() {
-    try {
-        context = new AudioContext();
-        analyser = context.createAnalyser();
-        analyser.fftSize = 2048;
-
-        navigator.mediaDevices
-            .getUserMedia({ audio: true, video: true })
-            .then(function (stream) {
-                mediaSource = context.createMediaStreamSource(stream);
-                mediaSource.connect(analyser);
-                animate();
-                context.resume();
-            })
-            .catch(function (err) {
-                alert(err);
-            });
-    } catch (e) {
-        alert(e);
-    }
-}
-
-function updateFFT() {
-    let timeData = new Uint8Array(analyser.frequencyBinCount);
-
-    analyser.getByteFrequencyData(timeData);
-
-    imageData = ctx.getImageData(0, 1, 256, 511);
-    ctx.putImageData(imageData, 0, 0, 0, 0, 256, 512);
-
-    for (let x = 0; x < 256; x++) {
-        ctx.fillStyle = 'rgb(' + timeData[x] + ', 0, 0) ';
-        ctx.fillRect(x, 510, 2, 2);
-    }
-
-    texture.needsUpdate = true;
-}
-
-const stats = new Stats();
-document.body.appendChild(stats.domElement);
-
+// Animation loop
 function animate() {
     requestAnimationFrame(animate);
-
-    updateFFT();
-
+    updateFFTData(); // Update FFT data here
     render();
-
     stats.update();
 }
 
@@ -135,6 +119,38 @@ function render() {
     renderer.render(scene, camera);
 }
 
-window.onload = function () {
-    connectAudioAPI();
-};
+function updateFFTData() {
+    if (!context) {
+      // Create audio context and analyzer if not already created
+      context = new AudioContext();
+      analyser = context.createAnalyser();
+      analyser.fftSize = 256; // Adjust based on desired frequency resolution
+  
+      navigator.mediaDevices
+        .getUserMedia({ audio: true, video: false })
+        .then(function (stream) {
+          const mediaSource = context.createMediaStreamSource(stream);
+          mediaSource.connect(analyser);
+        })
+        .catch(function (err) {
+          alert(err);
+        });
+    }
+  
+    if (context) {
+      // Get byte frequency data from the analyzer
+      const frequencyData = new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteFrequencyData(frequencyData);
+  
+      // Convert byte data to frequency magnitudes (adjust scaling as needed)
+      const fftData = new Float32Array(frequencyData.length);
+      for (let i = 0; i < frequencyData.length; i++) {
+        fftData[i] = frequencyData[i] / 255.0; // Normalize between 0.0 and 1.0
+      }
+  
+      // Update the fftData uniform in the liquidShaderMaterial
+      liquidShaderMaterial.uniforms.fftData.value = fftData;
+    }
+  }  
+
+animate();
