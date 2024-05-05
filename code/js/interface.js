@@ -4,7 +4,6 @@ function Interface(renderer) {
         panelsBox = document.getElementById('panels'),
 
         filtersBox = document.getElementById('filters'),
-        settingsBox = document.getElementById('settings'),
 
         photoButton = document.getElementById('photo-button'),
         recordButton = document.getElementById('record-button'),

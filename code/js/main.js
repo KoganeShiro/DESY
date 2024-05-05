@@ -24,47 +24,6 @@ var renderer,
     sourceNode,
     audioTrack;
 
-function loop() {
-    renderer.render();
-
-    frameCount ++;
-
-    if (capturer) {
-        capturer.capture(renderer.tRenderer.domElement);
-        precisionRecorderFrames ++;
-
-        if (precisionRecorderAutoStop) {
-            console.log(precisionRecorderFrames * (1 / precisionRecorderFramerate));
-            if (precisionRecorderFrames * (1 / precisionRecorderFramerate) >= precisionRecorderAutoStop) {
-                stopRecording();
-                document.getElementById('record-button').style.color = '#00f';
-            }
-        }
-    }
-
-    requestAnimationFrame(loop);
-}
-
-window.addEventListener('load', function () {
-    var video = document.createElement('video'),
-        videoLoaded = false,
-        image = new Image();
-
-    renderer = new Renderer();
-    interface = new Interface(renderer);
-
-    loop();
-
-    video.onplay = function () {
-        if (videoLoaded) return;
-        videoLoaded = true;
-
-        cleanupAudio();
-        renderer.useInput(video);
-    };
-
-});
-
 function useWebcam() {
     var video = document.createElement('video');
 
@@ -97,6 +56,102 @@ function useWebcam() {
 }
 
 useWebcam();
+
+
+
+/*
+function updatePanelValues(newValues) {
+    const valueElements = document.querySelectorAll('.panel-value'); // Adjust selector as needed
+
+    valueElements.forEach((element, index) => {
+      const newValue = newValues[index];
+      if (newValue !== undefined) {
+        element.textContent = newValue.toFixed(3); // Update the content of the span element, rounded to 3 decimal places
+      }
+    });
+  }
+
+  // Replace mouse interaction logic with calls to updatePanelValues
+
+  // Function to capture microphone input and update panel values based on volume
+  function captureMicrophoneInput() {
+    const mediaStreamSource = audioContext.createMediaStreamSource(streamDestination.stream);
+    const analyser = audioContext.createAnalyser();
+    analyser.fftSize = 256;
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    mediaStreamSource.connect(analyser);
+
+    function updateValues() {
+      analyser.getByteFrequencyData(dataArray);
+
+      // Calculate average volume level
+      let sum = 0;
+      for (let i = 0; i < bufferLength; i++) {
+        sum += dataArray[i];
+      }
+      const averageVolume = sum / bufferLength;
+
+      // Map average volume to new values for the panels
+      const newStrength = averageVolume / 255; // Normalize to a range of [0, 1]
+      const newSize = averageVolume * 0.12; // Adjust multiplier as needed
+      const newSpeed = averageVolume * 0.0001; // Adjust multiplier as needed
+
+      // Update the panel bar values
+      updatePanelValues([newStrength, newSize, newSpeed]);
+
+      // Schedule the next update
+      requestAnimationFrame(updateValues);
+    }
+
+    // Start updating values
+    updateValues();
+  }
+
+  // Call the microphone capture function
+  captureMicrophoneInput();
+*/
+
+
+
+function loop() {
+    renderer.render();
+
+    frameCount ++;
+
+    if (capturer) {
+        capturer.capture(renderer.tRenderer.domElement);
+        precisionRecorderFrames ++;
+
+        if (precisionRecorderAutoStop) {
+            console.log(precisionRecorderFrames * (1 / precisionRecorderFramerate));
+            if (precisionRecorderFrames * (1 / precisionRecorderFramerate) >= precisionRecorderAutoStop) {
+                stopRecording();
+                document.getElementById('record-button').style.color = '#00f';
+            }
+        }
+    }
+
+    requestAnimationFrame(loop);
+}
+
+window.addEventListener('load', function () {
+
+    renderer = new Renderer();
+    interface = new Interface(renderer);
+
+    loop();
+
+    video.onplay = function () {
+        if (videoLoaded) return;
+        videoLoaded = true;
+
+        cleanupAudio();
+        renderer.useInput(video);
+    };
+
+});
 
 function cleanupAudio() {
     if (sourceNode) {
