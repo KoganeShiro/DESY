@@ -115,6 +115,7 @@ function updatePanelValues(newValues) {
 
 
 
+
 function loop() {
     renderer.render();
 
@@ -140,16 +141,9 @@ window.addEventListener('load', function () {
 
     renderer = new Renderer();
     interface = new Interface(renderer);
+    //audio = new Audio();
 
     loop();
-
-    video.onplay = function () {
-        if (videoLoaded) return;
-        videoLoaded = true;
-
-        cleanupAudio();
-        renderer.useInput(video);
-    };
 
 });
 
@@ -161,6 +155,8 @@ function cleanupAudio() {
     sourceNode = null;
     audioTrack = null;
 }
+
+
 
 function startRecording() {
     var options, stream, audioTracks, chosenMime = null,

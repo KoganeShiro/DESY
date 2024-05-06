@@ -3,7 +3,7 @@ function Interface(renderer) {
         controlsBox = document.getElementById('controls'),
         panelsBox = document.getElementById('panels'),
 
-        filtersBox = document.getElementById('filters'),
+        //filtersBox = document.getElementById('filters'),
 
         photoButton = document.getElementById('photo-button'),
         recordButton = document.getElementById('record-button'),
@@ -15,10 +15,9 @@ function Interface(renderer) {
             min = control.min,
             max = control.max,
             percent = (value - min) / (max - min),
-            degrees = -180 + percent * (180+90),
             controlsWidth = controlsBox.offsetWidth,
 
-            text;
+            text; //strength, size, speed
 
         control.innerLabel.style.width = controlsWidth;
 
@@ -175,13 +174,38 @@ function Interface(renderer) {
 
     }
 
-    //these two should be change with the sound
+/*
+    function updateControlValues() {
+        setInterval(function () {
+            renderer.filters.forEach(function (filter) {
+                if (filter.controls) {
+                    Object.keys(filter.controls).forEach(function (key) {
+                        var control = filter.controls[key];
+                        if (control.type === 'slider') {
+                            // Increment the value
+                            control.value += 1; // Adjust the increment as needed
+                            if (control.value > control.max) {
+                                control.value = control.max;
+                            }
+                            // Apply the updated value to the effect
+                            control.parentFilter.uniforms[control.uniform].value = control.value;
+                        }
+                    });
+                }
+            });
+        }, 6000);
+    }
+    */
+
     createPanels();
     addPanels();
+    //updateControlValues();
 
     setupFilter();
 
     document.addEventListener('mousemove', handleMouse);
+
+
 
 
     recordButton.addEventListener('click', function () {
