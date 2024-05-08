@@ -1,47 +1,60 @@
-
-<!DOCTYPE html>
-
-<html lang="fr">
+<html class="fa-events-icons-ready">
 	<head>
-		<meta http-equiv="X-UA-Compatible" content="IE-edge">
-		<meta charset="utf-8">
+		<meta http-equiv="content-type" content="text/html; charset=windows-1252">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>DESY</title>
 		<link rel="stylesheet" href="./code/css/web_page.css">
 		<link rel="stylesheet" href="./code/css/video.css">
 		<script src="./code/js/web_page.js"></script>
-		<script>
-			document.documentElement.className="js";
-			var supportsCssVars=function(){
-				var e,t=document.createElement("style");
-				return t.innerHTML="root: { --tmp-var: bold; }",document.head.appendChild(t),e=!!(window.CSS&&window.CSS.supports&&window.CSS.supports("font-weight","var(--tmp-var)")),t.parentNode.removeChild(t),e};
-				supportsCssVars()||alert("Please view this demo in a modern browser that supports CSS Variables.");
-		</script>
-		<script src="./code/js/three.js-master/build/three.js"></script>
-		<script src="./code/js/dat.gui-master/build/dat.gui.js"></script>
-	</head>
-	<body>
-		<!-- <script src="/code/js/temporal_smoothing.js"></script>
-			motion design of the logo when we enter the website on phone
+		
+			<link href="./code/css/style.css" rel="stylesheet">
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+	
+			
+			<script src="./code/js/libs/perlin.js"></script>
+	
+			<!-- library for screenshot and recording -->
+			<script src="./code/js/libs/CCapture.js"></script>
+			<script src="./code/js/libs/Whammy.js"></script>
+			<script src="./code/js/libs/download.js"></script>
+	
+			<script src="./code/js/libs/PaletteMetaFilter.js"></script>
+	
+			<script src="./code/js/libs/WarpShader.js"></script>
+			<script src="./code/js/libs/WarpFilter.js"></script>
+			<script src="./code/js/libs/TimeWarpFilter.js"></script>
+	
+			<script src="./code/js/libs/FlipShader.js"></script>
+			<script src="./code/js/libs/FlipFilter.js"></script>
+	
+			<script src="./code/js/utils.js"></script>
+			<script src="./code/js/renderer.js"></script>
+			<script src="./code/js/interface.js"></script>
+			<script src="./code/js/main.js"></script>
+	
+			<link href="./code/css/icons.css" media="all" rel="stylesheet">
 
-			<video id="video" autoplay loop muted>
-				<source src="video.mp4" type="video/mp4">
-			</video>
-		-->
+	</head>
+	<body class="vsc-initialized">
+		<!-- <div id="logo">
+			<img class="anim-logo" src="../img/logo.webp" alt="DESY logo">
+		</div>
+
 		<div id="container">
 			<img class="anim-logo" src="./img/logo.webp" alt="DESY logo">
 		</div>
+		-->
 
 		<nav class="navbar">
 			<div class="title-logo">
 				<a href="https://github.com/KoganeShiro/DESY" target="_blank">
-					<img class="logo" src="./img/logo.webp" alt="DESY logo">
+					<img class="logo" src="../img/logo.webp" alt="DESY logo">
 				</a>
 			</div>
 			<div class="navbar-links">
 				<ul>
-					<li><a href="./index.html"><button>Accueil</button></a></li>
-					<li><a href="./code/about.html"><button>A Propos</button></a></li>
+					<li><a href="../index.html"><button>Accueil</button></a></li>
+					<li><a href="./about.html"><button>A Propos</button></a></li>
 					<!-- <li><a href="gallery.html"><button>Gallery</button></a></li> -->
 				</ul>
 			</div>
@@ -56,7 +69,7 @@
 					</li>
 					<li class="links-button"><a href="./index.html"><button>Home</button></a></li>
 					<li class="links-button"><a href="./code/about.html"><button>About</button></a></li>
-					<!-- <li class="links-button"><a href="gallery.html"><button>Gallery</button></a></li> -->
+					<!-- <li class="links-button"><a href="./code/gallery.html"><button>Gallery</button></a></li> -->
 				</ul>
 				<ul>
 					<li class="menu-button" onclick="showSidebar()">
@@ -67,12 +80,27 @@
 						</a>
 					</li>
 				</ul>
-				<script src="./code/js/burger-menu.js"></script>
+				<script src="./js/burger-menu.js"></script>
 			</div>				
 		</nav>
 
-		<canvas id="canvas"></canvas>
-		<!-- <script src="./code/js/distord.js"></script> -->
-		<script src="./code/js/effect.js"></script>
+		<div id="main">
+		<div id="inner">
+			<div id="container">
+			</div>
+			<div id="controls">
+				<div id="icon-box">
+					<i id="photo-button" class="fa fa-camera icon-button" aria-hidden="true"></i>
+					<i id="record-button" class="fa fa-video-camera icon-button" aria-hidden="true"></i>
+				</div>
+				<div id="filters">
+					<div id="panels" class="panel">
+					</div>
+				</div>
+        	</div>
+    	</div>
+		</div>
+
+
 	</body>
 </html>
