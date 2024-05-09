@@ -44,11 +44,16 @@
 			<img class="anim-logo" src="./img/logo.webp" alt="DESY logo">
 		</div>
 		-->
-
+		<script>
+			function isMobile() {
+				return navigator.maxTouchPoints > 0 && /Android|iPhone/i.test(navigator.userAgent);
+			}
+			console.log(isMobile());
+		</script>
 		<nav class="navbar">
 			<div class="title-logo">
 				<a href="https://github.com/KoganeShiro/DESY" target="_blank">
-					<img class="logo" src="../img/logo.webp" alt="DESY logo">
+					<img class="logo" src="./img/logo.webp" alt="DESY logo">
 				</a>
 			</div>
 			<div class="navbar-links">
