@@ -91,6 +91,7 @@ function Renderer() {
         self.mesh.scale.x = self.width;
         self.mesh.scale.y = self.height;
 
+        //resize function
         function resizeFilter(filter) {
             if (filter.filters) {
                 filter.filters.forEach(resizeFilter);
@@ -106,7 +107,8 @@ function Renderer() {
         }
         self.filters.forEach(resizeFilter);
     };
-    window.addEventListener('resize', self.resize);
+    // window.addEventListener('resize', self.resize);
+
 
     self.useInput = function (input, needsFlip) {
         if (input.tagName == 'VIDEO') {

@@ -1,3 +1,4 @@
+/* delete vh or vw and viewport */
 
 #main {
   display: flex;
@@ -10,11 +11,17 @@
 }
 
 #container {
-  display: inline-block;
+  /* display: inline-block; */
   overflow: hidden;
   position: relative;
+  min-width: 100%;
+  min-height: 100%;
 }
 
+canvas {
+  width: 100%;
+  height: 100%;
+}
 
 #controls {
   display: flex;
@@ -29,15 +36,32 @@
   margin-left: -10;
 }
 
+/* do more of these */
+
 @media (max-width: 1200px) {
+  #controls {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 20%;
+    width: 100%;
+    left: 0;
+  }
   #icon-box {
-    font-size: 35px;
+    font-size: calc(1vw + 30px);
+    margin: 0 auto;
   }
-  #photo-button{
-    margin: 0 50px;
-    /*left: 50%;*/
-  }
-  #record-button {
-    margin: 0 50px;
+  #photo-button, #record-button {
+    margin: 0 20px;
   }
 }
+
+@media (max-width: 535px) {
+  #icon-box {
+    font-size: calc(1.5vw + 25px);
+  }
+  #photo-button, #record-button {
+    margin: 0 10px;
+  }
+}
+
