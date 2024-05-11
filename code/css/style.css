@@ -11,7 +11,6 @@
 }
 
 #container {
-  /* display: inline-block; */
   overflow: hidden;
   position: relative;
   min-width: 100%;
@@ -43,7 +42,7 @@ canvas {
     display: flex;
     justify-content: space-between;
     position: absolute;
-    bottom: 20%;
+    bottom: 15%;
     width: 100%;
     left: 0;
   }
@@ -56,7 +55,7 @@ canvas {
   }
 }
 
-@media (max-width: 535px) {
+@media (max-width: 660px) {
   #icon-box {
     font-size: calc(1.5vw + 25px);
   }
@@ -65,3 +64,20 @@ canvas {
   }
 }
 
+@media (max-width: 425px) {
+  #icon-box {
+    font-size: calc(1.5vw + 25px);
+  }
+  #photo-button, #record-button {
+    margin: 0 10px;
+  }
+}
+
+@media (max-width: 325px) {
+  #icon-box {
+    font-size: calc(1.5vw + 25px);
+  }
+  #photo-button, #record-button {
+    margin: 0 10px;
+  }
+}
