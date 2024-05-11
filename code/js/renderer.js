@@ -45,8 +45,8 @@ function Renderer() {
 
     self.resize = function () {
         var inner = document.getElementById('main'),
-            pageWidth = inner.offsetWidth - 300 - 10 - 40,
-            pageHeight = inner.offsetHeight - 40;
+            pageWidth = inner.offsetWidth - 100,
+            pageHeight = inner.offsetHeight - 10;
 
         self.width = inputWidth;
         self.height = inputHeight;

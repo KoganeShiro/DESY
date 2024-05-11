@@ -30,9 +30,11 @@ canvas {
 }
 
 #icon-box {
-  font-size: 50px;
-  margin: 0 auto;
-  margin-left: -10;
+  font-size: calc(1vw + 30px);
+  margin: 0 205;
+}
+#photo-button, #record-button {
+  margin: 0 30px;
 }
 
 /* do more of these */
