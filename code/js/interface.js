@@ -249,7 +249,7 @@ function Interface(renderer) {
                 stopRecording();
             }
 
-            recordButton.style.color = '#00f';
+            recordButton.style.color = '#000006';
     });
 
     photoButton.addEventListener('click', function () {

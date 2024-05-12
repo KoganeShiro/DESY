@@ -30,9 +30,11 @@ function useWebcam() {
     video.loop = true;
 
     navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" },
-        audio: true
-    })
+        video: {
+            facingMode: 'environment'
+          },
+        audio: true,
+      })
     .then(function (stream) {
         var newStream = new MediaStream(stream.getVideoTracks()),
             audioTracks = stream.getAudioTracks();
