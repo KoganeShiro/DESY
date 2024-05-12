@@ -1,0 +1,19 @@
+.gallery_button {
+    display: flex;
+    position:relative;
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: 1%;
+    margin-bottom: 1%;
+    width: 65px;
+    height: 65px;
+    padding: 10px;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border: 7px solid;
+    border-image: linear-gradient(0.1turn, #12548A, #15B6C9, #81C594, #EDC50F, #CD4E16, #1F254A, #1D509F) 10;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.75);
+}

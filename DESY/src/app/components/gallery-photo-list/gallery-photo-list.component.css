@@ -1,0 +1,7 @@
+.cadre_photo {
+    display: flex;
+    margin: 5px;
+    width: 200px;
+    height: 200px;
+    background-color: grey;
+}
