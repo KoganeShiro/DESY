@@ -1,0 +1,8 @@
+#footer {
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    justify-content: space-between;
+    align-items:baseline;
+    padding: 25px;
+}

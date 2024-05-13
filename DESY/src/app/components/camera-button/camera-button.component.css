@@ -1,4 +1,8 @@
 .camera-button {
+    display: flex;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
     width: 100px;
     height: 100px;
     flex-shrink: 0;
