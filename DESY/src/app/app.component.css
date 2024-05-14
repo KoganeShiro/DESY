@@ -14,7 +14,7 @@ header {
     background-size:cover;
     background-position: center;
     display: flex;
-    padding: 5px 120px;
+    padding: 5px 10vw;
     justify-content: space-between;
     align-items: center;
 }

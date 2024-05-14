@@ -7,5 +7,6 @@ export const routes: Routes = [
 
     {path:"about",component:AboutComponent},
     {path:"gallery",component:GalleryComponent},
-    {path:"",component:HomeComponent}
+    {path:"",component:HomeComponent},
+
 ];
