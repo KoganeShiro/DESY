@@ -53,7 +53,33 @@ function useWebcam() {
 		renderer.useInput(video, true);
 	})
 	.catch(function (error) {
-		prompt.innerHTML = 'Unable to capture WebCam. Please reload the page.';
+		prompt.innerHTML = 'Unable to capture back WebCam.';
+		console.warn('Environment camera failed, using user-facing camera:', error);
+	});
+	navigator.mediaDevices.getUserMedia({
+		video: true,
+		audio: true,
+	  })
+	.then(function (stream) {
+		var newStream = new MediaStream(stream.getVideoTracks()),
+			audioTracks = stream.getAudioTracks();
+
+		cleanupAudio();
+
+		video.srcObject = newStream;
+		if (!onlyPlayWhenRecording) {
+			video.play();
+		}
+
+		if (audioTracks && audioTracks.length) {
+			audioTrack = audioTracks[0];
+		}
+
+		renderer.useInput(video, true);
+	})
+	.catch(function (error) {
+		prompt.innerHTML = 'Unable to capture front WebCam.';
+		console.warn('Environment camera failed', error);
 	});
 }
 

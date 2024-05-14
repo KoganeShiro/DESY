@@ -185,6 +185,12 @@ button:hover {
     color: #92a6cc;
 }
 
+@media (orientation: portrait) {
+    .logo {
+        width: 30px;
+    }
+}
+
 @media screen and (max-width: 1212px) {
     .navbar-links ul {
         display: none;

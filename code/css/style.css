@@ -37,7 +37,36 @@ canvas {
   margin: 0 30px;
 }
 
-/* do more of these */
+/*
+@media (orientation: portrait) {
+  #container {
+    transform: rotate(90deg);
+  }
+}
+*/
+
+@media (orientation: landscape) {
+  /*
+  #container {
+    transform: rotate(90deg);
+  }
+  */
+  #controls {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      right: 20px;
+      bottom: auto;
+  }
+
+  #icon-box {
+      margin: 0 20px;
+  }
+
+  #photo-button, #record-button {
+      margin: 5px 0;
+  }
+}
 
 @media (max-width: 1200px) {
   #controls {
@@ -58,6 +87,7 @@ canvas {
 }
 
 @media (max-width: 660px) {
+
   #icon-box {
     font-size: calc(1.5vw + 25px);
   }
