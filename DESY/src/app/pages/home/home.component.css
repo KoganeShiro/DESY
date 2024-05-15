@@ -1,0 +1,98 @@
+#footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    justify-content: space-between;
+    align-items:baseline;
+    padding: 25px;
+}
+
+.camera-button {
+    display: flex;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+}
+
+.camera-button-fill {
+    transition: none ease-in-out .2s;
+    transition-property: fill, fill-opacity;
+}
+
+.switch-mode-button {
+    position:absolute;
+    flex-shrink: 0;
+    left: 0;
+    bottom: 0;
+    transform: translate(-50%,50%);
+    transform-origin: center center;
+    transition: cubic-bezier(0,.4,.6,1.4) transform .2s;
+}
+
+#Ellipse_1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 216px;
+    height: 216px;
+    transform: rotate(45.5deg);
+    flex-shrink: 0;
+    fill: radial-gradient(54.05% 54.05% at 50% 50%, rgba(241, 241, 241, 0.75) 67.5%, rgba(234, 231, 231, 0.75) 89.09%);
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    
+    
+}
+
+#border {
+    width: 216px;
+    height: 216px;
+    border-radius: 50%;
+    border: 5px solid transparent;
+    background: url(../../../assets/31004187da305da9047f3dd05ff78d9d.png) border-box;
+    -webkit-mask: 
+        linear-gradient(#fff 0 0) padding-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+}
+
+#Fichier_24x {
+    position: absolute;
+    top: 40px;
+    left: 100px;
+    width: 116.469px;
+    height: 30.781px;
+    transform: rotate(45.241deg);
+    flex-shrink: 0;
+    background: url(../../../assets/59b5330d52a1e62d03a94c1ec9a4d567.png) 50% / cover no-repeat;
+}
+
+#Fichier_14x {
+    position: absolute;
+    top: 140px;
+    left: 100px;
+    width: 106.79px;
+    height: 33.372px;
+    transform: rotate(139.844deg);
+    flex-shrink: 0;
+    background: url(../../../assets/4a8c2f49b288dd7ac7680c97d297eb50.png) 50% / cover no-repeat;
+}
+
+.switch-mode-button.video {
+    transform: translate(-50%,50%) rotate(-90deg);
+
+}
+
+.camera-button.video .camera-button-fill {
+    fill: red;
+    fill-opacity: 0.75;
+}
+

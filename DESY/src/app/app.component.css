@@ -1,0 +1,42 @@
+ul li a {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: large;
+    color: white;
+    text-decoration: none;
+}
+
+header {
+    top: 0;
+    height:max-content;
+    position: relative;
+    overflow: hidden;
+    background-image:url('../assets/31004187da305da9047f3dd05ff78d9drotate.png');
+    background-size:cover;
+    background-position: center;
+    display: flex;
+    padding: 5px 10vw;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.titre {
+    display: flex;
+    flex-direction: column;
+}
+
+img {
+    height: 32px;
+    size: 32px;
+    filter: invert();
+    mix-blend-mode:difference;
+}
+
+nav ul {
+    display: flex;
+    gap: 16px;
+    list-style: none;
+}
+
+#router-outlet {
+    height: auto;
+}

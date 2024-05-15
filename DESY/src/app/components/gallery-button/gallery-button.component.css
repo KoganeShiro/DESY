@@ -1,0 +1,28 @@
+.gallery_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position:absolute;
+    bottom: 25px;
+    right: 25px;
+    width: 65px;
+    height: 65px;
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 15px;
+}
+
+#border {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 65px;
+    height: 65px;
+    border: 7px solid transparent;
+    border-radius: 15px;
+    background: linear-gradient(0.1turn, #12548A, #15B6C9, #81C594, #EDC50F, #CD4E16, #1F254A, #1D509F) border-box;
+    -webkit-mask: 
+        linear-gradient(#fff 0 0) padding-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+}

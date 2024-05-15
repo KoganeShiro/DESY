@@ -1,0 +1,17 @@
+<html>
+    <header>
+        <div class="titre">
+            <img src="../assets/IMG_1448.png" alt="">
+        </div>
+        <nav>
+            <ul>
+                <li><a [routerLink]="['/']">homepage</a></li>
+                <!-- <li><a [routerLink]="['/gallery']">gallery</a></li> -->
+                <li><a [routerLink]="['/about']">About</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <router-outlet id="router-outlet"/>
+    <router-outlet name="modal"/>
+</html>
