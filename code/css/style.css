@@ -13,6 +13,7 @@
   position: relative;
   min-width: 100%;
   min-height: 100%;
+  top: 50%;
 }
 
 canvas {
@@ -36,10 +37,6 @@ canvas {
 #photo-button, #record-button {
   margin: 5px 0;
 }
-
-#container {
-    transform: rotate(90deg);
-  }
 
 @media (orientation: landscape) {
   #controls {
