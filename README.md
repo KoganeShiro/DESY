@@ -8,15 +8,15 @@
 #
 
 ### Table of Content
-- [Why DESY](#Why DESY ?)
-- [The Project](#The Project)
-- [Quick Start](#Quick Start)
-
- View the website [`*here*`](https://koganeshiro.github.io/DESY/index.html) !
+- [Why DESY](#why-desy)
+- [The Project](#the-project)
+- [Quick Start](#quick-start)
 
 #
+### View the website [`*here*`](https://koganeshiro.github.io/DESY/index.html) !
+#
 
-### Why DESY ?
+### Why DESY
 
 DESY is a collaborative project involving students from Esadhar School and 42 Le Havre, as part of the Normandy Impressionism Festival.
 
