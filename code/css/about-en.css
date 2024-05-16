@@ -1,44 +1,43 @@
 
 .container {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     max-width: 800px;
     width: 80%;
     padding: 2rem;
-    height: calc(100vh - 6rem);
     background: rgb(245, 242, 224);
     box-sizing: border-box;
-    margin: 5rem auto 1rem auto;
-    overflow-y: auto;
 }
 
 h1 {
-    display: flex;
-    font-size: 2em;
-    text-align: left;
-    font-weight: bold;
+	display: flex;
+	font-size: 2em;
+	text-align: left;
+	font-weight: bold;
 }
 
 .project-description {
-    margin-top: 5%;
-    margin-left: 20%;
-    text-align: left;
+	margin-top: 5%;
+	margin-left: 20%;
+	text-align: left;
 }
 
 .project-description p {
-    margin-top: 1%;
-    margin-bottom: 7%;
+	margin-bottom: 7%;
     font-size: 1.3rem;
 }
 
 .lang-menu {
-    position: absolute;
-    right: 15%;
-    top: 55%;
-    transform: translateY(-50%);
-    font-weight: bold;
+	position: fixed;
+	right: 29%;
+	top: 2%;
+	font-weight: bold;
 }
 
 .lang-menu .selected-lang {
-    display: flex;
+    display: flex;   
     justify-content: space-between;
     line-height: 2;
     cursor: pointer;
@@ -66,6 +65,7 @@ h1 {
     border-radius: 5px;
     box-shadow: 0px 1px 10px rgba(0,0,0,0.2);
 }
+
 
 .lang-menu ul li {
     list-style: none;
@@ -103,19 +103,12 @@ h1 {
     background-image: url('/img/french.png');
 }
 
+
 .lang-menu:hover ul {
     display: block;
 }
 
 @media (max-width: 700px) {
-    .lang-menu {
-        position: absolute;
-        right: 25%;
-        top: 50%;
-        transform: translateY(-50%);
-        font-weight: bold;
-    }
-
     .project-description {
         margin-top: 5%;
         margin-left: 23%;
@@ -128,16 +121,24 @@ h1 {
     }
     
     .container {
-        max-width: 700px;
+        position: absolute;
+        top: 55%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         width: 80%;
         padding: 2rem;
         background: rgb(245, 242, 224);
         box-sizing: border-box;
-        margin-bottom: 2rem;
     }
 }
 
 @media (max-width: 500px) {
+    .lang-menu {
+        position: fixed;
+        right: 33%;
+        top: 2.5%;
+        font-weight: bold;
+    }
 
     .project-description {
         margin-top: 5%;
@@ -151,16 +152,18 @@ h1 {
     }
     
     .container {
-        max-width: 500px;
+        position: absolute;
+        top: 58%;
+        left: 50%;
         width: 80%;
         padding: 2rem;
         background: rgb(245, 242, 224);
         box-sizing: border-box;
-        margin-bottom: 2rem;
     }
 }
 
 @media (max-width: 400px) {
+
     .project-description {
         margin-top: 3%;
         margin-left: 20%;
@@ -173,11 +176,12 @@ h1 {
     }
     
     .container {
-        max-width: 400px;
+        position: absolute;
+        top: 65%;
+        left: 50%;
         width: 80%;
         padding: 1.5rem;
         background: rgb(245, 242, 224);
         box-sizing: border-box;
-        margin-bottom: 2rem;
     }
 }

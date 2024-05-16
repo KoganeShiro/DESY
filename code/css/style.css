@@ -1,8 +1,10 @@
+/* delete vh or vw and viewport */
 
 #main {
   display: flex;
   align-items: center;
   justify-content: center;
+  
   width: 100%;
   height: 100%;
   font-size: 0rem;
@@ -11,9 +13,7 @@
 #container {
   overflow: hidden;
   position: relative;
-  min-width: 100%;
-  min-height: 100%;
-  top: 50%;
+
 }
 
 canvas {
@@ -25,100 +25,90 @@ canvas {
   display: flex;
   justify-content: space-between;
   position: absolute;
-  bottom: 15%;
-  width: 100%;
-  left: -45%;
+  bottom: 150;
 }
+
 #icon-box {
   font-size: calc(1vw + 30px);
-  margin: 0 auto;
+  margin: 0 205;
+}
+#photo-button, #record-button {
+  margin: 0 30px;
 }
 
-#photo-button, #record-button {
-  margin: 5px 0;
+/*
+@media (orientation: portrait) {
+  #container {
+    transform: rotate(90deg);
+  }
 }
+*/
 
 @media (orientation: landscape) {
+  /*
+  #container {
+    transform: rotate(90deg);
+  }
+  */
   #controls {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-end;
-	right: 20px;
-	bottom: 5%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      right: 20px;
+      bottom: auto;
   }
 
   #icon-box {
-	margin: 0 20px;
+      margin: 0 20px;
   }
 
   #photo-button, #record-button {
-	margin: 5px 0;
+      margin: 5px 0;
   }
-}
-
-@media (orientation: portrait) {
-	#container {
-	  top: 50%;
-	}
-
-	#controls {
-	  display: flex;
-	  flex-direction: column;
-	  align-items: flex-end;
-	  right: 20px;
-	  bottom: 3%;
-	}
-
-	#icon-box {
-	  margin: 0 20px;
-	}
-
-	#photo-button, #record-button {
-	  margin: 5px 0;
-	}
-
-	@media (max-width: 425px) {
-	  #icon-box {
-		font-size: calc(1.5vw + 25px);
-	  }
-	  #photo-button, #record-button {
-		margin: 0 10px;
-	  }
-	}
-
-	@media (max-width: 325px) {
-	  #icon-box {
-		font-size: calc(1.5vw + 25px);
-	  }
-	  #photo-button, #record-button {
-		margin: 0 10px;
-	  }
-	}
 }
 
 @media (max-width: 1200px) {
   #controls {
-	display: flex;
-	justify-content: space-between;
-	position: absolute;
-	bottom: 15%;
-	width: 100%;
-	left: 0;
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 15%;
+    width: 100%;
+    left: 0;
   }
   #icon-box {
-	font-size: calc(1vw + 30px);
-	margin: 0 auto;
+    font-size: calc(1vw + 30px);
+    margin: 0 auto;
   }
   #photo-button, #record-button {
-	margin: 0 20px;
+    margin: 0 20px;
   }
 }
 
 @media (max-width: 660px) {
+
   #icon-box {
-	font-size: calc(1.5vw + 25px);
+    font-size: calc(1.5vw + 25px);
   }
   #photo-button, #record-button {
-	margin: 0 10px;
+    margin: 0 10px;
+  }
+}
+
+@media (max-width: 425px) {
+  #icon-box {
+    font-size: calc(1.5vw + 25px);
+  }
+  #photo-button, #record-button {
+    margin: 0 10px;
+  }
+}
+
+@media (max-width: 325px) {
+  #icon-box {
+    font-size: calc(1.5vw + 25px);
+  }
+  #photo-button, #record-button {
+    margin: 0 10px;
   }
 }

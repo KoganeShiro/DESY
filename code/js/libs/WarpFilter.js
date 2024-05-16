@@ -68,7 +68,7 @@ function WarpFilter() {
                 c = Math.floor(o * 128)+128;
                 data[ i   ] = c;
 
-                o = noise.perlin3(x/size, y/size, noiseOffset+4330);
+                o = noise.perlin3(x/size, y/size, noiseOffset+4340);
                 c = Math.floor(o * 128)+128;
                 data[ i +1] = c;
 

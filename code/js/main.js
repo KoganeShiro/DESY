@@ -24,46 +24,45 @@ var renderer,
 	sourceNode,
 	audioTrack;
 
+	function useWebcam() {
+		var video = document.createElement('video');
+		video.loop = true;
+	
+		navigator.mediaDevices.getUserMedia({
+			video: { facingMode: { exact: 'environment' } },
+			audio: true,
+		})
+		.then(handleStream)
+		.catch(handleError);
+	
+		function handleStream(stream) {
+			var newStream = new MediaStream(stream.getVideoTracks());
+			audioTrack = stream.getAudioTracks();
+	
+			video.srcObject = newStream;
+			if (!onlyPlayWhenRecording) {
+				video.play();
+			}
+	
+			renderer.useInput(video, true);
+		}
+	
+		function handleError(error) {
+			console.warn('Environment camera failed, using user-facing camera:', error);
+	
+			navigator.mediaDevices.getUserMedia({
+				video: true,
+				audio: true,
+			})
+			.then(handleStream)
+			.catch(function (error) {
+				console.warn('User-facing camera failed:', error);
+				alert('Cannot open the camera on your device, try changing browser');
+			});
+		}
+	}
 
-function useWebcam() {
-    var video = document.createElement('video');
-    video.loop = true;
 
-	navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { exact: 'environment' } },
-        audio: true,
-    })
-    .then(handleStream)
-    .catch(handleError);
-
-    function handleStream(stream) {
-        var newStream = new MediaStream(stream.getVideoTracks());
-
-        video.srcObject = newStream;
-        if (!onlyPlayWhenRecording) {
-            video.play();
-        }
-
-		audioTrack = stream.getAudioTracks();
-
-        renderer.useInput(video, true);
-    }
-
-    function handleError(error) {
-        prompt.innerHTML = 'Unable to capture back WebCam. Trying user-facing camera...';
-        console.warn('Environment camera failed, using user-facing camera:', error);
-
-        navigator.mediaDevices.getUserMedia({
-            video: true,
-            audio: true,
-        })
-        .then(handleStream)
-        .catch(function (error) {
-            prompt.innerHTML = 'Unable to capture front WebCam.';
-            console.warn('User-facing camera failed:', error);
-        });
-    }
-}
 
 
 function loop() {
@@ -87,14 +86,25 @@ function loop() {
 	requestAnimationFrame(loop);
 }
 
-window.addEventListener('load', function () {
+	window.addEventListener('load', function () {
 
-	useWebcam();
 	renderer = new Renderer();
-	interface = new Interface(renderer, audioTrack);
+	interface = new Interface(renderer);
 	loop();
 
 });
+
+
+useWebcam();
+
+function cleanupAudio() {
+	if (sourceNode) {
+		sourceNode.disconnect();
+	}
+
+	sourceNode = null;
+	audioTrack = null;
+}
 
 
 
@@ -201,7 +211,7 @@ function stopRecording() {
 				a = document.createElement('a');
 
 			a.href = url;
-			a.download = 'DESY-video';
+			a.download = 'DESY video';
 			a.click();
 
 			mediaRecorder = false;

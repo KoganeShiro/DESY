@@ -168,7 +168,8 @@ function Interface(renderer) {
 	function updateControlValues() {
 		const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 		const analyser = audioContext.createAnalyser();
-		analyser.fftSize = 256; 
+		analyser.fftSize = 256; // Adjust FFT size as needed for accuracy
+	
 		navigator.mediaDevices.getUserMedia({ audio: true })
 			.then(function(stream) {
 				const source = audioContext.createMediaStreamSource(stream);
@@ -180,32 +181,36 @@ function Interface(renderer) {
 				function processAudio() {
 					analyser.getByteFrequencyData(dataArray);
 	
+					// Calculate audio intensity based on frequency data
 					let audioIntensity = 0;
 					for (let i = 0; i < bufferLength; i++) {
 						audioIntensity += dataArray[i];
 					}
 					audioIntensity /= bufferLength;
 	
+					// Update control values based on audio intensity
 					renderer.filters.forEach(function (filter) {
 						if (filter.controls) {
 							Object.keys(filter.controls).forEach(function (key) {
 								const control = filter.controls[key];
-								let newValue;
-								switch (key) {
-									case 'Strength':
-										newValue = audioIntensity * 0.003;
-										break;
-									case 'Size':
-										newValue = audioIntensity * 0.6;
-										break;
-									case 'Speed':
-										newValue = audioIntensity * 0.00055;
-										break;
-									default:
-										return;
+								if (key === 'Strength') {
+									const newValue = (audioIntensity * 0.003);
+									control.value = Math.min(newValue, control.max);
+									self.updateSlider(control);
+									//console.log(`Control ${key} value updated to:`, control.value);
 								}
-								control.value = Math.min(newValue, control.max);
-								self.updateSlider(control);
+								if (key === 'Size') {
+									const newValue = (audioIntensity * 0.6);
+									control.value = Math.min(newValue, control.max);
+									self.updateSlider(control);
+									//console.log(`Control ${key} value updated to:`, control.value);
+								}
+								if (key === 'Speed') {
+									const newValue = (audioIntensity * 0.0005);
+									control.value = Math.min(newValue, control.max);
+									self.updateSlider(control)
+									//console.log(`Control ${key} value updated to:`, control.value);
+								}
 							});
 						}
 					});
