@@ -24,64 +24,59 @@ var renderer,
 	sourceNode,
 	audioTrack;
 
+
 function useWebcam() {
-	var video = document.createElement('video');
+    var video = document.createElement('video');
+    var onlyPlayWhenRecording = false; // Set this according to your needs
+    var audioTrack;
 
-	video.loop = true;
+    video.loop = true;
 
-	navigator.mediaDevices.getUserMedia({
-		video: {
-			facingMode:  {exact: 'environment'}, 
-		  },
-		audio: true,
-	  })
-	.then(function (stream) {
-		var newStream = new MediaStream(stream.getVideoTracks()),
-			audioTracks = stream.getAudioTracks();
+    // Function to handle media stream
+    function handleStream(stream) {
+        var newStream = new MediaStream(stream.getVideoTracks());
+        var audioTracks = stream.getAudioTracks();
 
-		cleanupAudio();
+        cleanupAudio();
 
-		video.srcObject = newStream;
-		if (!onlyPlayWhenRecording) {
-			video.play();
-		}
+        video.srcObject = newStream;
+        if (!onlyPlayWhenRecording) {
+            video.play();
+        }
 
-		if (audioTracks && audioTracks.length) {
-			audioTrack = audioTracks[0];
-		}
+        if (audioTracks && audioTracks.length) {
+            audioTrack = audioTracks[0];
+        }
 
-		renderer.useInput(video, true);
-	})
-	.catch(function (error) {
-		prompt.innerHTML = 'Unable to capture back WebCam.';
-		console.warn('Environment camera failed, using user-facing camera:', error);
-	});
-	navigator.mediaDevices.getUserMedia({
-		video: true,
-		audio: true,
-	  })
-	.then(function (stream) {
-		var newStream = new MediaStream(stream.getVideoTracks()),
-			audioTracks = stream.getAudioTracks();
+        renderer.useInput(video, true);
+    }
 
-		cleanupAudio();
+    // Function to handle errors
+    function handleError(error) {
+        prompt.innerHTML = 'Unable to capture back WebCam. Trying user-facing camera...';
+        console.warn('Environment camera failed, using user-facing camera:', error);
 
-		video.srcObject = newStream;
-		if (!onlyPlayWhenRecording) {
-			video.play();
-		}
+        // Fallback to user-facing camera
+        navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: true,
+        })
+        .then(handleStream)
+        .catch(function (error) {
+            prompt.innerHTML = 'Unable to capture front WebCam.';
+            console.warn('User-facing camera failed:', error);
+        });
+    }
 
-		if (audioTracks && audioTracks.length) {
-			audioTrack = audioTracks[0];
-		}
-
-		renderer.useInput(video, true);
-	})
-	.catch(function (error) {
-		prompt.innerHTML = 'Unable to capture front WebCam.';
-		console.warn('Environment camera failed', error);
-	});
+    // Try to get the environment-facing camera first
+    navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { exact: 'environment' } },
+        audio: true,
+    })
+    .then(handleStream)
+    .catch(handleError);
 }
+
 
 useWebcam();
 
