@@ -27,12 +27,17 @@ var renderer,
 
 function useWebcam() {
     var video = document.createElement('video');
-    var onlyPlayWhenRecording = false; // Set this according to your needs
     var audioTrack;
 
     video.loop = true;
 
-    // Function to handle media stream
+	navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { exact: 'environment' } },
+        audio: true,
+    })
+    .then(handleStream)
+    .catch(handleError);
+
     function handleStream(stream) {
         var newStream = new MediaStream(stream.getVideoTracks());
         var audioTracks = stream.getAudioTracks();
@@ -51,12 +56,10 @@ function useWebcam() {
         renderer.useInput(video, true);
     }
 
-    // Function to handle errors
     function handleError(error) {
         prompt.innerHTML = 'Unable to capture back WebCam. Trying user-facing camera...';
         console.warn('Environment camera failed, using user-facing camera:', error);
 
-        // Fallback to user-facing camera
         navigator.mediaDevices.getUserMedia({
             video: true,
             audio: true,
@@ -67,19 +70,7 @@ function useWebcam() {
             console.warn('User-facing camera failed:', error);
         });
     }
-
-    // Try to get the environment-facing camera first
-    navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { exact: 'environment' } },
-        audio: true,
-    })
-    .then(handleStream)
-    .catch(handleError);
 }
-
-
-useWebcam();
-
 
 
 function loop() {
@@ -105,6 +96,7 @@ function loop() {
 
 window.addEventListener('load', function () {
 
+	useWebcam();
 	renderer = new Renderer();
 	interface = new Interface(renderer);
 	loop();
@@ -225,7 +217,7 @@ function stopRecording() {
 				a = document.createElement('a');
 
 			a.href = url;
-			a.download = 'DESY video';
+			a.download = 'DESY-video';
 			a.click();
 
 			mediaRecorder = false;

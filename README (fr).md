@@ -8,11 +8,13 @@
 #
 
 ### Table of Content
-- [Pourquoi DESY](#Pourquoi DESY ?)
-- [Le Projet](#Le Projet)
-- [Quick Start](#Quick Start)
+- [Pourquoi DESY](#pourquoi-desy)
+- [Le Projet](#le-projet)
+- [Quick Start](#quick-start)
 
- Vous pouvez acceder au site [`*ici*`](https://koganeshiro.github.io/DESY/index.html) !
+#
+
+### Vous pouvez acceder au site [`*ici*`](https://koganeshiro.github.io/DESY/index.html) !
 
 #
 
@@ -53,5 +55,5 @@ Utilise ensuite les commandes suivante:
 (Installe ce que le temrinal vous dit d'installer)
 
 
-You can also view the website [`here`](https://koganeshiro.github.io/DESY/index.html)
+Vous pouvez acceder au site [`*ici*`](https://koganeshiro.github.io/DESY/index.html) !
 
