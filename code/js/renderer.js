@@ -1,24 +1,17 @@
-
 function Renderer() {
 	var self = this,
-
 		inputTexture,
 		inputWidth = 800,
 		inputHeight = 600,
 		needsUpdating = false,
-
 		container = document.getElementById('container'),
-
 		renderTargetA,
 		renderTargetB,
-
 		basicMaterial = new THREE.MeshBasicMaterial({transparent: true}),
-
 		flipFilter = new FlipFilter(),
 		flip = false;
 
 	self.input = null;
-
 	self.width = 800;
 	self.height = 600;
 
@@ -26,9 +19,9 @@ function Renderer() {
 	self.tRenderer.setClearColor(new THREE.Color(0xffffff));
 	container.appendChild(self.tRenderer.domElement);
 
-	self.camera = new THREE.OrthographicCamera(self.width / - 2, self.width / 2, self.height / 2, self.height / - 2, 1, 1000);
+	self.camera = new THREE.OrthographicCamera(self.width / -2, self.width / 2, self.height / 2, self.height / -2, 1, 1000);
 	self.camera.position.z = 300;
-	
+
 	self.mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1, 1, 1));
 	self.mesh.scale.x = self.width;
 	self.mesh.scale.y = self.height;
@@ -37,9 +30,8 @@ function Renderer() {
 	self.scene.add(self.mesh);
 
 	self.filters = [];
-
 	self.fullSizeVideo = false;
-	
+
 	renderTargetA = new THREE.WebGLRenderTarget(self.width, self.height, {minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter});
 	renderTargetB = new THREE.WebGLRenderTarget(self.width, self.height, {minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter});
 
@@ -53,24 +45,12 @@ function Renderer() {
 
 		if (!self.fullSizeVideo) {
 			if (self.height > pageHeight) {
-				self.width = pageHeight * (inputWidth/inputHeight);
+				self.width = pageHeight * (inputWidth / inputHeight);
 				self.height = pageHeight;
 			}
 			if (self.width > pageWidth) {
 				self.width = pageWidth;
-				self.height = pageWidth * (inputHeight/inputWidth);
-			}
-
-			self.width = Math.round(self.width);
-			self.height = Math.round(self.height);
-
-			if (self.height > pageHeight) {
-				self.width = pageHeight * (inputWidth/inputHeight);
-				self.height = pageHeight;
-			}
-			if (self.width > pageWidth) {
-				self.width = pageWidth;
-				self.height = pageWidth * (inputHeight/inputWidth);
+				self.height = pageWidth * (inputHeight / inputWidth);
 			}
 		}
 
@@ -79,10 +59,10 @@ function Renderer() {
 
 		self.tRenderer.setSize(self.width, self.height);
 
-		self.camera.left = self.width / - 2;
+		self.camera.left = self.width / -2;
 		self.camera.right = self.width / 2;
 		self.camera.top = self.height / 2;
-		self.camera.bottom = self.height / - 2;
+		self.camera.bottom = self.height / -2;
 		self.camera.updateProjectionMatrix();
 
 		renderTargetA = new THREE.WebGLRenderTarget(self.width, self.height, { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter});
@@ -91,7 +71,6 @@ function Renderer() {
 		self.mesh.scale.x = self.width;
 		self.mesh.scale.y = self.height;
 
-		//resize function
 		function resizeFilter(filter) {
 			if (filter.filters) {
 				filter.filters.forEach(resizeFilter);
@@ -107,19 +86,15 @@ function Renderer() {
 		}
 		self.filters.forEach(resizeFilter);
 	};
-	// window.addEventListener('resize', self.resize);
-
 
 	self.useInput = function (input, needsFlip) {
 		if (input.tagName == 'VIDEO') {
 			if (input.readyState != input.HAVE_ENOUGH_DATA) {
-				setTimeout(function () {self.useInput(input, needsFlip);}, 0);
+				setTimeout(function () { self.useInput(input, needsFlip); }, 0);
 				return;
 			}
-
 			needsUpdating = true;
-		}
-		else {
+		} else {
 			needsUpdating = false;
 		}
 
@@ -130,7 +105,6 @@ function Renderer() {
 		}
 
 		self.input = input;
-
 		flip = needsFlip;
 
 		inputTexture = new THREE.Texture(input);
@@ -152,8 +126,7 @@ function Renderer() {
 
 		if (flip) {
 			filters = [flipFilter].concat(self.filters);
-		}
-		else {
+		} else {
 			filters = self.filters;
 		}
 
@@ -164,13 +137,12 @@ function Renderer() {
 		if (needsUpdating) inputTexture.needsUpdate = true;
 
 		do {
-			lastFilterIndex --;
+			lastFilterIndex--;
 			lastFilter = filters[lastFilterIndex];
-		}
-		while (lastFilter.hidden && lastFilterIndex > 0);
+		} while (lastFilter.hidden && lastFilterIndex > 0);
 
 		if (!lastFilter.hidden && lastFilter.filters) {
-			lastFilter = lastFilter.filters[lastFilter.filters.length-1];
+			lastFilter = lastFilter.filters[lastFilter.filters.length - 1];
 		}
 
 		function renderFilter(filter) {
@@ -179,8 +151,7 @@ function Renderer() {
 			if (!(index % 2)) {
 				input = renderTargetA.texture;
 				output = renderTargetB;
-			}
-			else {
+			} else {
 				input = renderTargetB.texture;
 				output = renderTargetA;
 			}
@@ -197,8 +168,7 @@ function Renderer() {
 				basicMaterial.map = input;
 				self.mesh.material = basicMaterial;
 				self.tRenderer.render(self.scene, self.camera, output);
-			}
-			else {
+			} else {
 				if (filter.material) {
 					self.mesh.material = filter.material;
 					filter.uniforms.inputImageTexture.value = input;
@@ -208,13 +178,11 @@ function Renderer() {
 					}
 
 					self.tRenderer.render(self.scene, self.camera, output);
-					index ++;
-				}
-				else if (filter.render) {
+					index++;
+				} else if (filter.render) {
 					filter.render(input, output);
-					index ++;
-				}
-				else if (filter.filters) {
+					index++;
+				} else if (filter.filters) {
 					filter.filters.forEach(renderFilter);
 				}
 			}

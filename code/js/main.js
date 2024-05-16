@@ -27,8 +27,6 @@ var renderer,
 
 function useWebcam() {
     var video = document.createElement('video');
-    var audioTrack;
-
     video.loop = true;
 
 	navigator.mediaDevices.getUserMedia({
@@ -40,18 +38,13 @@ function useWebcam() {
 
     function handleStream(stream) {
         var newStream = new MediaStream(stream.getVideoTracks());
-        var audioTracks = stream.getAudioTracks();
-
-        cleanupAudio();
 
         video.srcObject = newStream;
         if (!onlyPlayWhenRecording) {
             video.play();
         }
 
-        if (audioTracks && audioTracks.length) {
-            audioTrack = audioTracks[0];
-        }
+		audioTrack = stream.getAudioTracks();
 
         renderer.useInput(video, true);
     }
@@ -98,19 +91,10 @@ window.addEventListener('load', function () {
 
 	useWebcam();
 	renderer = new Renderer();
-	interface = new Interface(renderer);
+	interface = new Interface(renderer, audioTrack);
 	loop();
 
 });
-
-function cleanupAudio() {
-	if (sourceNode) {
-		sourceNode.disconnect();
-	}
-
-	sourceNode = null;
-	audioTrack = null;
-}
 
 
 
