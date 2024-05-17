@@ -166,7 +166,7 @@ function Interface(renderer) {
 	}
 
 	function updateControlValues() {
-		const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+		var audioContext = new (window.AudioContext || window.webkitAudioContext);
 		const analyser = audioContext.createAnalyser();
 		analyser.fftSize = 256;
 	

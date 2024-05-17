@@ -48,7 +48,7 @@ h1 {
     display: inline-block;
     width: 32px;
     height: 32px;
-    background-image: url('/img/british-us.png');
+    background-image: url('../../img/british-us.png');
     background-size: contain;
     background-repeat: no-repeat;
 }
@@ -97,10 +97,10 @@ h1 {
 }
 
 .en:before {
-    background-image: url('/img/british-us.png');
+    background-image: url('../../img/british-us.png');
 }
 .fr:before {
-    background-image: url('/img/french.png');
+    background-image: url('../../img/french.png');
 }
 
 .lang-menu:hover ul {

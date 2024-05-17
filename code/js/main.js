@@ -63,8 +63,6 @@ var renderer,
 	}
 
 
-
-
 function loop() {
 	renderer.render();
 
