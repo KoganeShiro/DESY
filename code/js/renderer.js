@@ -149,33 +149,33 @@ function Renderer() {
 			filters,
 			lastFilterIndex,
 			lastFilter;
-
+	
 		if (flip) {
 			filters = [flipFilter].concat(self.filters);
 		}
 		else {
 			filters = self.filters;
 		}
-
+	
 		lastFilterIndex = filters.length;
-
+	
 		if (!inputTexture) { return; }
-
+	
 		if (needsUpdating) inputTexture.needsUpdate = true;
-
+	
 		do {
 			lastFilterIndex --;
 			lastFilter = filters[lastFilterIndex];
 		}
 		while (lastFilter.hidden && lastFilterIndex > 0);
-
+	
 		if (!lastFilter.hidden && lastFilter.filters) {
 			lastFilter = lastFilter.filters[lastFilter.filters.length-1];
 		}
-
+	
 		function renderFilter(filter) {
 			var input, output;
-
+	
 			if (!(index % 2)) {
 				input = renderTargetA.texture;
 				output = renderTargetB;
@@ -184,30 +184,32 @@ function Renderer() {
 				input = renderTargetB.texture;
 				output = renderTargetA;
 			}
-
+	
 			if (!index) {
 				input = inputTexture;
 			}
-
+	
 			if (filter == lastFilter) {
 				output = null;
 			}
-
+	
 			if (filter.hidden) {
 				basicMaterial.map = input;
 				self.mesh.material = basicMaterial;
-				self.tRenderer.render(self.scene, self.camera, output);
+				self.tRenderer.setRenderTarget(output);
+				self.tRenderer.render(self.scene, self.camera);
 			}
 			else {
 				if (filter.material) {
 					self.mesh.material = filter.material;
 					filter.uniforms.inputImageTexture.value = input;
-
+	
 					if (filter.uniforms.resolution) {
 						filter.uniforms.resolution.value = new THREE.Vector2(self.width, self.height);
 					}
-
-					self.tRenderer.render(self.scene, self.camera, output);
+	
+					self.tRenderer.setRenderTarget(output);
+					self.tRenderer.render(self.scene, self.camera);
 					index ++;
 				}
 				else if (filter.render) {
@@ -219,7 +221,8 @@ function Renderer() {
 				}
 			}
 		}
-
+	
+		self.tRenderer.setRenderTarget(null);
 		filters.forEach(renderFilter);
 	}
-}
+}	
