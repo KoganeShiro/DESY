@@ -223,5 +223,3 @@ function Renderer() {
 		filters.forEach(renderFilter);
 	}
 }
-
-expot

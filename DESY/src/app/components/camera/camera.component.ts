@@ -12,6 +12,7 @@ export class CameraComponent implements OnInit {
 	constructor(){}
 
 	ngOnInit() {
+		this.loadScript('https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js');
 		this.loadScript('assets/libs/perlin.js');
 		this.loadScript('assets/libs/CCapture.js');
 		this.loadScript('assets/libs/Whammy.js');
