@@ -15,30 +15,28 @@ var renderer,
     audioContext,
     streamDestination,
     sourceNode,
-    audioTrack;
+    audioTrack,
+    video,
+    animationFrameId;
 
-	
-	function createAndStartAudioContext() {
-		if (!audioContext) {
-			audioContext = new (window.AudioContext || window.webkitAudioContext)();
-	
-			if (audioContext.state === 'suspended') {
-				document.addEventListener('click', function() {
-					audioContext.resume().then(() => {
-						console.log('AudioContext resumed successfully.');
-					}).catch((error) => {
-						console.error('Failed to resume AudioContext:', error);
-					});
-				}, { once: true });
-			}
-		}
-	}
-	
-	createAndStartAudioContext();
-	
+function createAndStartAudioContext() {
+    if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        if (audioContext.state === 'suspended') {
+            document.addEventListener('click', function() {
+                audioContext.resume().then(() => {
+                    console.log('AudioContext resumed successfully.');
+                }).catch((error) => {
+                    console.error('Failed to resume AudioContext:', error);
+                });
+            }, { once: true });
+        }
+    }
+}
 
 function useWebcam() {
-    var video = document.createElement('video');
+    video = document.createElement('video');
     video.loop = true;
     navigator.mediaDevices.getUserMedia({
         video: { facingMode: { exact: 'environment' } },
@@ -90,14 +88,39 @@ function loop() {
         }
     }
 
-    requestAnimationFrame(loop);
+    animationFrameId = requestAnimationFrame(loop);
 }
 
-window.addEventListener('load', function () {
+document.getElementById('play-button').addEventListener('click', function () {
+    createAndStartAudioContext();
     useWebcam();
     renderer = new Renderer();
     interface = new Interface(renderer, audioContext);
     loop();
+
+    document.getElementById('play-button').style.display = 'none';
+});
+
+document.getElementById('container').addEventListener('click', function () {
+    console.log("click in container");
+    // Stop the animation loop
+    cancelAnimationFrame(animationFrameId);
+
+    // Stop the video playback
+    if (video) {
+        video.pause();
+        video.srcObject.getTracks().forEach(track => track.stop());
+        video.srcObject = null;
+    }
+
+    if (renderer && renderer.tRenderer && renderer.tRenderer.domElement) {
+        const domElement = renderer.tRenderer.domElement;
+        if (domElement.parentNode) {
+            domElement.parentNode.removeChild(domElement);
+        }
+    }
+
+    document.getElementById('play-button').style.display = 'block';
 });
 
 document.addEventListener('DOMContentLoaded', function() {
