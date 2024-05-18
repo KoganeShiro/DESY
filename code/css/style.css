@@ -55,7 +55,10 @@ canvas {
 
 @media (orientation: portrait) {
 	#container {
-	  top: 50%;
+		top: 50%;
+		transform: rotateY(180deg);
+		-webkit-transform:rotateY(180deg); /* Safari and Chrome */
+		-moz-transform:rotateY(180deg); /* Firefox */
 	}
 
 	#controls {

@@ -1,271 +1,270 @@
 var renderer,
-	interface,
-	fpsBox,
-	frameCount = 0,
-	filterIndex = 2,
-	Filters = ['Wiggle', WarpFilter],
-	mediaRecorder,
-	recording = false,
-	precisionRecorderActive = false,
-	precisionRecorderFramerate = 25,
-	precisionRecorderAutoStop = 0,
-	precisionRecorderFrames = 0,
-	capturer,
-	onlyPlayWhenRecording = false,
-	audioContext,
-	streamDestination,
-	sourceNode,
-	audioTrack,
-	video,
-	animationFrameId;
+    interface,
+    fpsBox,
+    frameCount = 0,
+    filterIndex = 2,
+    Filters = ['Wiggle', WarpFilter],
+    mediaRecorder,
+    recording = false,
+    precisionRecorderActive = false,
+    precisionRecorderFramerate = 25,
+    precisionRecorderAutoStop = 0,
+    precisionRecorderFrames = 0,
+    capturer,
+    onlyPlayWhenRecording = false,
+    audioContext,
+    streamDestination,
+    sourceNode,
+    audioTrack,
+    video,
+    animationFrameId;
 
 function createAndStartAudioContext() {
-	if (!audioContext) {
-		audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-		if (audioContext.state === 'suspended') {
-			document.addEventListener('click', function() {
-				audioContext.resume().then(() => {
-					console.log('AudioContext resumed successfully.');
-				}).catch((error) => {
-					console.error('Failed to resume AudioContext:', error);
-				});
-			}, { once: true });
-		}
-	}
+        if (audioContext.state === 'suspended') {
+            document.addEventListener('click', function() {
+                audioContext.resume().then(() => {
+                    console.log('AudioContext resumed successfully.');
+                }).catch((error) => {
+                    console.error('Failed to resume AudioContext:', error);
+                });
+            }, { once: true });
+        }
+    }
 }
 
 function useWebcam() {
-	video = document.createElement('video');
-	video.loop = true;
-	navigator.mediaDevices.getUserMedia({
-		video: { facingMode: { exact: 'environment' } },
-		audio: false,
-	})
-	.then(handleStream)
-	.catch(handleError);
+    video = document.createElement('video');
+    video.loop = true;
+    navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { exact: 'environment' } },
+        audio: false,
+    })
+    .then(handleStream)
+    .catch(handleError);
 
-	function handleStream(stream) {
-		var newStream = new MediaStream(stream.getVideoTracks());
-		video.srcObject = newStream;
-		if (!onlyPlayWhenRecording) {
-			video.play();
-		}
-		if (stream.getVideoTracks()[0].label.includes("environment")) {
-			flipVideo();
-		} 
-		audioTrack = stream.getAudioTracks()[0] || null;
-		renderer.useInput(video, true);
-	}
+    function handleStream(stream) {
+        var newStream = new MediaStream(stream.getVideoTracks());
+        video.srcObject = newStream;
+        if (!onlyPlayWhenRecording) {
+            video.play();
+        }
 
-	function handleError(error) {
-		console.warn('Environment camera failed, using user-facing camera:', error);
+        audioTrack = stream.getAudioTracks()[0] || null;
+        renderer.useInput(video, true);
+        
+    }
 
-		navigator.mediaDevices.getUserMedia({
-			video: true,
-			audio: false,
-		})
-		.then(handleStream)
-		.catch(function (error) {
-			console.warn('User-facing camera failed:', error);
-			alert('Cannot open the camera on your device, try changing browser');
-		});
-	}
+    function handleError(error) {
+        console.warn('Environment camera failed, using user-facing camera:', error);
+
+        navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: false,
+        })
+        .then(handleStream)
+        .catch(function (error) {
+            console.warn('User-facing camera failed:', error);
+            alert('Cannot open the camera on your device, try changing browser');
+        });
+    }
 }
 
 function loop() {
-	renderer.render();
-	frameCount++;
+    renderer.render();
+    frameCount++;
 
-	if (capturer) {
-		capturer.capture(renderer.tRenderer.domElement);
-		precisionRecorderFrames++;
+    if (capturer) {
+        capturer.capture(renderer.tRenderer.domElement);
+        precisionRecorderFrames++;
 
-		if (precisionRecorderAutoStop) {
-			console.log(precisionRecorderFrames * (1 / precisionRecorderFramerate));
-			if (precisionRecorderFrames * (1 / precisionRecorderFramerate) >= precisionRecorderAutoStop) {
-				stopRecording();
-				document.getElementById('record-button').style.color = '#00f';
-			}
-		}
-	}
+        if (precisionRecorderAutoStop) {
+            console.log(precisionRecorderFrames * (1 / precisionRecorderFramerate));
+            if (precisionRecorderFrames * (1 / precisionRecorderFramerate) >= precisionRecorderAutoStop) {
+                stopRecording();
+                document.getElementById('record-button').style.color = '#00f';
+            }
+        }
+    }
 
-	animationFrameId = requestAnimationFrame(loop);
+    animationFrameId = requestAnimationFrame(loop);
 }
 
 document.getElementById('play-button').addEventListener('click', function () {
-	createAndStartAudioContext();
-	useWebcam();
-	renderer = new Renderer();
-	interface = new Interface(renderer, audioContext);
-	loop();
+    createAndStartAudioContext();
+    useWebcam();
+    renderer = new Renderer();
+    interface = new Interface(renderer, audioContext);
+    loop();
 
-	document.getElementById('play-button').style.display = 'none';
+    document.getElementById('play-button').style.display = 'none';
 });
 
 document.getElementById('container').addEventListener('click', function () {
-	console.log("click in container");
-	// Stop the animation loop
-	cancelAnimationFrame(animationFrameId);
+    console.log("click in container");
+    // Stop the animation loop
+    cancelAnimationFrame(animationFrameId);
 
-	// Stop the video playback
-	if (video) {
-		video.pause();
-		video.srcObject.getTracks().forEach(track => track.stop());
-		video.srcObject = null;
-	}
+    // Stop the video playback
+    if (video) {
+        video.pause();
+        video.srcObject.getTracks().forEach(track => track.stop());
+        video.srcObject = null;
+    }
 
-	if (renderer && renderer.tRenderer && renderer.tRenderer.domElement) {
-		const domElement = renderer.tRenderer.domElement;
-		if (domElement.parentNode) {
-			domElement.parentNode.removeChild(domElement);
-		}
-	}
+    if (renderer && renderer.tRenderer && renderer.tRenderer.domElement) {
+        const domElement = renderer.tRenderer.domElement;
+        if (domElement.parentNode) {
+            domElement.parentNode.removeChild(domElement);
+        }
+    }
 
-	document.getElementById('play-button').style.display = 'block';
+    document.getElementById('play-button').style.display = 'block';
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-	var photoButton = document.getElementById('photo-button');
-	var recordButton = document.getElementById('record-button');
+    var photoButton = document.getElementById('photo-button');
+    var recordButton = document.getElementById('record-button');
 
-	if (photoButton) {
-		photoButton.addEventListener('click', function () {
-			var url = renderer.tRenderer.domElement.toDataURL('image/png');
-			var a = document.createElement('a');
+    if (photoButton) {
+        photoButton.addEventListener('click', function () {
+            var url = renderer.tRenderer.domElement.toDataURL('image/png');
+            var a = document.createElement('a');
 
-			console.log("photo taken");
-			a.href = url;
-			a.download = 'DESY-' + '.png';
-			a.click();
-		});
-	} else {
-		console.error('photoButton not found');
-	}
+            console.log("photo taken");
+            a.href = url;
+            a.download = 'DESY-' + '.png';
+            a.click();
+        });
+    } else {
+        console.error('photoButton not found');
+    }
 
-	if (recordButton) {
-		recordButton.addEventListener('click', function () {
-			if (!recording) {
-				console.log("recording");
-				if (startRecording()) {
-					recordButton.style.color = '#f00';
-					return;
-				}
-			} else {
-				console.log("finish recording");
-				stopRecording();
-			}
+    if (recordButton) {
+        recordButton.addEventListener('click', function () {
+            if (!recording) {
+                console.log("recording");
+                if (startRecording()) {
+                    recordButton.style.color = '#f00';
+                    return;
+                }
+            } else {
+                console.log("finish recording");
+                stopRecording();
+            }
 
-			recordButton.style.color = '#000006';
-		});
-	} else {
-		console.error('recordButton not found');
-	}
+            recordButton.style.color = '#000006';
+        });
+    } else {
+        console.error('recordButton not found');
+    }
 });
 
 function startRecording() {
-	var options, stream, audioTracks, chosenMime = null,
-		mimeTypes = [
-			'video/mp4',
-			'video/webm',
-		];
+    var options, stream, audioTracks, chosenMime = null,
+        mimeTypes = [
+            'video/mp4',
+            'video/webm',
+        ];
 
-	if (mediaRecorder) mediaRecorder.stop();
+    if (mediaRecorder) {
+        mediaRecorder.stop();
+    }
 
-	if (precisionRecorderActive) {
-		startPrecisionRecording();
-		return true;
-	} else {
-		if (MediaRecorder) {
-			mimeTypes.reverse().forEach(function (mime) {
-				if (MediaRecorder.isTypeSupported(mime)) {
-					chosenMime = mime;
-				}
-			});
+    if (precisionRecorderActive) {
+        startPrecisionRecording();
+        return true;
+    } else {
+        if (MediaRecorder) {
+            mimeTypes.reverse().forEach(function (mime) {
+                if (MediaRecorder.isTypeSupported(mime)) {
+                    chosenMime = mime;
+                }
+            });
 
-			if (chosenMime) {
-				console.log(chosenMime);
+            if (chosenMime) {
+                console.log(chosenMime);
 
-				stream = renderer.tRenderer.domElement.captureStream(24);
+                stream = renderer.tRenderer.domElement.captureStream(24);
 
-				if (audioTrack) {
-					stream.addTrack(audioTrack);
-				} else if (renderer.input.tagName == 'VIDEO') {
-					streamDestination = audioContext.createMediaStreamDestination();
+                if (audioTrack) {
+                    stream.addTrack(audioTrack);
+                } else if (renderer.input.tagName == 'VIDEO') {
+                    streamDestination = audioContext.createMediaStreamDestination();
 
-					if (!sourceNode) {
-						sourceNode = audioContext.createMediaElementSource(renderer.input);
-						sourceNode.connect(audioContext.destination);
-					}
+                    if (!sourceNode) {
+                        sourceNode = audioContext.createMediaElementSource(renderer.input);
+                        sourceNode.connect(audioContext.destination);
+                    }
 
-					sourceNode.connect(streamDestination);
+                    sourceNode.connect(streamDestination);
 
-					audioTracks = streamDestination.stream.getAudioTracks();
+                    audioTracks = streamDestination.stream.getAudioTracks();
 
-					if (audioTracks && audioTracks.length) {
-						stream.addTrack(audioTracks[0]);
-					}
-				}
+                    if (audioTracks && audioTracks.length) {
+                        stream.addTrack(audioTracks[0]);
+                    }
+                }
 
-				mediaRecorder = new MediaRecorder(
-					stream,
-					{
-						mimeType: chosenMime,
-						videoBitsPerSecond: 2500000 * 2,
-					}
-				);
+                mediaRecorder = new MediaRecorder(
+                    stream,
+                    {
+                        mimeType: chosenMime,
+                        videoBitsPerSecond: 2500000 * 2,
+                    }
+                );
 
-				if (onlyPlayWhenRecording && renderer.input.tagName == 'VIDEO') {
-					renderer.input.play();
-				}
-				mediaRecorder.start();
-				recording = true;
+                mediaRecorder.ondataavailable = function(event) {
+                    if (event.data.size > 0) {
+                        var url = URL.createObjectURL(event.data);
+                        var a = document.createElement('a');
 
-				return true;
-			} else {
-				alert('Hmm. Looks like your browser doesn\'t support recording... Try Chrome.');
-				return false;
-			}
-		} else {
-			alert('Hmm. Looks like your browser doesn\'t support recording... Try Chrome.');
-			return false;
-		}
-	}
+                        a.href = url;
+                        a.download = 'DESY-video.webm'; // Use proper extension
+                        a.click();
+
+                        setTimeout(function () {
+                            URL.revokeObjectURL(url);
+                        }, 100);
+                    }
+                };
+
+                mediaRecorder.onstop = function() {
+                    recording = false;
+                    if (sourceNode) {
+                        sourceNode.disconnect();
+                        sourceNode = null;
+                    }
+                    if (onlyPlayWhenRecording && renderer.input.tagName == 'VIDEO') {
+                        renderer.input.pause();
+                    }
+                };
+
+                if (onlyPlayWhenRecording && renderer.input.tagName == 'VIDEO') {
+                    renderer.input.play();
+                }
+                mediaRecorder.start();
+                recording = true;
+
+                return true;
+            } else {
+                alert('Hmm. Looks like your browser doesn\'t support recording... Try Chrome.');
+                return false;
+            }
+        } else {
+            alert('Hmm. Looks like your browser doesn\'t support recording... Try Chrome.');
+            return false;
+        }
+    }
 }
 
 function stopRecording() {
-	if (capturer) {
-		capturer.stop();
-		recording = false;
-
-		if (onlyPlayWhenRecording && renderer.input.tagName == 'VIDEO') {
-			renderer.input.pause();
-		}
-
-		capturer.save();
-		capturer = null;
-	} else if (mediaRecorder) {
-		mediaRecorder.stop();
-		recording = false;
-
-		if (sourceNode) {
-			sourceNode.disconnect(streamDestination);
-			streamDestination = null;
-		}
-
-		mediaRecorder.ondataavailable = function (event) {
-			var url = URL.createObjectURL(event.data);
-			var a = document.createElement('a');
-
-			a.href = url;
-			a.download = 'DESY-video';
-			a.click();
-
-			mediaRecorder = false;
-
-			setTimeout(function () {
-				window.URL.revokeObjectURL(url);
-			}, 100);
-		}
-	}
+    if (mediaRecorder && recording) {
+        mediaRecorder.stop();
+        recording = false;
+    } else {
+        console.warn('No active recording found.');
+    }
 }
