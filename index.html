@@ -6,6 +6,7 @@
 		<link rel="stylesheet" href="./code/css/web_page.css">
 		<!-- <link rel="stylesheet" href="./code/css/video.css"> -->
 		<script src="./code/js/web_page.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.10.2/dist/ffmpeg.min.js"></script>
 		
 			<link href="./code/css/icons.css" media="all" rel="stylesheet">
 			<link href="./code/css/style.css" rel="stylesheet">
@@ -28,10 +29,6 @@
 			<script src="./code/js/libs/FlipShader.js"></script>
 			<script src="./code/js/libs/FlipFilter.js"></script>
 	
-			<script src="./code/js/utils.js"></script>
-			<script src="./code/js/renderer.js"></script>
-			<script src="./code/js/interface.js"></script>
-			<script src="./code/js/main.js"></script>
 
 	</head>
 	<body class="vsc-initialized">
@@ -57,7 +54,7 @@
 			</div>
 			<div class="navbar-links">
 				<ul>
-					<li><a href="../index.html"><button>Accueil</button></a></li>
+					<li><a href="./index.html"><button>Accueil</button></a></li>
 					<li><a href="./code/about.html"><button>A Propos</button></a></li>
 					<!-- <li><a href="gallery.html"><button>Gallery</button></a></li> -->
 				</ul>
@@ -92,6 +89,7 @@
 		<div id="inner">
 			<div id="container">
 			</div>
+			<img id="play-button" src="./img/play-button.svg" alt="Play Button" />
 			<div id="controls">
 				<div id="icon-box">
 					<i id="photo-button" class="fa fa-camera icon-button" aria-hidden="true"></i>
@@ -104,6 +102,11 @@
         	</div>
     	</div>
 		</div>
+
+		<script src="./code/js/utils.js"></script>
+		<script src="./code/js/renderer.js"></script>
+		<script src="./code/js/distord-with-sound.js"></script>
+		<script src="./code/js/main.js"></script>
 
 
 	</body>

@@ -1,10 +1,8 @@
-/* delete vh or vw and viewport */
 
 #main {
   display: flex;
   align-items: center;
   justify-content: center;
-  
   width: 100%;
   height: 100%;
   font-size: 0rem;
@@ -13,7 +11,6 @@
 #container {
   overflow: hidden;
   position: relative;
-
 }
 
 canvas {
@@ -25,90 +22,105 @@ canvas {
   display: flex;
   justify-content: space-between;
   position: absolute;
-  bottom: 150;
+  bottom: 15%;
+  width: 100%;
+  left: -45%;
 }
-
 #icon-box {
   font-size: calc(1vw + 30px);
-  margin: 0 205;
-}
-#photo-button, #record-button {
-  margin: 0 30px;
+  margin: 0 auto;
 }
 
-/*
-@media (orientation: portrait) {
-  #container {
-    transform: rotate(90deg);
-  }
+#photo-button, #record-button {
+  margin: 5px 0;
 }
-*/
 
 @media (orientation: landscape) {
-  /*
-  #container {
-    transform: rotate(90deg);
-  }
-  */
   #controls {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      right: 20px;
-      bottom: auto;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	right: 20px;
+	bottom: 5%;
   }
 
   #icon-box {
-      margin: 0 20px;
+	margin: 0 20px;
   }
 
   #photo-button, #record-button {
-      margin: 5px 0;
+	margin: 5px 0;
   }
 }
 
+@media (orientation: portrait) {
+	#container {
+		top: 50%;
+		transform: rotateY(180deg);
+		-webkit-transform:rotateY(180deg); /* Safari and Chrome */
+		-moz-transform:rotateY(180deg); /* Firefox */
+	}
+
+	#controls {
+	  display: flex;
+	  flex-direction: column;
+	  align-items: flex-end;
+	  right: 20px;
+	  bottom: 3%;
+	}
+
+	#icon-box {
+	  margin: 0 20px;
+	}
+
+	#photo-button, #record-button {
+	  margin: 5px 0;
+	}
+}
+
+
+@media (max-width: 425px) {
+	#icon-box {
+	  font-size: calc(1.5vw + 25px);
+	}
+	#photo-button, #record-button {
+	  margin: 0 10px;
+	}
+  }
+
+  @media (max-width: 325px) {
+	#icon-box {
+	  font-size: calc(1.5vw + 25px);
+	}
+	#photo-button, #record-button {
+	  margin: 0 10px;
+	}
+  }
+
+
 @media (max-width: 1200px) {
-  #controls {
-    display: flex;
-    justify-content: space-between;
-    position: absolute;
-    bottom: 15%;
-    width: 100%;
-    left: 0;
-  }
-  #icon-box {
-    font-size: calc(1vw + 30px);
-    margin: 0 auto;
-  }
-  #photo-button, #record-button {
-    margin: 0 20px;
-  }
+	#controls {
+	display: flex;
+	justify-content: space-between;
+	position: absolute;
+	bottom: 5%;
+	width: 100%;
+	left: 0;
+	}
+	#icon-box {
+	font-size: calc(1vw + 30px);
+	margin: 0 auto;
+	}
+	#photo-button, #record-button {
+	margin: 0 20px;
+	}
 }
 
 @media (max-width: 660px) {
-
-  #icon-box {
-    font-size: calc(1.5vw + 25px);
-  }
-  #photo-button, #record-button {
-    margin: 0 10px;
-  }
-}
-
-@media (max-width: 425px) {
-  #icon-box {
-    font-size: calc(1.5vw + 25px);
-  }
-  #photo-button, #record-button {
-    margin: 0 10px;
-  }
-}
-
-@media (max-width: 325px) {
-  #icon-box {
-    font-size: calc(1.5vw + 25px);
-  }
-  #photo-button, #record-button {
-    margin: 0 10px;
-  }
+	#icon-box {
+	font-size: calc(1.5vw + 25px);
+	}
+	#photo-button, #record-button {
+	margin: 0 10px;
+	}
 }
