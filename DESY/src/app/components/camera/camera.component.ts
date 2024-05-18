@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-camera',
@@ -7,65 +7,32 @@ import { Component } from '@angular/core';
   templateUrl: './camera.component.html',
   styleUrl: './camera.component.css'
 })
-export class CameraComponent {
-	threejs: HTMLScriptElement;
-	perlinjs: HTMLScriptElement;
-	ccapturejs: HTMLScriptElement;
-	whammyjs: HTMLScriptElement;
-	downloadjs: HTMLScriptElement;
-	warpShader: HTMLScriptElement;
-	warpFilter: HTMLScriptElement;
-	timeWarpFilter: HTMLScriptElement;
-	flipShader: HTMLScriptElement;
-	flipFilter: HTMLScriptElement;
-	utils: HTMLScriptElement;
-	renderer: HTMLScriptElement;
-	interface: HTMLScriptElement;
-	main: HTMLScriptElement;
+export class CameraComponent implements OnInit {
 
-	constructor(){
-		this.threejs = document.createElement("threejs");
-		this.threejs.src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
-		document.head.appendChild(this.threejs);
+	constructor(){}
 
-		this.perlinjs = document.createElement("perlinjs");
-		this.perlinjs.src = "DESY/src/assets/libs/perlin.js";
-		document.head.appendChild(this.perlinjs);
-
-		this.ccapturejs = document.createElement("ccapturejs");
-		this.ccapturejs.src = "DESY/src/assets/libs/CCapture.js";
-		document.head.appendChild(this.ccapturejs);
-
-		this.whammyjs = document.createElement("whammyjs");
-		this.whammyjs.src = "DESY/src/assets/libs/Whammy.js";
-		document.head.appendChild(this.whammyjs);
-
-		this.downloadjs = document.createElement("downloadjs");
-		this.downloadjs.src = "DESY/src/assets/libs/download.js";
-		document.head.appendChild(this.downloadjs);
-
-		this.warpShader = document.createElement("warpShader");
-		this.warpShader.src = "DESY/src/assets/WarpShader.js";
-		document.head.appendChild(this.warpShader);
-
-		this.warpFilter = document.createElement("warpFilter");
-		this.warpFilter.src = "DESY/src/assets/CCapture.js";
-		document.head.appendChild(this.warpFilter);
-
-		this.utils = document.createElement("utils");
-		this.utils.src = "DESY/src/assets/CCapture.js";
-		document.head.appendChild(this.utils);
-
-		this.renderer = document.createElement("renderer");
-		this.renderer.src = "DESY/src/assets/CCapture.js";
-		document.head.appendChild(this.renderer);
-
-		this.interface = document.createElement("interface");
-		this.interface.src = "DESY/src/assets/CCapture.js";
-		document.head.appendChild(this.interface);
-
-		this.main = document.createElement("main");
-		this.main.src = "DESY/src/assets/CCapture.js";
-		document.head.appendChild(this.main);
+	ngOnInit() {
+		this.loadScript('assets/libs/perlin.js');
+		this.loadScript('assets/libs/CCapture.js');
+		this.loadScript('assets/libs/Whammy.js');
+		this.loadScript('assets/libs/download.js');
+		this.loadScript('assets/WarpShader.js');
+		this.loadScript('assets/WarpFilter.js');
+		this.loadScript('assets/TimeWarpFilter.js');
+		this.loadScript('assets/FlipShader.js');
+		this.loadScript('assets/FlipFilter.js');
+		this.loadScript('assets/Utils.js');
+		this.loadScript('assets/Renderer.js');
+		this.loadScript('assets/Interface.js');
+		this.loadScript('assets/Main.js');
 	}
+
+	private loadScript(src: string) {
+		const script = document.createElement('script');
+		script.src = src;
+		script.async = false;
+		script.onload = () => console.log(`${src} loaded`);
+  		script.onerror = () => console.error(`Error loading ${src}`);
+		document.head.appendChild(script);
+	  }
 }
