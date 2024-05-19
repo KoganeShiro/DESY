@@ -19,6 +19,7 @@ var renderer,
     video,
     animationFrameId;
 
+
 function createAndStartAudioContext() {
     if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -40,7 +41,7 @@ function useWebcam() {
     video.loop = true;
     navigator.mediaDevices.getUserMedia({
         video: { facingMode: { exact: 'environment' } },
-        audio: false,
+        audio: true,
     })
     .then(handleStream)
     .catch(handleError);
@@ -62,7 +63,7 @@ function useWebcam() {
 
         navigator.mediaDevices.getUserMedia({
             video: true,
-            audio: false,
+            audio: true,
         })
         .then(handleStream)
         .catch(function (error) {
@@ -104,10 +105,8 @@ document.getElementById('play-button').addEventListener('click', function () {
 
 document.getElementById('container').addEventListener('click', function () {
     console.log("click in container");
-    // Stop the animation loop
     cancelAnimationFrame(animationFrameId);
 
-    // Stop the video playback
     if (video) {
         video.pause();
         video.srcObject.getTracks().forEach(track => track.stop());
@@ -162,109 +161,120 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+
 function startRecording() {
-    var options, stream, audioTracks, chosenMime = null,
-        mimeTypes = [
-            'video/mp4',
+	var options, stream, audioTracks, chosenMime = null,
+		mimeTypes = [
+			'video/mp4',
+            'video/webm;codecs=vp9,opus',
+            'video/webm;codecs=vp8,opus',
             'video/webm',
-        ];
+		];
 
-    if (mediaRecorder) {
-        mediaRecorder.stop();
-    }
+	if (mediaRecorder) mediaRecorder.stop();
 
-    if (precisionRecorderActive) {
-        startPrecisionRecording();
-        return true;
-    } else {
-        if (MediaRecorder) {
-            mimeTypes.reverse().forEach(function (mime) {
-                if (MediaRecorder.isTypeSupported(mime)) {
-                    chosenMime = mime;
-                }
-            });
+	if (precisionRecorderActive) {
+		startPrecisionRecording();
 
-            if (chosenMime) {
-                console.log(chosenMime);
+		return true;
+	}
+	else {
+		if (MediaRecorder) {
+			mimeTypes.reverse().forEach(function (mime) {
+				if (MediaRecorder.isTypeSupported(mime)) {
+					chosenMime = mime;
+				}
+			});
 
-                stream = renderer.tRenderer.domElement.captureStream(24);
+			if (chosenMime) {
+				console.log(chosenMime);
 
-                if (audioTrack) {
-                    stream.addTrack(audioTrack);
-                } else if (renderer.input.tagName == 'VIDEO') {
-                    streamDestination = audioContext.createMediaStreamDestination();
+				stream = renderer.tRenderer.domElement.captureStream(24);
 
-                    if (!sourceNode) {
-                        sourceNode = audioContext.createMediaElementSource(renderer.input);
-                        sourceNode.connect(audioContext.destination);
-                    }
+				if (audioTrack) {
+					stream.addTrack(audioTrack);
+				}
+				else if (renderer.input.tagName == 'VIDEO') {
+					streamDestination = audioContext.createMediaStreamDestination();
 
-                    sourceNode.connect(streamDestination);
+					if (!sourceNode) {
+						sourceNode = audioContext.createMediaElementSource(renderer.input);
+						sourceNode.connect(audioContext.destination);
+					}
 
-                    audioTracks = streamDestination.stream.getAudioTracks();
+					sourceNode.connect(streamDestination);
 
-                    if (audioTracks && audioTracks.length) {
-                        stream.addTrack(audioTracks[0]);
-                    }
-                }
+					audioTracks = streamDestination.stream.getAudioTracks();
 
-                mediaRecorder = new MediaRecorder(
-                    stream,
-                    {
-                        mimeType: chosenMime,
-                        videoBitsPerSecond: 2500000 * 2,
-                    }
-                );
+					if (audioTracks && audioTracks.length) {
+						stream.addTrack(audioTracks[0]);
+					}
+				}
 
-                mediaRecorder.ondataavailable = function(event) {
-                    if (event.data.size > 0) {
-                        var url = URL.createObjectURL(event.data);
-                        var a = document.createElement('a');
+				mediaRecorder = new MediaRecorder(
+					stream,
+					{
+						mimeType: chosenMime,
+						videoBitsPerSecond : 2500000 * 2,
+					}
+				);
 
-                        a.href = url;
-                        a.download = 'DESY-video.webm'; // Use proper extension
-                        a.click();
+				if (onlyPlayWhenRecording && renderer.input.tagName == 'VIDEO') {
+					renderer.input.play();
+				}
+				mediaRecorder.start();
+				recording = true;
 
-                        setTimeout(function () {
-                            URL.revokeObjectURL(url);
-                        }, 100);
-                    }
-                };
-
-                mediaRecorder.onstop = function() {
-                    recording = false;
-                    if (sourceNode) {
-                        sourceNode.disconnect();
-                        sourceNode = null;
-                    }
-                    if (onlyPlayWhenRecording && renderer.input.tagName == 'VIDEO') {
-                        renderer.input.pause();
-                    }
-                };
-
-                if (onlyPlayWhenRecording && renderer.input.tagName == 'VIDEO') {
-                    renderer.input.play();
-                }
-                mediaRecorder.start();
-                recording = true;
-
-                return true;
-            } else {
-                alert('Hmm. Looks like your browser doesn\'t support recording... Try Chrome.');
-                return false;
-            }
-        } else {
-            alert('Hmm. Looks like your browser doesn\'t support recording... Try Chrome.');
-            return false;
-        }
-    }
+				return true;
+			}
+			else {
+				alert('Hmm. Looks like your browser doesn\'t support recording... Try Chrome.');
+				return false;
+			}
+		}
+		else {
+			alert('Hmm. Looks like your browser doesn\'t support recording... Try Chrome.');
+			return false;
+		}
+	}
 }
 
 function stopRecording() {
-    if (mediaRecorder && recording) {
-        mediaRecorder.stop();
-        recording = false;
-    } else {
-        console.warn('No active recording found.');
-    }
+	if (capturer) {
+		capturer.stop();
+		recording = false;
+
+		if (onlyPlayWhenRecording && renderer.input.tagName == 'VIDEO') {
+			renderer.input.pause();
+		}
+
+		capturer.save();
+
+		capturer = null;
+	}
+	else if (mediaRecorder) {
+
+		mediaRecorder.stop();
+		recording = false;
+
+		if (sourceNode) {
+			sourceNode.disconnect(streamDestination);
+			streamDestination = null;
+		}
+
+		mediaRecorder.ondataavailable = function (event) {
+			var url = URL.createObjectURL(event.data),
+				a = document.createElement('a');
+
+			a.href = url;
+			a.download = 'DESY-video.mp4';
+			a.click();
+
+			mediaRecorder = false;
+
+			setTimeout(function () {
+				window.URL.revokeObjectURL(url);
+			}, 100);
+		}
+	}
 }
