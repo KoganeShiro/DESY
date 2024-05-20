@@ -123,158 +123,158 @@ document.getElementById('container').addEventListener('click', function () {
     document.getElementById('play-button').style.display = 'block';
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-    var photoButton = document.getElementById('photo-button');
-    var recordButton = document.getElementById('record-button');
+// document.addEventListener('DOMContentLoaded', function() {
+//     var photoButton = document.getElementById('photo-button');
+//     var recordButton = document.getElementById('record-button');
 
-    if (photoButton) {
-        photoButton.addEventListener('click', function () {
-            var url = renderer.tRenderer.domElement.toDataURL('image/png');
-            var a = document.createElement('a');
+//     if (photoButton) {
+//         photoButton.addEventListener('click', function () {
+//             var url = renderer.tRenderer.domElement.toDataURL('image/png');
+//             var a = document.createElement('a');
 
-            console.log("photo taken");
-            a.href = url;
-            a.download = 'DESY-' + '.png';
-            a.click();
-        });
-    } else {
-        console.error('photoButton not found');
-    }
+//             console.log("photo taken");
+//             a.href = url;
+//             a.download = 'DESY-' + '.png';
+//             a.click();
+//         });
+//     } else {
+//         console.error('photoButton not found');
+//     }
 
-    if (recordButton) {
-        recordButton.addEventListener('click', function () {
-            if (!recording) {
-                console.log("recording");
-                if (startRecording()) {
-                    recordButton.style.color = '#f00';
-                    return;
-                }
-            } else {
-                console.log("finish recording");
-                stopRecording();
-            }
+//     if (recordButton) {
+//         recordButton.addEventListener('click', function () {
+//             if (!recording) {
+//                 console.log("recording");
+//                 if (startRecording()) {
+//                     recordButton.style.color = '#f00';
+//                     return;
+//                 }
+//             } else {
+//                 console.log("finish recording");
+//                 stopRecording();
+//             }
 
-            recordButton.style.color = '#000006';
-        });
-    } else {
-        console.error('recordButton not found');
-    }
-});
+//             recordButton.style.color = '#000006';
+//         });
+//     } else {
+//         console.error('recordButton not found');
+//     }
+// });
 
 
-function startRecording() {
-	var options, stream, audioTracks, chosenMime = null,
-		mimeTypes = [
-			'video/mp4',
-            'video/webm;codecs=vp9,opus',
-            'video/webm;codecs=vp8,opus',
-            'video/webm',
-		];
+// function startRecording() {
+// 	var options, stream, audioTracks, chosenMime = null,
+// 		mimeTypes = [
+// 			'video/mp4',
+//             'video/webm;codecs=vp9,opus',
+//             'video/webm;codecs=vp8,opus',
+//             'video/webm',
+// 		];
 
-	if (mediaRecorder) mediaRecorder.stop();
+// 	if (mediaRecorder) mediaRecorder.stop();
 
-	if (precisionRecorderActive) {
-		startPrecisionRecording();
+// 	if (precisionRecorderActive) {
+// 		startPrecisionRecording();
 
-		return true;
-	}
-	else {
-		if (MediaRecorder) {
-			mimeTypes.reverse().forEach(function (mime) {
-				if (MediaRecorder.isTypeSupported(mime)) {
-					chosenMime = mime;
-				}
-			});
+// 		return true;
+// 	}
+// 	else {
+// 		if (MediaRecorder) {
+// 			mimeTypes.reverse().forEach(function (mime) {
+// 				if (MediaRecorder.isTypeSupported(mime)) {
+// 					chosenMime = mime;
+// 				}
+// 			});
 
-			if (chosenMime) {
-				console.log(chosenMime);
+// 			if (chosenMime) {
+// 				console.log(chosenMime);
 
-				stream = renderer.tRenderer.domElement.captureStream(24);
+// 				stream = renderer.tRenderer.domElement.captureStream(24);
 
-				if (audioTrack) {
-					stream.addTrack(audioTrack);
-				}
-				else if (renderer.input.tagName == 'VIDEO') {
-					streamDestination = audioContext.createMediaStreamDestination();
+// 				if (audioTrack) {
+// 					stream.addTrack(audioTrack);
+// 				}
+// 				else if (renderer.input.tagName == 'VIDEO') {
+// 					streamDestination = audioContext.createMediaStreamDestination();
 
-					if (!sourceNode) {
-						sourceNode = audioContext.createMediaElementSource(renderer.input);
-						sourceNode.connect(audioContext.destination);
-					}
+// 					if (!sourceNode) {
+// 						sourceNode = audioContext.createMediaElementSource(renderer.input);
+// 						sourceNode.connect(audioContext.destination);
+// 					}
 
-					sourceNode.connect(streamDestination);
+// 					sourceNode.connect(streamDestination);
 
-					audioTracks = streamDestination.stream.getAudioTracks();
+// 					audioTracks = streamDestination.stream.getAudioTracks();
 
-					if (audioTracks && audioTracks.length) {
-						stream.addTrack(audioTracks[0]);
-					}
-				}
+// 					if (audioTracks && audioTracks.length) {
+// 						stream.addTrack(audioTracks[0]);
+// 					}
+// 				}
 
-				mediaRecorder = new MediaRecorder(
-					stream,
-					{
-						mimeType: chosenMime,
-						videoBitsPerSecond : 2500000 * 2,
-					}
-				);
+// 				mediaRecorder = new MediaRecorder(
+// 					stream,
+// 					{
+// 						mimeType: chosenMime,
+// 						videoBitsPerSecond : 2500000 * 2,
+// 					}
+// 				);
 
-				if (onlyPlayWhenRecording && renderer.input.tagName == 'VIDEO') {
-					renderer.input.play();
-				}
-				mediaRecorder.start();
-				recording = true;
+// 				if (onlyPlayWhenRecording && renderer.input.tagName == 'VIDEO') {
+// 					renderer.input.play();
+// 				}
+// 				mediaRecorder.start();
+// 				recording = true;
 
-				return true;
-			}
-			else {
-				alert('Hmm. Looks like your browser doesn\'t support recording... Try Chrome.');
-				return false;
-			}
-		}
-		else {
-			alert('Hmm. Looks like your browser doesn\'t support recording... Try Chrome.');
-			return false;
-		}
-	}
-}
+// 				return true;
+// 			}
+// 			else {
+// 				alert('Hmm. Looks like your browser doesn\'t support recording... Try Chrome.');
+// 				return false;
+// 			}
+// 		}
+// 		else {
+// 			alert('Hmm. Looks like your browser doesn\'t support recording... Try Chrome.');
+// 			return false;
+// 		}
+// 	}
+// }
 
-function stopRecording() {
-	if (capturer) {
-		capturer.stop();
-		recording = false;
+// function stopRecording() {
+// 	if (capturer) {
+// 		capturer.stop();
+// 		recording = false;
 
-		if (onlyPlayWhenRecording && renderer.input.tagName == 'VIDEO') {
-			renderer.input.pause();
-		}
+// 		if (onlyPlayWhenRecording && renderer.input.tagName == 'VIDEO') {
+// 			renderer.input.pause();
+// 		}
 
-		capturer.save();
+// 		capturer.save();
 
-		capturer = null;
-	}
-	else if (mediaRecorder) {
+// 		capturer = null;
+// 	}
+// 	else if (mediaRecorder) {
 
-		mediaRecorder.stop();
-		recording = false;
+// 		mediaRecorder.stop();
+// 		recording = false;
 
-		if (sourceNode) {
-			sourceNode.disconnect(streamDestination);
-			streamDestination = null;
-		}
+// 		if (sourceNode) {
+// 			sourceNode.disconnect(streamDestination);
+// 			streamDestination = null;
+// 		}
 
-		mediaRecorder.ondataavailable = function (event) {
-			var url = URL.createObjectURL(event.data),
-				a = document.createElement('a');
+// 		mediaRecorder.ondataavailable = function (event) {
+// 			var url = URL.createObjectURL(event.data),
+// 				a = document.createElement('a');
 
-			a.href = url;
-			a.download = 'DESY-video.mp4';
-			a.click();
+// 			a.href = url;
+// 			a.download = 'DESY-video.mp4';
+// 			a.click();
 
-			mediaRecorder = false;
+// 			mediaRecorder = false;
 
-			setTimeout(function () {
-				window.URL.revokeObjectURL(url);
-			}, 100);
-		}
-	}
-}
+// 			setTimeout(function () {
+// 				window.URL.revokeObjectURL(url);
+// 			}, 100);
+// 		}
+// 	}
+// }
