@@ -123,7 +123,6 @@ document.getElementById('container').addEventListener('click', function () {
     document.getElementById('play-button').style.display = 'block';
 });
 
-
 /*
 document.addEventListener('DOMContentLoaded', function() {
     var photoButton = document.getElementById('photo-button');
