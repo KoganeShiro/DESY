@@ -142,19 +142,25 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (recordButton) {
-        recordButton.addEventListener('click', function () {
-            if (!recording) {
-                console.log("recording");
-                if (startRecording()) {
-                    recordButton.style.color = '#f00';
-                    return;
-                }
-            } else {
-                console.log("finish recording");
-                stopRecording();
+        recordButton.addEventListener('mousedown', function () {
+            console.log("recording started");
+            if (startRecording()) {
+                recordButton.style.color = '#f00';
             }
+        });
 
+        recordButton.addEventListener('mouseup', function () {
+            console.log("recording stopped");
+            stopRecording();
             recordButton.style.color = '#000006';
+        });
+
+        recordButton.addEventListener('mouseleave', function () {
+            if (recording) {
+                console.log("recording stopped");
+                stopRecording();
+                recordButton.style.color = '#000006';
+            }
         });
     } else {
         console.error('recordButton not found');
