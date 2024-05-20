@@ -24,7 +24,7 @@ export class CameraComponent implements OnInit {
 		this.loadScript('assets/FlipFilter.js');
 		this.loadScript('assets/Utils.js');
 		this.loadScript('assets/Renderer.js');
-		this.loadScript('assets/Interface.js');
+		this.loadScript('assets/Distord-with-sound.js');
 		this.loadScript('assets/Main.js');
 	}
 

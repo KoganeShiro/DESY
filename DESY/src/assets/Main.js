@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 function startRecording() {
-	var stream, audioTracks, chosenMime = null,
+	var options, stream, audioTracks, chosenMime = null,
 		mimeTypes = [
 			'video/mp4',
             'video/webm;codecs=vp9,opus',
