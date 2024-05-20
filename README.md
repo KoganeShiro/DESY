@@ -7,6 +7,17 @@
 
 #
 
+### Table of Content
+- [Why DESY](#why-desy)
+- [The Project](#the-project)
+- [Quick Start](#quick-start)
+
+#
+### View the website [`*here*`](https://koganeshiro.github.io/DESY/index.html) !
+#
+
+### Why DESY
+
 DESY is a collaborative project involving students from Esadhar School and 42 Le Havre, as part of the Normandy Impressionism Festival.
 
 You can learn more about the festival [here](https://www.normandie-impressionniste.fr/en)
@@ -39,17 +50,11 @@ If you want to view the website in local, you can :
   
     `python3 -m http.server`
 -->
+You can also view the webite with vite. For that use the command :
+		`npx vite`
+(You have to install node.js and if you don't have vite follow what the terminal tells you to download)
 
 You can also view the website [`here`](https://koganeshiro.github.io/DESY/index.html)
 
 #
-### Resources that help me build this
-[rgbKineticSlider](https://github.com/hmongouachon/rgbKineticSlider/tree/master)
 
-[LiquidDistortion](https://github.com/codrops/LiquidDistortion/)
-
-[effect on the webcam](https://github.com/EliasHasle/EliasHasle.github.io/tree/master)
-
-[drawing on the webcam](https://jrlazz.eu5.org/anim/ontv.html)
-
-[webgl-mouseover-effects](https://github.com/akella/webgl-mouseover-effects)
