@@ -123,51 +123,59 @@ document.getElementById('container').addEventListener('click', function () {
     document.getElementById('play-button').style.display = 'block';
 });
 
-/*
+
+
 document.addEventListener('DOMContentLoaded', function() {
-    var photoButton = document.getElementById('photo-button');
-    var recordButton = document.getElementById('record-button');
+    var button = document.getElementById('photo-button');
+    var recordingTimeout;
+    var isLongPress = false;
 
-    if (photoButton) {
-        photoButton.addEventListener('click', function () {
-            var url = renderer.tRenderer.domElement.toDataURL('image/png');
-            var a = document.createElement('a');
-
-            console.log("photo taken");
-            a.href = url;
-            a.download = 'DESY-' + '.png';
-            a.click();
-        });
-    } else {
-        console.error('photoButton not found');
-    }
-
-    if (recordButton) {
-        recordButton.addEventListener('mousedown', function () {
-            console.log("recording started");
-            if (startRecording()) {
-                recordButton.style.color = '#f00';
-            }
+    if (button) {
+        button.addEventListener('mousedown', function () {
+            isLongPress = false;
+            recordingTimeout = setTimeout(function() {
+                isLongPress = true;
+                console.log("recording started");
+                if (startRecording()) {
+                    var switchModeButton = document.getElementById('switch-mode-button');
+                    if (switchModeButton) {
+                        switchModeButton.click();
+                    }
+                    var fills = document.getElementsByClassName('camera-button-fill');
+                    for (var i = 0; i < fills.length; i++) {
+                        fills[i].style.fill = 'red';
+                    }
+                }
+            }, 100);
         });
 
-        recordButton.addEventListener('mouseup', function () {
-            console.log("recording stopped");
-            stopRecording();
-            recordButton.style.color = '#000006';
-        });
-
-        recordButton.addEventListener('mouseleave', function () {
-            if (recording) {
+        button.addEventListener('mouseup', function () {
+            clearTimeout(recordingTimeout);
+            if (isLongPress) {
                 console.log("recording stopped");
                 stopRecording();
-                recordButton.style.color = '#000006';
+                var switchModeButton = document.getElementById('switch-mode-button');
+                if (switchModeButton) {
+                    switchModeButton.click();
+                }
+                var fills = document.getElementsByClassName('camera-button-fill');
+                for (var i = 0; i < fills.length; i++) {
+                    fills[i].style.fill = 'black';
+                }
+            } else {
+                var url = renderer.tRenderer.domElement.toDataURL('image/png');
+                var a = document.createElement('a');
+                console.log("photo taken");
+                a.href = url;
+                a.download = 'DESY-' + '.png';
+                a.click();
             }
         });
+
     } else {
-        console.error('recordButton not found');
+        console.error('Button not found');
     }
 });
-
 
 function startRecording() {
 	var stream, audioTracks, chosenMime = null,
@@ -285,4 +293,3 @@ function stopRecording() {
 		}
 	}
 }
-*/

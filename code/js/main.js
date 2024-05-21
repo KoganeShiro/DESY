@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         console.error('photoButton not found');
     }
-
+/*
     if (recordButton) {
         recordButton.addEventListener('mousedown', function () {
             console.log("recording started");
@@ -161,6 +161,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 stopRecording();
                 recordButton.style.color = '#000006';
             }
+        });
+*/
+	if (recordButton) {
+        recordButton.addEventListener('click', function () {
+            if (!recording) {
+                console.log("recording");
+                if (startRecording()) {
+                    recordButton.style.color = '#f00';
+                    return;
+                }
+            } else {
+                console.log("finish recording");
+                stopRecording();
+            }
+
+            recordButton.style.color = '#000006';
         });
     } else {
         console.error('recordButton not found');
