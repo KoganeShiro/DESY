@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         fills[i].style.fill = 'red';
                     }
                 }
-            }, 100);
+            }, 200);
         });
 
         button.addEventListener('mouseup', function () {
