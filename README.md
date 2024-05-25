@@ -13,7 +13,7 @@
 - [Quick Start](#quick-start)
 
 #
-### View the website [`*here*`](https://koganeshiro.github.io/DESY/index.html) !
+### View the website [`*here*`](https://koganeshiro.github.io/DESY/index.html) ! *(old-front)*
 #
 
 ### Why DESY
@@ -42,10 +42,12 @@ The goal is to explore the boundaries between visual and auditory stimuli, provi
 If you want to view the website in local, you can :
 
     `git clone git@github.com:KoganeShiro/DESY.git`
-    
+    `git checkout old-front`
+
+<!--
   open the directory in VSC (VSCodium or VSCode)
   Install the Live Server extension and go to `index.html` and click to `Go Live`
-<!--
+
   If you are using Vim (or any other IDE) you can open the directory and open the terminal and write
   
     `python3 -m http.server`
@@ -56,5 +58,7 @@ You can also view the webite with vite. For that use the command :
 
 You can also view the website [`here`](https://koganeshiro.github.io/DESY/index.html)
 
-#
+
+For the new front, you will have to build the angular. You will be able to access to the website in a short time
+
 
