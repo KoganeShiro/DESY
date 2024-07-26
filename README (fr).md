@@ -15,7 +15,7 @@
 #
 
 ### Vous pouvez acceder au site [`*ici*`](https://koganeshiro.github.io/DESY/index.html) !
-
+Si cela ne marche pas, essayez avec un autre moteur de recherche tel que chrome
 #
 
 ### Pourquoi DESY ?
@@ -35,7 +35,17 @@ La synesthésie est un phénomène perceptuel où la stimulation d'une voie sens
 
 Les participants, en interagissant avec le projet sur leur téléphone ou tout autre appareil doté d'un moteur de recherche, verront une déformation en direct de l'image directement influencée par leur environnement sonore. (Les éléments audio contribuent à la transformation et à la distorsion des composants visuels en temps réel.)
 
+
+![image](https://github.com/user-attachments/assets/90f30b7e-84ac-401f-8c77-86afab46ba6f)
+
+
+https://github.com/user-attachments/assets/08885f0f-a9ed-41a0-b13d-22abf94ca0b7
+
+
 L'objectif est d'explorer les frontières entre les stimuli visuels et auditifs, offrant aux participants une manière nouvelle et innovante de percevoir leur environnement.
+
+
+https://github.com/user-attachments/assets/47a0cd49-44ce-4dad-8cd7-80521b50a7e4
 
 #
 
