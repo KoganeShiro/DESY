@@ -14,6 +14,7 @@
 
 #
 ### View the website [`*here*`](https://koganeshiro.github.io/DESY/index.html) ! *(old-front)*
+If it doesn't work, please try it on chrome
 #
 
 ### Why DESY
@@ -31,10 +32,19 @@ In this project, we aim to create a unique and immersive synesthetic experience.
 
 As participants engage with the project on their phone or any device that has a search engine.
 They will see a live deformation of the image directly influenced by their surrounding: environment sound. (The audio elements contribute to the transform and distortion of the visual components in real-time.)
-<!--
-image or video
--->
+
+![image](https://github.com/user-attachments/assets/90f30b7e-84ac-401f-8c77-86afab46ba6f)
+
+
+https://github.com/user-attachments/assets/08885f0f-a9ed-41a0-b13d-22abf94ca0b7
+
+
+
 The goal is to explore the boundaries between visual and auditory stimuli, providing participants with a new and innovative way to see their surrounding.
+
+
+https://github.com/user-attachments/assets/47a0cd49-44ce-4dad-8cd7-80521b50a7e4
+
 
 #
 
