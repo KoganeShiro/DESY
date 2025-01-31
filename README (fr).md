@@ -22,7 +22,7 @@ Si cela ne marche pas, essayez avec un autre moteur de recherche tel que chrome
 
 DESY est un projet collaboratif qui implique des étudiants de l'école Esadhar et de 42 Le Havre, dans le cadre du Festival Normandie Impressionnisme.
 
-Vous pouvez en apprendre plus sur le festival [ici](https://www.normandie-impressionniste.fr/fr) !
+Vous pouvez en apprendre plus sur le festival [ici](https://www.normandie-impressionniste.fr/fr/les-interfaces-numeriques/view/215/desy) !
 ![image](https://github.com/KoganeShiro/desy/assets/126095786/c3f5f0df-1095-4d5a-93fe-ec71be1ea26e)
 
 #

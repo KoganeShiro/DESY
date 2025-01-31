@@ -21,7 +21,7 @@ If it doesn't work, please try it on chrome
 
 DESY is a collaborative project involving students from Esadhar School and 42 Le Havre, as part of the Normandy Impressionism Festival.
 
-You can learn more about the festival [here](https://www.normandie-impressionniste.fr/en)
+You can learn more about the festival [here](https://www.normandie-impressionniste.fr/en/les-interfaces-numeriques/view/215/desy)
 ![image](https://github.com/KoganeShiro/desy/assets/126095786/c3f5f0df-1095-4d5a-93fe-ec71be1ea26e)
 
 #
